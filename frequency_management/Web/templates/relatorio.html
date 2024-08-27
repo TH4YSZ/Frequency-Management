@@ -1,0 +1,20 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}
+Relatorio
+{% endblock %}
+
+{% block body %}
+<style>
+
+</style>
+
+<div class="">
+    {% csrf_token %}
+    {% if messages %}
+    {% for message in messages %}
+    {% endif %}
+</div>
+
+{% endblock %}
