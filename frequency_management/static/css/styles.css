@@ -1,3 +1,6 @@
+*{
+    text-decoration: none;
+}
 
 .titulo{
     font-family: "Krona One", sans-serif;
@@ -5,11 +8,19 @@
     font-style: normal;
 }
 
-.botao{
+.texto{
     font-family: "Kumbh Sans", sans-serif;
     font-optical-sizing: auto;
     font-weight: 200;
     font-style: normal;
     font-variation-settings:
         "YOPQ" 300;
+}
+
+.navbarcor{
+    background-color: #7C0D1D";
+}
+
+.nav-mobile{
+    text-decoration: none;
 }
