@@ -1,6 +1,95 @@
-<nav class="navbar" style="background-color: #7C0D1D; width: 100%; padding: 9px;">
-    <ul id="nav-mobile" style="display: flex; list-style-type: none; margin: 9px 0px">
-        {% load static %}
-        <img src="{% static 'img/senai_logo.png' %}" alt="Senai Logo" style="width: 10%; display: block; max-width: 100%; height: auto;">
-    </ul>
+{% load static %}
+
+<style>
+    /* O switch - o container */
+    .interruptor {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+    /* Esconder o checkbox HTML padrão */
+    .interruptor input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    /* O slider */
+    .deslizador {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #8C031C;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+    /* O círculo dentro do slider */
+    .deslizador:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+        background-image: url("{% static 'img/tema_dark.webp' %}");
+        background-size: cover;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #8C031C;
+    }
+
+    /* Quando o checkbox está marcado */
+    input:checked+.deslizador {
+        background-color: #260104;
+    }
+
+    /* Mover o círculo para a direita e mudar a imagem */
+    input:checked+.deslizador:before {
+        transform: translateX(26px);
+        background-image: url("{% static 'img/tema_white.webp' %}");
+        background-color: #260104;
+    }
+
+    .navbar {
+        background-color: #7C0D1D;
+        width: 100%;
+        padding: 9px;
+        position: fixed;
+        bottom: 1;
+        left: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .navbar img {
+        width: 10%;
+        max-width: 100%;
+        height: auto;
+    }
+
+    .nav-direita {
+        display: flex;
+        align-items: center;
+    }
+</style>
+
+<nav class="navbar">
+    <img src="{% static 'img/senai_logo.png' %}" alt="Senai Logo">
+    <div class="nav-direita">
+        <label class="interruptor">
+            <input type="checkbox" checked>
+            <span class="deslizador"></span>
+        </label>
+    </div>
 </nav>

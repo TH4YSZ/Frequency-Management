@@ -19,7 +19,7 @@ Homepage
         flex-wrap: wrap;
         align-items: center;
         color: #FFFAFB;
-        padding: 0 13%;
+        padding: 0 10%;
     }
 
     button {
@@ -38,14 +38,15 @@ Homepage
     .main {
         text-align: center;
         width: 100%;
-        max-width: 700px;
+        max-width: 450px;
         margin-bottom: 20px;
         align-content: center;
     }
 
     .imag {
         width: 100%;
-        max-width: 670px;
+        max-width: 400px;
+        padding: 10px;
     }
 
     .imag img {
@@ -88,6 +89,7 @@ Homepage
     <div class="main">
         <h2 class="titulo">Gestão de Atrasos</h2>
         <button><a href="{% url 'login' %}" style="color: #FFFAFB; text-decoration: none;" class="rounded-pill">Login</a></button>
+        <button><a href="{% url 'cadastro' %}" style="color: #FFFAFB; text-decoration: none;" class="rounded-pill">Cadastro (Teste)</a></button>
     </div>
     <div class="imag">
         <img src="{% static 'img/img_home.webp' %}" alt="Imagem de fundo">

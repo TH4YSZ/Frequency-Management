@@ -1,0 +1,43 @@
+:root {
+    --text-color: #260104;
+    --background-color: #FFFAFB;
+    --button-gradient-start: #FFFAFB;
+    --button-gradient-middle: #FFFAFB;
+    --button-gradient-end: #FFFAFB;
+    --navbar-bg-color: #7C0D1D;
+    --list-bg-color: #FFECF0;
+    --button-bg-color: #FFFAFB;
+}
+
+[data-theme="dark"] {
+    --text-color: #f2f2f2;
+    --background-color: #260104;
+    --button-gradient-start: #DF79A9;
+    --button-gradient-middle: #CC5854;
+    --button-gradient-end: #40010D;
+    --navbar-bg-color: #260104;
+    --list-bg-color: #260104;
+    --button-bg-color: #8C031C;
+}
+
+body {
+    color: var(--text-color);
+    background-color: var(--background-color);
+}
+
+.navbar {
+    background-color: var(--navbar-bg-color);
+}
+
+.bg_Home {
+    background-color: var(--background-color);
+}
+
+.btn-custom {
+    background: linear-gradient(145deg, var(--button-gradient-start), var(--button-gradient-middle) 20%, var(--button-gradient-end));
+    color: var(--text-color);
+}
+
+h2.titulo {
+    color: inherit;
+}

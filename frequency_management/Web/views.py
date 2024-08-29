@@ -8,3 +8,12 @@ def homepage(request):
 
 def login(request):
     return render(request, 'login.html')
+
+def cadastro(request):
+    return render(request, 'cadastro.html')
+
+def cursos(request):
+    return render(request, 'cursos.html')
+
+def relatorio(request):
+    return render(request, 'relatorio.html')

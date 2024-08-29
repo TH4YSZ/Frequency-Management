@@ -2,19 +2,151 @@
 {% load static %}
 
 {% block title %}
-Relatorio
+Relatório
+{% endblock %}
+
+{% block head %}
+<style>
+    .bg_relatorio {
+        min-height: 100vh;
+        background-color: #FFFAFB;
+        padding: 20px;
+        align-items: center;
+        display: flex;
+        align-content: center;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .titulo-cabecalho {
+        font-size: 2.5rem;
+        padding-top: 20px;
+        color: #000;
+        font-weight: 600;
+        margin-bottom: 20px;
+
+    }
+
+    .container-cursos {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+
+    .imag {
+        max-width: 400px;
+        text-align: center;
+    }
+
+    .imag img {
+        width: 100%;
+        height: auto;
+    }
+
+    .relatorio-lista {
+        flex-grow: 1;
+        margin-right: 20px;
+    }
+
+    .relatorio-item {
+        background-color: #FEEEEE;
+        padding: 10px 20px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+
+    .relatorio-item h5 {
+        margin: 0;
+        color: #7C0D1D;
+    }
+
+    .relatorio-item .icons {
+        display: flex;
+        align-items: center;
+    }
+
+    .relatorio-item .icons i {
+        margin-left: 20px;
+        cursor: pointer;
+        color: #7C0D1D;
+    }
+
+    .relatorio-geral {
+        text-align: center;
+        margin-top: 30px;
+        padding: 20px;
+    }
+
+    .relatorio-geral button {
+        background-color: #FEEEEE;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        color: #7C0D1D;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .relatorio-geral button:hover {
+        background-color: #8C031C;
+        color: #fff;
+    }
+
+    @media (max-width: 768px) {
+        .container-cursos {
+            flex-direction: column;
+        }
+
+        .relatorio-lista {
+            margin-right: 0;
+            margin-bottom: 20px;
+        }
+
+        .imag {
+            max-width: 300px;
+        }
+    }
+</style>
 {% endblock %}
 
 {% block body %}
-<style>
+<div class="bg_relatorio">
+    <h2 class="titulo-cabecalho">Relatórios</h2>
+    <div class="container-cursos">
+        
+        <div class="relatorio-lista">
+            <h5>Mais Recentes</h5>
+            <div class="relatorio-item">
+                <h5>Relatório ISIDSIS – 4-16 agosto de 2024</i></h5>
+                <div class="icons">
+                    <i class="bi bi-download"></i>
+                </div>
+            </div>
+            <h5>Mês de julho de 2024</h5>
+            <div class="relatorio-item">
+                <h5>Relatório geral julho de 2024</h5>
+                <div class="icons">
+                    <i class="bi bi-download"></i>                
+                </div>
+            </div>
+            <h5>Relatorios Anteriores</h5>
+            <div class="relatorio-item">
+                <h5>-</h5>
+            </div>
+            <div class="relatorio-geral">
+                <button>Gerar relatório geral</button>
+            </div>
+        </div>
 
-</style>
-
-<div class="">
-    {% csrf_token %}
-    {% if messages %}
-    {% for message in messages %}
-    {% endif %}
+        <div class="imag">
+            <img src="{% static 'img/img_relatorios.webp' %}" alt="Imagem">
+            
+        </div>
+    </div>
 </div>
-
 {% endblock %}

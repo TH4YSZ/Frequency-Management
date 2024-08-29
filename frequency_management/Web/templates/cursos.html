@@ -1,0 +1,129 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}
+Cursos
+{% endblock %}
+
+{% block head %}
+<style>
+    .container-conteudo {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        background-color: #FFFAFB;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .container-cursos {
+        width: 100%;
+        max-width: 1000px;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .curso {
+        padding: 18px;
+        border-radius: 20px;
+        background-color: #FFECF0;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin: 15px 0;
+        flex-wrap: wrap;
+    }
+
+    .titulo-curso, .detalhes-curso {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #555;
+        flex: 1;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .titulo-cabecalho {
+        color: #000;
+        font-size: 2.5rem;
+        font-weight: 600;
+        margin: 30px;
+    }
+
+    .ident {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin: 0 15px;
+        flex-wrap: wrap;
+        text-align: center;
+    }
+
+    @media (max-width: 768px) {
+        .titulo-cabecalho {
+            font-size: 2rem;
+        }
+
+        .curso, .ident {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .titulo-curso, .detalhes-curso {
+            font-size: 0.8rem;
+            text-align: left;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container-conteudo">
+    <h2 class="titulo-cabecalho">Cursos</h2>
+    <div class="container-cursos">
+
+        <div class="ident">
+            <h5 class="titulo-curso">Turma:</h5>
+            <div class="detalhes-curso">Código do Curso:</div>
+            <div class="detalhes-curso">Atrasos:</div>
+        </div>
+        
+        <div class="curso">
+            <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
+            <div class="detalhes-curso">IS1DSIS-4-16</div>
+            <div class="detalhes-curso">89</div>
+        </div>
+
+        <div class="curso">
+            <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
+            <div class="detalhes-curso">IS1DSIS-4-16</div>
+            <div class="detalhes-curso">89</div>
+        </div>
+
+        <div class="curso">
+            <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
+            <div class="detalhes-curso">IS1DSIS-4-16</div>
+            <div class="detalhes-curso">89</div>
+        </div>
+
+        <div class="curso">
+            <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
+            <div class="detalhes-curso">IS1DSIS-4-16</div>
+            <div class="detalhes-curso">89</div>
+        </div>
+
+        <div class="curso">
+            <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
+            <div class="detalhes-curso">IS1DSIS-4-16</div>
+            <div class="detalhes-curso">89</div>
+        </div>
+
+        <div class="ident">
+            <a href="{% url 'relatorio' %}" class="titulo-curso">Relatório <i class="bi bi-file-earmark-arrow-down"></i></a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

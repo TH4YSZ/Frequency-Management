@@ -1,0 +1,126 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block head %}
+<style>
+    .bg_Login {
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center center;
+        background-size: cover;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        align-items: center;
+        background-color: #FFFAFB;
+        padding: 0 10%;
+    }
+
+    .button {
+        color: #260164;
+        background-color: #FFFAFB;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        margin-top: 20px;
+        max-width: 200px;
+    }
+
+    .button:hover {
+        background-color: #f2f2f2;
+        color: #40010D;
+    }
+
+    .main {
+        padding: 40px;
+        background-color: #7C0D1D;
+        border-radius: 40px;
+        text-align: center;
+        width: 100%;
+        max-width: 400px;
+        margin-bottom: 20px;
+        align-content: center;
+    }
+
+    .imag {
+        width: 100%;
+        max-width: 400px;
+        padding: 10px;
+    }
+
+    .imag img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .titulo {
+        color: #ffff;
+        font-size: 2.5rem;
+        font-weight: 400;
+        margin-bottom: 20px;
+    }
+
+    .form-label{
+        color: white;
+    }
+
+    .form {
+        border-radius: 5px;
+        border: 1px, linear-gradient(to left, #FFF, #7C0D1D);
+        background: linear-gradient(to right, #FFF, #7C0D1D);
+        opacity: 0.3;
+    }
+
+    @media (min-width: 768px) {
+        .bg_Home {
+            justify-content: space-between;
+        }
+
+        .main {
+            text-align: left;
+        }
+
+        .titulo {
+            font-size: 2.5rem;
+            text-align: center;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .titulo {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="bg_Login">
+
+    <div class="main">
+
+        <form>
+            <div class="mb-3">
+                <h2 class="titulo">Fazer Login</h2>
+            <label for="exampleInputUser" class="form-label">Usuário</label>
+            <input type="text" class="form-control form" id="exampleInputUser" aria-describedby="userHelp">
+            </div>
+            <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Senha</label>
+            <input type="password" class="form-control form" id="exampleInputPassword1">
+            </div>
+            <button class="button"><a href="{% url 'cursos' %}" style="color:#40010D ;text-decoration: none;">Entrar</a></button>
+        </form>
+        
+    </div>
+    <div class="imag">
+        <img src="{% static 'img/img_login.webp' %}" alt="Imagem">
+    </div>
+</div>
+{% endblock %}

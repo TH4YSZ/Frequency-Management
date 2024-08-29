@@ -1,0 +1,130 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}
+Cadastro
+{% endblock %}
+
+{% block head %}
+<style>
+    .bg_Cadastro {
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center center;
+        background-size: cover;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        align-items: center;
+        background-color: #FFFAFB;
+        padding: 0 10%;
+    }
+
+    .button {
+        color: #260164;
+        background-color: #FFFAFB;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        margin-top: 20px;
+        max-width: 20;
+    }
+
+    .button:hover {
+        background-color: #f2f2f2;
+        color: #40010D;
+    }
+
+    .main {
+        padding: 40px;
+        background-color: #7C0D1D;
+        border-radius: 40px;
+        text-align: center;
+        width: 100%;
+        max-width: 400px;
+        margin-bottom: 20px;
+        align-content: center;
+    }
+
+    .imag {
+        width: 100%;
+        max-width: 400px;
+        padding: 10px;
+    }
+
+    .imag img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .titulo {
+        color: #ffff;
+        font-size: 2.5rem;
+        font-weight: 400;
+        margin-bottom: 20px;
+    }
+
+    .form-label{
+        color: white;
+    }
+
+    .form {
+        border-radius: 5px;
+        background: linear-gradient(to right, #fff 20%, #7C0D1D);
+        opacity: 0.3;
+        border: none;
+    }
+
+    @media (min-width: 768px) {
+        .bg_Cadastro {
+            justify-content: space-between;
+        }
+
+        .main {
+            text-align: left;
+        }
+
+        .titulo {
+            font-size: 2.5rem;
+            text-align: center;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .titulo {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="bg_Cadastro">
+
+    <div class="main">
+
+        <form>
+            <h2 class="titulo">Fazer Cadastro</h2>
+            <div class="mb-3">
+                <label for="exampleInputName" class="form-label">Nome e Sobrenome</label>
+                <input type="text" class="form-control form" id="exampleInputName" aria-describedby="nameHelp">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputUser" class="form-label">Usuário</label>
+                <input type="text" class="form-control form" id="exampleInputUser">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword" class="form-label">Senha</label>
+                <input type="password" class="form-control form" id="exampleInputPassword">
+            </div>
+            <button class="button"><a href="{% url 'login' %}" style="color:#40010D ;text-decoration: none;">Cadastrar</a></button>
+        </form>
+        
+    </div>
+    <div class="imag">
+        <img src="{% static 'img/img_login.webp' %}" alt="Imagem">
+    </div>
+</div>
+{% endblock %}
