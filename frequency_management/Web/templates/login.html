@@ -14,10 +14,10 @@ Login
         background-size: cover;
         height: 100vh;
         display: flex;
-        justify-content: center;
+        justify-content: space-around;
         flex-wrap: wrap;
         align-items: center;
-        background-color: #FFFAFB;
+        background-color: var(--background-color);
         padding: 0 10%;
     }
 
@@ -26,9 +26,9 @@ Login
         background-color: #FFFAFB;
         border: none;
         padding: 10px 20px;
-        border-radius: 20px;
+        border-radius: 10px;
         margin-top: 20px;
-        max-width: 200px;
+        width: 320px;
     }
 
     .button:hover {
@@ -49,7 +49,7 @@ Login
 
     .imag {
         width: 100%;
-        max-width: 400px;
+        max-width: 500px;
         padding: 10px;
     }
 
@@ -60,21 +60,23 @@ Login
     }
 
     .titulo {
-        color: #ffff;
+        color: #FFFAFB;
         font-size: 2.5rem;
         font-weight: 400;
         margin-bottom: 20px;
     }
 
-    .form-label{
-        color: white;
-    }
-
     .form {
         border-radius: 5px;
-        border: 1px, linear-gradient(to left, #FFF, #7C0D1D);
-        background: linear-gradient(to right, #FFF, #7C0D1D);
-        opacity: 0.3;
+        border: 1px solid;
+        border-image: linear-gradient(to left, #913744, #7C0D1D);
+        border-image-slice: 1;
+        border-image-radius: 5px;
+        background: linear-gradient(to right, #913744, #7C0D1D);
+    }
+
+    .form::placeholder {
+        color: #FFFAFB;
     }
 
     @media (min-width: 768px) {
@@ -107,13 +109,13 @@ Login
 
         <form>
             <div class="mb-3">
-                <h2 class="titulo">Fazer Login</h2>
-            <label for="exampleInputUser" class="form-label">Usuário</label>
-            <input type="text" class="form-control form" id="exampleInputUser" aria-describedby="userHelp">
+                <h2 class="titulo" style="color: white;">Fazer Login</h2>
+            <label for="exampleInputUser" class="form-label; color: #FFFAFB;">Usuário</label>
+            <input type="text" class="form-control form" id="exampleInputUser" aria-describedby="userHelp" placeholder="Nome de usuário">
             </div>
             <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Senha</label>
-            <input type="password" class="form-control form" id="exampleInputPassword1">
+            <input type="password" class="form-control form" id="exampleInputPassword1" placeholder="Senha">
             </div>
             <button class="button"><a href="{% url 'cursos' %}" style="color:#40010D ;text-decoration: none;">Entrar</a></button>
         </form>

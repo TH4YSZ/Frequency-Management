@@ -17,7 +17,7 @@ Cadastro
         justify-content: center;
         flex-wrap: wrap;
         align-items: center;
-        background-color: #FFFAFB;
+        background-color: var(--background-color);
         padding: 0 10%;
     }
 
@@ -37,19 +37,20 @@ Cadastro
     }
 
     .main {
+        margin-top:100px;
         padding: 40px;
         background-color: #7C0D1D;
         border-radius: 40px;
         text-align: center;
         width: 100%;
         max-width: 400px;
-        margin-bottom: 20px;
-        align-content: center;
+        margin-bottom: 30px;
+        align-content: center; 
     }
 
     .imag {
         width: 100%;
-        max-width: 400px;
+        max-width: 600px;
         padding: 10px;
     }
 
@@ -66,15 +67,20 @@ Cadastro
         margin-bottom: 20px;
     }
 
-    .form-label{
-        color: white;
+    .form-label {
+        color: white; /* Cor branca para todos os labels */
+    }
+
+    .form::placeholder {
+        color: #FFFF;
     }
 
     .form {
         border-radius: 5px;
-        background: linear-gradient(to right, #fff 20%, #7C0D1D);
-        opacity: 0.3;
-        border: none;
+        border: 1px solid;
+        border-image: linear-gradient(to left, #913744, #7C0D1D);
+        border-image-slice: 1;
+        background: linear-gradient(to right, #913744, #7C0D1D);
     }
 
     @media (min-width: 768px) {
@@ -106,25 +112,29 @@ Cadastro
     <div class="main">
 
         <form>
-            <h2 class="titulo">Fazer Cadastro</h2>
+            <h2 class="titulo" style="color: white;">Fazer Cadastro</h2>
             <div class="mb-3">
-                <label for="exampleInputName" class="form-label">Nome e Sobrenome</label>
-                <input type="text" class="form-control form" id="exampleInputName" aria-describedby="nameHelp">
+                <label for="exampleInputName" class="form-label">Nome</label>
+                <input type="text" class="form-control form" id="exampleInputName" aria-describedby="nameHelp" placeholder="Insira seu nome">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputName" class="form-label">Sobrenome</label>
+                <input type="text" class="form-control form" id="exampleInputName" aria-describedby="nameHelp" placeholder="Insira seu sobrenome">
             </div>
             <div class="mb-3">
                 <label for="exampleInputUser" class="form-label">Usuário</label>
-                <input type="text" class="form-control form" id="exampleInputUser">
+                <input type="text" class="form-control form" id="exampleInputUser" placeholder="Insira seu nome de usuário">
             </div>
             <div class="mb-3">
                 <label for="exampleInputPassword" class="form-label">Senha</label>
-                <input type="password" class="form-control form" id="exampleInputPassword">
+                <input type="password" class="form-control form" id="exampleInputPassword" placeholder="Insira sua senha">
             </div>
-            <button class="button"><a href="{% url 'login' %}" style="color:#40010D ;text-decoration: none;">Cadastrar</a></button>
+            <button class="button"><a href="{% url 'login' %}" style="color: #40010D; text-decoration: none;">Cadastrar</a></button>
         </form>
         
     </div>
     <div class="imag">
-        <img src="{% static 'img/img_login.webp' %}" alt="Imagem">
+        <img src="{% static 'img/img_cadastro.webp' %}" alt="Imagem">
     </div>
 </div>
 {% endblock %}

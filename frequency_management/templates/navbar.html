@@ -1,95 +1,61 @@
 {% load static %}
 
 <style>
-    /* O switch - o container */
-    .interruptor {
-        position: relative;
-        display: inline-block;
-        width: 60px;
-        height: 34px;
-    }
 
-    /* Esconder o checkbox HTML padrão */
-    .interruptor input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
+/* Navbar e outros estilos */
+.navbar {
+    background-color: #7C0D1D;
+    width: 100%;
+    padding: 9px;
+    position: fixed;
+    bottom: 1;
+    left: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-    /* O slider */
-    .deslizador {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #8C031C;
-        transition: .4s;
-        border-radius: 34px;
-    }
+.navbar img {
+    width: 10%;
+    max-width: 100%;
+    height: auto;
+}
 
-    /* O círculo dentro do slider */
-    .deslizador:before {
-        position: absolute;
-        content: "";
-        height: 26px;
-        width: 26px;
-        left: 4px;
-        bottom: 4px;
-        background-color: white;
-        transition: .4s;
-        border-radius: 50%;
-        background-image: url("{% static 'img/tema_dark.webp' %}");
-        background-size: cover;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #8C031C;
-    }
+.nav-direita {
+    display: flex;
+    align-items: center;
+}
 
-    /* Quando o checkbox está marcado */
-    input:checked+.deslizador {
-        background-color: #260104;
-    }
+.logo_senai {
+    margin-left: 30px;
+}
 
-    /* Mover o círculo para a direita e mudar a imagem */
-    input:checked+.deslizador:before {
-        transform: translateX(26px);
-        background-image: url("{% static 'img/tema_white.webp' %}");
-        background-color: #260104;
-    }
+.IconButton-homepage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px; /* Ajuste conforme necessário */
+    height: 40px; /* Ajuste conforme necessário */
+    background-color: transparent; /* Fundo transparente para o ícone */
+    border: none;
+    cursor: pointer;
+}
 
-    .navbar {
-        background-color: #7C0D1D;
-        width: 100%;
-        padding: 9px;
-        position: fixed;
-        bottom: 1;
-        left: 1;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+.material-symbols-outlined {
+    font-size: 24px; /* Ajuste conforme necessário */
+    color: #ffffff; /* Cor branca para o ícone */
+}
 
-    .navbar img {
-        width: 10%;
-        max-width: 100%;
-        height: auto;
-    }
 
-    .nav-direita {
-        display: flex;
-        align-items: center;
-    }
 </style>
 
 <nav class="navbar">
-    <img src="{% static 'img/senai_logo.png' %}" alt="Senai Logo">
-    <div class="nav-direita">
-        <label class="interruptor">
-            <input type="checkbox" checked>
-            <span class="deslizador"></span>
-        </label>
+    <img class="logo_senai" src="{% static 'img/senai_logo.png' %}" alt="Senai Logo">
+    <div class="Buttons-component">
+        <a id="theme-toggle" class="IconButton-homepage">
+            <span class="material-symbols-outlined">
+                contrast
+            </span>
+        </a>
     </div>
 </nav>

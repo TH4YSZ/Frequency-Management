@@ -1,0 +1,87 @@
+.bg_Home {
+    background-image: url("{% static 'img/bg_home.jpg' %}");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+    color: var(--text-color);
+    padding: 0 10%;
+}
+
+button {
+    background-color: #7C0D1D;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #8C031C;
+    color: #000;
+}
+
+.main {
+    text-align: center;
+    width: 100%;
+    max-width: 450px;
+    margin-bottom: 20px;
+    align-content: center;
+}
+
+.imag {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+}
+
+.imag img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.titulo {
+    color: var(--color-primary);
+    font-size: 2.5rem;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+    .bg_Home {
+        justify-content: space-between;
+    }
+
+    .main {
+        text-align: left;
+    }
+
+    .titulo {
+        font-size: 3rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .titulo {
+        font-size: 4rem;
+    }
+}
+.IconButton-homepage {
+    text-decoration: none;
+    color: var(--text-color); /* Cor baseada no tema */
+    transition: color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    margin-right: 30px;
+}
+
+.IconButton-homepage:hover {
+    color: #781010;
+    cursor: pointer;
+    transform: scale(1.1);
+}

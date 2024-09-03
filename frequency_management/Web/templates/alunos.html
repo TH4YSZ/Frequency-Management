@@ -1,0 +1,246 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}
+Gestão de Atrasos
+{% endblock %}
+
+{% block head %}
+<style>
+    .container-conteudo {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #FFFAFB;
+        padding: 20px;
+        box-sizing: border-box;
+        flex-direction: column; 
+    }
+
+    .titulo-cabecalho {
+        color: #000;
+        font-size: 2.5rem;
+        font-weight: 600;
+        text-align: center;
+        margin: 30px ;
+        width: 100%; 
+        padding: 20px;
+    }
+
+    .container-atrasos {
+        display: flex;
+        justify-content: space-between;
+        width: 100%; 
+        background-color: #FFFAFB;
+        border-radius: 10px;
+        box-sizing: border-box;
+    }
+
+    .lista-alunos {
+        flex: 3;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .aluno-info {
+        padding: 10px;
+        border-radius: 20px;
+        background-color: #FFECF0;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin: 20px 0;
+        flex-wrap: wrap;
+    }
+
+    .titulo-info, .detalhes-info {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #555;
+        flex: 1;
+        text-align: center;
+    }
+
+    .ident {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+    }
+
+    .options {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .options a {
+        text-decoration: none;
+        color: #870000;
+        font-size: 18px;
+    }
+
+    .inform {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        border-radius: 10px;
+        margin-left: 20px;
+        gap: 20px;
+    }
+
+    .inform h3 {
+        margin: 0;
+        color: #555;
+        padding:10px
+    }
+
+    .inform p {
+        margin: 5px 0;
+        color: #555;
+    }
+
+    .barra-lateral {
+        flex: 1;
+        display: flex;
+        flex-wrap: wrap;
+        background-color: #FFECF0;
+        border-radius: 20px;
+        max-width: 270px;
+        max-height: 200px;
+        padding: 20px;
+    }
+
+    .botao-lateral {
+        display: flex;
+        flex-direction: column; 
+        align-items: center; 
+    }
+
+    .botao-lateral button {
+        background-color: #FEEEEE;
+        border: none;
+        border-radius: 10px;
+        color: #7C0D1D;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 10px 20px;
+        width: 250px;
+        height: 40px;
+    }
+
+    .botao-lateral button:hover {
+        background-color: #8C031C;
+        color: #fff;
+    }
+
+    @media (max-width: 768px) {
+        .container-atrasos {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .inform {
+            margin-left: 0;
+            margin-top: 20px;
+            width: 100%;
+            max-width: none;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container-conteudo">
+    <h2 class="titulo-cabecalho">Análise e Desenvolvimento de Sistemas</h2>
+    
+    <div class="container-atrasos">
+        <div class="lista-alunos">
+            <div class="ident">
+                <h5 class="titulo-info">Aluno</h5>
+                <div class="detalhes-info">Atrasos</div>
+                <div class="detalhes-info">Frequência</div>
+                <div class="detalhes-info">Faltas</div>
+                <div class="detalhes-info">Opções</div>
+            </div>
+
+            <div class="aluno-info">
+                <div class="titulo-info">Natália Vaz Cerqueira</div>
+                <div class="detalhes-info">0</div>
+                <div class="detalhes-info">100%</div>
+                <div class="detalhes-info">0</div>
+                <div class="detalhes-info options">
+                    <a href="#"><i class="bi bi-pencil"></i></a>
+                    <a href="#"><i class="bi bi-trash3"></i></a>
+                </div>
+            </div>
+
+            <div class="aluno-info">
+                <div class="titulo-info">Carlos Eduardo Ribeiro Silva</div>
+                <div class="detalhes-info">3</div>
+                <div class="detalhes-info">97%</div>
+                <div class="detalhes-info">3</div>
+                <div class="detalhes-info options">
+                    <a href="#"><i class="bi bi-pencil"></i></a>
+                    <a href="#"><i class="bi bi-trash3"></i></a>
+                </div>
+            </div>
+
+            <div class="aluno-info">
+                <div class="titulo-info">Mariely Alberto Galvão</div>
+                <div class="detalhes-info">0</div>
+                <div class="detalhes-info">100%</div>
+                <div class="detalhes-info">0</div>
+                <div class="detalhes-info options">
+                    <a href="#"><i class="bi bi-pencil"></i></a>
+                    <a href="#"><i class="bi bi-trash3"></i></a>
+                </div>
+            </div>
+
+            <div class="aluno-info">
+                <div class="titulo-info">Leonardo Pereira Gomes</div>
+                <div class="detalhes-info">12</div>
+                <div class="detalhes-info">68%</div>
+                <div class="detalhes-info">5</div>
+                <div class="detalhes-info options">
+                    <a href="#"><i class="bi bi-pencil"></i></a>
+                    <a href="#"><i class="bi bi-trash3"></i></a>
+                </div>
+            </div>
+
+            <div class="aluno-info">
+                <div class="titulo-info">Ana Carolina Martins Costa</div>
+                <div class="detalhes-info">7</div>
+                <div class="detalhes-info">95%</div>
+                <div class="detalhes-info">4</div>
+                <div class="detalhes-info options">
+                    <a href="#"><i class="bi bi-pencil"></i></a>
+                    <a href="#"><i class="bi bi-trash3"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="inform">
+            
+            <div class="barra-lateral">
+                <h3>Informações</h3>
+                <p><strong>Responsável:</strong> Carlos e Thiago</p>
+                <p><strong>Codigo da urma:</strong> ISIDSIS-4-24</p>
+                <p><strong>Sala:</strong> C13</p>
+            </div>
+
+            <div class="botao-lateral">
+                <a href="#"><button>Adicionar +</button></a>
+                <a href="#"><button>Excluir -</button></a>
+                <a href="{% url 'relatorio' %}"><button>Relatorio <i class="bi bi-file-earmark-arrow-down"></i></button></a>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+{% endblock %}
