@@ -1,40 +1,34 @@
-# from django import forms
+from django import forms
 
-# TIPO_USUARIOS = (
-#     ("COORDENADOR", "Coordenador"),
-#     ("PROFESSOR", "Professor"),
-# )
-
-
-# class FormLogin(forms.Form):
-#     username = forms.CharField(
-#         label="Usuário",
-#         max_length=20,
-#         widget=forms.TextInput(attrs={'placeholder': 'Nome de Usuário', 'class': 'form-control'})
-#     )
-#     password = forms.CharField(
-#         label="Senha",
-#         widget=forms.PasswordInput(attrs={'placeholder': 'Senha', 'class': 'form-control'})
-#     )
+TIPO_USUARIOS = (
+    ("COORDENAÇÃO", "Coordenação"),
+    ("ADMINISTRAÇÃO", "Administração"),
+)
 
 
-# class FormCadastro(forms.Form):
-#     nome = forms.CharField(
-#         label="Nome",
-#         max_length=20,
-#         widget=forms.TextInput(attrs={'placeholder': 'Nome', 'class': 'form-control'}))
+class FormLogin(forms.Form):
+    username = forms.CharField(max_length=20,
+        widget=forms.TextInput(attrs={'placeholder': 'Nome de usuário', 'class': 'form-control form'}))
+    senha = forms.CharField(max_length=20,
+        widget=forms.PasswordInput(attrs={'placeholder': 'Senha', 'class': 'form-control form', 'id': 'id_password'}))
 
-#     sobrenome = forms.CharField(
-#         label="Sobrenome",
-#         max_length=20,
-#         widget=forms.TextInput(attrs={'placeholder': 'Sobrenome', 'class': 'form-control'}))
 
-#     username = forms.CharField(
-#         label="Usuário",
-#         max_length=20,
-#         widget=forms.TextInput(attrs={'placeholder': 'Nome de Usuário', 'class': 'form-control'}))
+class FormCadastro(forms.Form):
+    nome = forms.CharField(
+        max_length=20,
+        widget=forms.TextInput(attrs={'placeholder': 'Nome', 'class': 'form-control form'})
+    )
 
-#     senha = forms.CharField(
-#         label="Senha",
-#         max_length=20,
-#         widget=forms.PasswordInput(attrs={'placeholder': 'Senha', 'class': 'form-control'}))
+    sobrenome = forms.CharField(
+        max_length=20,
+        widget=forms.TextInput(attrs={'placeholder': 'Sobrenome', 'class': 'form-control input-group form'})
+    )
+    
+    username = forms.CharField(
+        max_length=20,
+        widget=forms.TextInput(attrs={'placeholder': 'Nome de usuário', 'class': 'form-control form'})
+    )
+    senha = forms.CharField(
+        max_length=20,
+        widget=forms.PasswordInput(attrs={'placeholder': 'Senha', 'class': 'form-control form'})
+    )

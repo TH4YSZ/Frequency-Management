@@ -7,6 +7,7 @@
     --navbar-bg-color: #260104;
     --list-bg-color: #260104;
     --button-bg-color: #8C031C;
+    --table-bg-color: rgba(79, 1, 13, 0.2); /* Fundo translúcido */
 }
 
 [data-theme="dark"] {
@@ -17,7 +18,8 @@
     --button-gradient-end: #FFFAFB;
     --navbar-bg-color: #7C0D1D;
     --list-bg-color: #FFECF0;
-    --button-bg-color: #FFFAFB;                                                                                                                                                                                                                                                                                                     
+    --button-bg-color: #FFFAFB;
+    --table-bg-color: rgba(255, 236, 240, 0.7); /* Fundo translúcido no tema claro */                                                                                                                                                                                                                                                                                                
 }
 
 body {

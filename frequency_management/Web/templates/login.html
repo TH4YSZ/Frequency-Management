@@ -38,7 +38,7 @@ Login
 
     .main {
         padding: 40px;
-        background-color: #7C0D1D;
+        background: linear-gradient(135deg, #4e0205, #8d0103);
         border-radius: 40px;
         text-align: center;
         width: 100%;
@@ -67,20 +67,53 @@ Login
     }
 
     .form {
-        border-radius: 5px;
-        border: 1px solid;
-        border-image: linear-gradient(to left, #913744, #7C0D1D);
-        border-image-slice: 1;
-        border-image-radius: 5px;
+        border: none;
         background: linear-gradient(to right, #913744, #7C0D1D);
+        color: #FFFAFB;
     }
 
     .form::placeholder {
         color: #FFFAFB;
     }
 
+    .form:focus {
+        border: none;
+        background: linear-gradient(to right, #913744, #7C0D1D);
+        color: #FFFAFB;
+    }
+
+    .form-label {
+        color: #FFFAFB;
+    }
+
+    .icone {
+        color: #FFFAFB;
+    }
+
+    .input-group {
+        border: 1px solid;
+        border-image: linear-gradient(to left, #913744, #7C0D1D);
+        border-image-slice: 1;
+        border-radius: 5px;
+    }
+
+    .input-group-text {
+        background-color: #913744;
+        border: none;
+        color: #FFFAFB;
+        margin: 0; 
+    }
+
+    .esconder_senha {
+        color: #FFFAFB;
+        cursor: pointer;
+        position: absolute;
+        right: 5%;
+        top: 20%;
+    }
+
     @media (min-width: 768px) {
-        .bg_Home {
+        .bg_Login {
             justify-content: space-between;
         }
 
@@ -104,22 +137,41 @@ Login
 
 {% block body %}
 <div class="bg_Login">
-
     <div class="main">
-
-        <form>
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
             <div class="mb-3">
                 <h2 class="titulo" style="color: white;">Fazer Login</h2>
-            <label for="exampleInputUser" class="form-label; color: #FFFAFB;">Usuário</label>
-            <input type="text" class="form-control form" id="exampleInputUser" aria-describedby="userHelp" placeholder="Nome de usuário">
+                <label for="username" class="form-label">Nome de Usuário</label>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-person icone"></i>
+                    </span>
+                    {{ form.username }}
+                </div>
             </div>
+
+            <!-- INPUTA A SENHA -->
             <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Senha</label>
-            <input type="password" class="form-control form" id="exampleInputPassword1" placeholder="Senha">
+                <label for="senha" class="form-label">Senha</label>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-lock icone"></i>
+                    </span>
+                    {{ form.senha }}
+                    <i class="bi bi-eye esconder_senha" onclick="mostrar()" id="btnSenha"></i>
+                </div>
             </div>
-            <button class="button"><a href="{% url 'cursos' %}" style="color:#40010D ;text-decoration: none;">Entrar</a></button>
+            <button class="button" type="submit">Entrar</button>
+
+            {% if messages %}
+                {% for mensagem in messages %}
+                    <div class="mt-2 alert alert-warning" role="alert">
+                        {{ mensagem }}
+                    </div>
+                {% endfor %}
+            {% endif %}
         </form>
-        
     </div>
     <div class="imag">
         <img src="{% static 'img/img_login.webp' %}" alt="Imagem">

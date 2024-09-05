@@ -12,27 +12,28 @@ Gestão de Atrasos
         display: flex;
         justify-content: center;
         align-items: center;
-        background-color: #FFFAFB;
+        align-content: center;
+        background-color: var(--background-color);
         padding: 20px;
         box-sizing: border-box;
         flex-direction: column; 
     }
 
     .titulo-cabecalho {
-        color: #000;
+        color: var(--color-primary);
         font-size: 2.5rem;
         font-weight: 600;
         text-align: center;
         margin: 30px ;
         width: 100%; 
-        padding: 20px;
+        padding:30px
+   
     }
 
     .container-atrasos {
         display: flex;
         justify-content: space-between;
         width: 100%; 
-        background-color: #FFFAFB;
         border-radius: 10px;
         box-sizing: border-box;
     }
@@ -57,9 +58,10 @@ Gestão de Atrasos
     .titulo-info, .detalhes-info {
         margin: 0;
         font-size: 0.9rem;
-        color: #555;
+        color: #260104;
         flex: 1;
         text-align: center;
+    
     }
 
     .ident {
@@ -90,17 +92,18 @@ Gestão de Atrasos
         border-radius: 10px;
         margin-left: 20px;
         gap: 20px;
+        align-items: center;
     }
 
     .inform h3 {
         margin: 0;
-        color: #555;
+        color: #260104;
         padding:10px
     }
 
     .inform p {
         margin: 5px 0;
-        color: #555;
+        color: #260104;
     }
 
     .barra-lateral {
@@ -112,6 +115,7 @@ Gestão de Atrasos
         max-width: 270px;
         max-height: 200px;
         padding: 20px;
+        
     }
 
     .botao-lateral {
@@ -124,8 +128,8 @@ Gestão de Atrasos
         background-color: #FEEEEE;
         border: none;
         border-radius: 10px;
-        color: #7C0D1D;
-        font-weight: bold;
+        color: #260104;
+        font-weight: 400;
         cursor: pointer;
         padding: 10px 20px;
         width: 250px;
@@ -134,7 +138,7 @@ Gestão de Atrasos
 
     .botao-lateral button:hover {
         background-color: #8C031C;
-        color: #fff;
+        color: #FFFAFB;
     }
 
     @media (max-width: 768px) {
@@ -168,7 +172,7 @@ Gestão de Atrasos
             </div>
 
             <div class="aluno-info">
-                <div class="titulo-info">Natália Vaz Cerqueira</div>
+                <h5 class="titulo-info">Natália Vaz Cerqueira</h5>
                 <div class="detalhes-info">0</div>
                 <div class="detalhes-info">100%</div>
                 <div class="detalhes-info">0</div>
@@ -179,7 +183,7 @@ Gestão de Atrasos
             </div>
 
             <div class="aluno-info">
-                <div class="titulo-info">Carlos Eduardo Ribeiro Silva</div>
+                <h5 class="titulo-info">Carlos Eduardo Ribeiro Silva</h5>
                 <div class="detalhes-info">3</div>
                 <div class="detalhes-info">97%</div>
                 <div class="detalhes-info">3</div>
@@ -190,7 +194,7 @@ Gestão de Atrasos
             </div>
 
             <div class="aluno-info">
-                <div class="titulo-info">Mariely Alberto Galvão</div>
+                <h5 class="titulo-info">Mariely Alberto Galvão</h5>
                 <div class="detalhes-info">0</div>
                 <div class="detalhes-info">100%</div>
                 <div class="detalhes-info">0</div>
@@ -201,7 +205,7 @@ Gestão de Atrasos
             </div>
 
             <div class="aluno-info">
-                <div class="titulo-info">Leonardo Pereira Gomes</div>
+                <h5 class="titulo-info">Leonardo Pereira Gomes</h5>
                 <div class="detalhes-info">12</div>
                 <div class="detalhes-info">68%</div>
                 <div class="detalhes-info">5</div>
@@ -212,7 +216,7 @@ Gestão de Atrasos
             </div>
 
             <div class="aluno-info">
-                <div class="titulo-info">Ana Carolina Martins Costa</div>
+                <h5 class="titulo-info">Ana Carolina Martins Costa</h5>
                 <div class="detalhes-info">7</div>
                 <div class="detalhes-info">95%</div>
                 <div class="detalhes-info">4</div>
@@ -226,16 +230,16 @@ Gestão de Atrasos
         <div class="inform">
             
             <div class="barra-lateral">
-                <h3>Informações</h3>
+                <div style="margin-left: 25px"><h3>Informações</h3></div>
                 <p><strong>Responsável:</strong> Carlos e Thiago</p>
-                <p><strong>Codigo da urma:</strong> ISIDSIS-4-24</p>
+                <p><strong>Código da Turma:</strong> ISIDSIS-4-24</p>
                 <p><strong>Sala:</strong> C13</p>
             </div>
 
             <div class="botao-lateral">
                 <a href="#"><button>Adicionar +</button></a>
                 <a href="#"><button>Excluir -</button></a>
-                <a href="{% url 'relatorio' %}"><button>Relatorio <i class="bi bi-file-earmark-arrow-down"></i></button></a>
+                <a href="{% url 'relatorio' %}"><button>Relatório <i class="bi bi-file-earmark-arrow-down"></i></button></a>
             </div>
 
         </div>

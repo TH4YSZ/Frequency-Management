@@ -14,7 +14,7 @@ Cadastro
         background-size: cover;
         height: 100vh;
         display: flex;
-        justify-content: center;
+        justify-content: space-around;
         flex-wrap: wrap;
         align-items: center;
         background-color: var(--background-color);
@@ -28,7 +28,7 @@ Cadastro
         padding: 10px 20px;
         border-radius: 20px;
         margin-top: 20px;
-        max-width: 20;
+        max-width: 320px;
     }
 
     .button:hover {
@@ -68,7 +68,7 @@ Cadastro
     }
 
     .form-label {
-        color: white; /* Cor branca para todos os labels */
+        color: white;
     }
 
     .form::placeholder {
@@ -77,10 +77,33 @@ Cadastro
 
     .form {
         border-radius: 5px;
-        border: 1px solid;
+        border: none;
+        color: #FFFAFB;
+        border: 0px solid;
         border-image: linear-gradient(to left, #913744, #7C0D1D);
         border-image-slice: 1;
         background: linear-gradient(to right, #913744, #7C0D1D);
+    }
+
+    .input-group-text {
+        background-color: #913744;
+        border: none;
+        color: #FFFAFB;
+        margin: 0;
+    }
+
+    .form::placeholder {
+        color: #FFFAFB;
+    }
+
+    .form:focus {
+        border: none;
+        background: linear-gradient(to right, #913744, #7C0D1D);
+        color: #FFFAFB;
+    }
+
+    .form-label {
+        color: #FFFAFB;
     }
 
     @media (min-width: 768px) {
@@ -111,25 +134,52 @@ Cadastro
 
     <div class="main">
 
-        <form>
+        
+        <form method="post">
             <h2 class="titulo" style="color: white;">Fazer Cadastro</h2>
+            {% csrf_token %}
+            
             <div class="mb-3">
                 <label for="exampleInputName" class="form-label">Nome</label>
-                <input type="text" class="form-control form" id="exampleInputName" aria-describedby="nameHelp" placeholder="Insira seu nome">
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-person icone"></i>
+                    </span>
+                    {{ form.nome }}
+                </div>
             </div>
+
             <div class="mb-3">
-                <label for="exampleInputName" class="form-label">Sobrenome</label>
-                <input type="text" class="form-control form" id="exampleInputName" aria-describedby="nameHelp" placeholder="Insira seu sobrenome">
+                <label for="exampleInputSobrenome" class="form-label">Sobrenome</label>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-person icone"></i>
+                    </span>
+                    {{ form.sobrenome }}
+                </div>
             </div>
+
             <div class="mb-3">
                 <label for="exampleInputUser" class="form-label">Usuário</label>
-                <input type="text" class="form-control form" id="exampleInputUser" placeholder="Insira seu nome de usuário">
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-person icone"></i>
+                    </span>
+                    {{ form.username }}
+                </div>
             </div>
+
             <div class="mb-3">
                 <label for="exampleInputPassword" class="form-label">Senha</label>
-                <input type="password" class="form-control form" id="exampleInputPassword" placeholder="Insira sua senha">
+                <div class="input-group">
+                    <span class="input-group-text" style="background-color: #913744; border: none;">
+                        <i class="bi bi-lock icone"></i>
+                    </span>
+                    {{ form.senha }}
+                </div>
             </div>
-            <button class="button"><a href="{% url 'login' %}" style="color: #40010D; text-decoration: none;">Cadastrar</a></button>
+
+            <button class="button" type="submit" style="color: #40010D; text-decoration: none;">Cadastrar</button>
         </form>
         
     </div>
@@ -138,3 +188,14 @@ Cadastro
     </div>
 </div>
 {% endblock %}
+.main {
+    margin-top: 100px;
+    padding: 40px;
+    background-color: #7C0D1D;
+    border-radius: 40px;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 30px;
+    align-content: center;
+}

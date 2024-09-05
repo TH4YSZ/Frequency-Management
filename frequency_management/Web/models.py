@@ -1,8 +1,8 @@
 from django.db import models
 
 TIPO_USUARIOS = (
-    ("COORDENADOR", "Coordenador"),
-    ("PROFESSOR", "Professor")
+    ("COORDENAÇÃO", "Coordenação"),
+    ("ADMINISTRAÇÃO", "Administração")
 )
 
 class Senai(models.Model):
@@ -44,10 +44,10 @@ class Curso(models.Model):
 
 class Usuario(models.Model):
     nome = models.CharField(max_length=60)
-    sobrenome = models.CharField(max_length=20)
-    nome_usuario = models.CharField(max_length=20)
+    sobrenome = models.CharField(max_length=60)
+    username = models.CharField(max_length=20, primary_key=True)
     senha = models.CharField(max_length=20)
-    cargo = models.CharField(max_length=15)
+    cargo = models.CharField(max_length=15, choices=TIPO_USUARIOS)
 
     def __str__(self):
         return self.nome_usuario
