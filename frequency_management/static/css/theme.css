@@ -1,45 +1,115 @@
-:root {
-    --text-color: #f2f2f2;
-    --background-color: #260104;
-    --button-gradient-start: #DF79A9;
-    --button-gradient-middle: #CC5854;
-    --button-gradient-end: #40010D;
-    --navbar-bg-color: #260104;
-    --list-bg-color: #260104;
-    --button-bg-color: #8C031C;
-    --table-bg-color: rgba(79, 1, 13, 0.2); /* Fundo translúcido */
-}
-
-[data-theme="dark"] {
-    --text-color: #260104;
-    --background-color: #FFFAFB;
-    --button-gradient-start: #FFFAFB;
-    --button-gradient-middle: #FFFAFB;
-    --button-gradient-end: #FFFAFB;
-    --navbar-bg-color: #7C0D1D;
-    --list-bg-color: #FFECF0;
-    --button-bg-color: #FFFAFB;
-    --table-bg-color: rgba(255, 236, 240, 0.7); /* Fundo translúcido no tema claro */                                                                                                                                                                                                                                                                                                
-}
-
-body {
-    color: var(--text-color);
-    background-color: var(--background-color);
-}
-
-.navbar {
-    background-color: var(--navbar-bg-color);
-}
-
-.bg_Home {
-    background-color: var(--background-color);
-}
-
-.btn-custom {
-    background: linear-gradient(145deg, var(--button-gradient-start), var(--button-gradient-middle) 20%, var(--button-gradient-end));
-    color: var(--text-color);
-}
-
-h2.titulo {
-    color: inherit;
-}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Definição das cores */
+  :root {
+      --text-color: #f2f2f2;
+      --background-color: #260104;
+      --button-gradient-start: #DF79A9;
+      --button-gradient-middle: #CC5854;
+      --button-gradient-end: #40010D;
+      --navbar-bg-color: #260104;
+      --list-bg-color: #260104;
+      --button-bg-color: #8C031C;
+      --table-bg-color: rgba(79, 1, 13, 0.2); /* Fundo translúcido */
+  }
+  
+  [data-theme="dark"] {
+      --text-color: #260104;
+      --background-color: #FFFAFB;
+      --button-gradient-start: #FFFAFB;
+      --button-gradient-middle: #FFFAFB;
+      --button-gradient-end: #FFFAFB;
+      --navbar-bg-color: #7C0D1D;
+      --list-bg-color: #FFECF0;
+      --button-bg-color: #FFFAFB;
+      --table-bg-color: rgba(255, 236, 240, 0.7); /* Fundo translúcido no tema claro */
+  }
+  
+  body {
+      color: var(--text-color);
+      background-color: var(--background-color);
+      font-family: "Inter", sans-serif;
+      line-height: 1.7;
+      transition: background-color 0.8s ease, color 0.5s ease;
+  }
+  
+  .navbar {
+      background-color: var(--navbar-bg-color);
+      transition: background-color 0.8s ease;
+  }
+  
+  .bg_Home {
+      background-color: var(--background-color);
+      transition: background-color 0.8s ease;
+  }
+  
+  .btn-custom {
+      background: linear-gradient(145deg, var(--button-gradient-start), var(--button-gradient-middle) 20%, var(--button-gradient-end));
+      color: var(--text-color);
+      transition: background 0.8s ease, color 0.5s ease; /* Animação de transição */
+  }
+  
+  h2.titulo {
+      color: inherit;
+      transition: color 0.5s ease;
+  }
+  
+  .container {
+      max-width: 600px;
+      margin: 40px auto;
+      display: flex;
+      padding: 20px;
+      flex-direction: column;
+  }
+  
+  .text-wrapper {
+      width: 100%;
+      padding: 20px;
+      background-color: var(--background-color);
+      margin-bottom: 40px;
+      border-radius: 10px;
+      transition: background-color 0.5s ease; /* Animação de transição */
+  }
+  
+  .paragraph {
+      font-size: 16px;
+      color: var(--text-color);
+      transition: color 0.5s ease; /* Animação de transição */
+  }
+  
+  .heading {
+      font-size: 40px;
+      letter-spacing: 1px;
+      font-weight: 900;
+      margin-bottom: 40px;
+      color: var(--text-color);
+      transition: color 0.5s ease; /* Animação de transição */
+  }
+  
+  .buttons {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 40px;
+  }
+  
+  .button {
+      width: 200px;
+      padding: 5px;
+      height: 40px;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      cursor: pointer;
+      background-color: var(--button-bg-color);
+      color: var(--text-color);
+      font-size: 16px;
+      font-weight: 400;
+      text-transform: capitalize;
+      transition: background-color 0.5s ease, color 0.5s ease; /* Animação de transição */
+  }
+  

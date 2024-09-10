@@ -100,7 +100,6 @@ def cadastro(request):
     context.update({"form": form})
     return render(request, 'cadastro.html', context)
 
-
 def cursos(request):
     return render(request, 'cursos.html')
 
