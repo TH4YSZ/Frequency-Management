@@ -7,6 +7,7 @@ from django.contrib.auth.models import Group
 from django.db import IntegrityError
 from django.contrib import messages
 from .forms import FormLogin
+from django.contrib.auth.decorators import login_required
 
 
 def homepage(request):
@@ -25,7 +26,7 @@ def login(request):
             var_senha = form.cleaned_data['senha']
 
             # Autenticar usuário
-            user = authenticate(username=var_username, senha=var_senha)
+            user = authenticate(username=var_username, password=var_senha)
             if user is not None:
                 # Fazer login do usuário
                 auth_login(request, user)
@@ -34,12 +35,14 @@ def login(request):
             else:
                 # Adicionar mensagem de erro se as credenciais forem inválidas
                 messages.error(request, "Nome de usuário ou senha incorretos")
+                redirect("login")
     else:
         form = FormLogin()
 
     context.update({"form": form})
     return render(request, 'login.html', context)
 
+@login_required
 def cadastro(request):
     context = {}
     dados_senai = Senai.objects.all()
@@ -55,12 +58,12 @@ def cadastro(request):
             var_senha = form.cleaned_data['senha']
 
             try:
-                user = User.objects.create_user(username=var_username, senha=var_senha)
-                user.nome = var_nome
-                user.sobrenome = var_sobrenome
+                user = User.objects.create_user(username=var_username, password=var_senha)
+                user.first_name = var_nome
+                user.last_name = var_sobrenome
                 user.save()
 
-                coordenacao_group = Group.objects.get(name='Coordenação')
+                coordenacao_group = Group.objects.get(name='COORDENAÇÃO')
                 user.groups.add(coordenacao_group)
 
                 #Cria o perfil do usuário personalizado
@@ -69,10 +72,11 @@ def cadastro(request):
                     sobrenome=var_sobrenome,
                     username=var_username,
                     senha=var_senha,
-                    cargo="COORDENAÇÃO"
+                    cargo="COORDENAÇÃO",
                 )
                 messages.success(request, "Usuário cadastrado.")
                 return redirect("cadastro")
+            
             except IntegrityError:
                 messages.error(request, "Nome de usuário já existe. Por favor, escolha outro nome de usuário.")
                 #Renderizar o formulário com dados existentes
@@ -95,6 +99,7 @@ def cadastro(request):
 
     context.update({"form": form})
     return render(request, 'cadastro.html', context)
+
 
 def cursos(request):
     return render(request, 'cursos.html')
