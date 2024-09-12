@@ -1,15 +1,20 @@
 *{
     text-decoration: none;
+    font-family: "Kumbh Sans";
+}
+
+.downUp-1 {
+    animation: downUp 1s forwards;
 }
 
 .titulo{
-    font-family: "Krona One", sans-serif;
+    font-family: "Krona One";
     font-weight: 400;
     font-style: normal;
 }
 
 .navbarcor{
-    background-color: #7C0D1D"
+    background-color: #7C0D1D;
 }
 
 .nav-mobile{

@@ -7,6 +7,10 @@ Relatório
 
 {% block head %}
 <style>
+    *{
+        font-family:"Kumbh Sans";
+    }
+    
     .bg_relatorio {
         min-height: 100%;
         display: flex;
@@ -29,14 +33,13 @@ Relatório
     .voltar {
         font-family: "Krona One", sans-serif;
         font-size: 1rem;
-        left: 0;
-        top: 0;
         display: flex;
-        justify-content: flex-start;
         align-items: center;
         cursor: pointer;
-        margin: 10px;
-        flex-direction: left;
+        text-align: left;
+        position: absolute; 
+        top: 65px;
+        left: 50px; 
     }
 
     .voltar i {
@@ -44,9 +47,15 @@ Relatório
         font-size: 1.5rem;
     }
 
+
+    .voltar a {
+        text-decoration: none;
+        color: var(--text-color);
+    }
+
     .titulo {
         font-size: 2rem;
-        color: #000;
+        color: var(--title);
         font-weight: 400;
         margin-bottom: 20px;
         text-align: center;
@@ -78,7 +87,7 @@ Relatório
     }
 
     .relatorio-item {
-        background-color: #FEEEEE;
+        background: var(--list-bg-color);
         padding: 20px;
         border-radius: 15px;
         display: flex;
@@ -88,7 +97,7 @@ Relatório
 
     .relatorio-item h5 {
         margin: 0;
-        color: #7C0D1D;
+        color: var(--text-color);
     }
 
     .icons {
@@ -99,7 +108,7 @@ Relatório
     .icons i {
         margin-left: 10px;
         cursor: pointer;
-        color: #7C0D1D;
+        color: var(--text-color);
     }
 
     .relatorio-geral {
@@ -109,18 +118,18 @@ Relatório
     }
 
     .relatorio-geral button {
-        background-color: #FEEEEE;
+        background: var(--list-bg-color);
         border: none;
         padding: 10px 20px;
         border-radius: 20px;
-        color: #7C0D1D;
+        color: var(--text-color);
         font-weight: bold;
         cursor: pointer;
         transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .relatorio-geral button:hover {
-        background-color: #8C031C;
+        background: #8C031C;
         color: #fff;
     }
 
@@ -155,7 +164,7 @@ Relatório
 
 {% block body %}
 
-<div class="bg_relatorio">
+<div class="bg_relatorio animate downUp-1">
     <div class="topo">
         <div class="voltar">
             <a href="{% url 'cursos' %}">

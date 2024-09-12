@@ -7,13 +7,17 @@ Cursos
 
 {% block head %}
 <style>
+    *{
+        font-family:"Kumbh Sans";
+    }
+    
     .container-conteudo {
         min-height: 100%;
         display: flex;
         justify-content: center;
         flex-direction: column;
         align-items: center;
-        background-color: var(--background-color);
+        background: var(--background-color);
         padding: 60px;
         box-sizing: border-box;
     }
@@ -28,7 +32,8 @@ Cursos
     .curso {
         padding: 18px;
         border-radius: 20px;
-        background-color: #FFECF0;
+        background: var(--list-bg-color);
+        color: var(--text-color);
         display: flex;
         justify-content: space-around;
         align-items: center;
@@ -42,15 +47,15 @@ Cursos
     }
 
     .fundo-curso :hover {
-        background-color: #971C32;
+        background: #971C32;
         color: #fff;
         text-decoration: none;
     }
 
-    .nome-aluno, .detalhes-aluno{
+    .nome-aluno{
         margin: 0;
         font-size: 0.9rem;
-        color: #454444;
+        color: var(--text-color);
         flex: 1;
         text-align: center;
         text-decoration: none;
@@ -59,7 +64,7 @@ Cursos
     .detalhes-aluno {
         margin: 0;
         font-size: 0.9rem;
-        color: #454444;
+        color: var(--text-color);
         flex: 1;
         text-align: center;
         text-decoration: none;
@@ -76,19 +81,24 @@ Cursos
     .voltar {
         font-family: "Krona One", sans-serif;
         font-size: 1rem;
-        left: 0;
-        top: 0;
         display: flex;
-        justify-content: flex-start;
         align-items: center;
         cursor: pointer;
-        margin: 10px;
-        flex-direction: left;
+        text-align: left;
+        position: absolute; 
+        top: 70px;
+        left: 50px; 
     }
 
     .voltar i {
         margin-right: 10px;
         font-size: 1.5rem;
+    }
+
+
+    .voltar a {
+        text-decoration: none;
+        color: var(--text-color);
     }
 
     .titulo {
@@ -110,14 +120,17 @@ Cursos
 
     }
 
-    .detalhes-aluno {
-        font-size: 1.2rem;
-        flex: 1;
-        text-align: center;
+    .ident a {
+        text-decoration: none;
+        color: var(--text-color)
+    }
+
+    .ident a:hover {
+        color: #971C32; 
     }
 
     .titulo-curso{
-        color:black
+        color: black;
     }
 
     .opcoes {
@@ -147,7 +160,7 @@ Cursos
 {% endblock %}
 
 {% block body %}
-<div class="container-conteudo">
+<div class="container-conteudo animate downUp-1">
     <div class="topo">
         <div class="voltar">
             <a href="{% url 'cursos' %}">

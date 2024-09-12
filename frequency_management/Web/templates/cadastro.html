@@ -7,6 +7,10 @@ Cadastro
 
 {% block head %}
 <style>
+    *{
+        font-family:"Kumbh Sans";
+    }
+    
     .bg_Cadastro {
         height: 100%;
         display: flex;
@@ -21,7 +25,7 @@ Cadastro
 
     .main {
         padding: 40px;
-        background: radial-gradient(circle at 20% 30%, #6A2D3F, #450D0F 50%, #3B0B0E 80%);
+        background: var(--background);
         border-radius: 30px;
         text-align: center;
         width: 100%;
@@ -69,7 +73,7 @@ Cadastro
 
     .form {
         border: none;
-        background: radial-gradient(circle at 20% 30%, #6A2D3F, #450D0F 50%, #390C0E 80%);
+        background: var(--input-bg);
         color: #FFFAFB;
     }
 
@@ -80,7 +84,7 @@ Cadastro
 
     .form:focus {
         border: none;
-        background: radial-gradient(circle at 20% 30%, #6A2D3F, #450D0F 50%, #390C0E 80%);
+        background: var(--input-bg);
         color: #FFFAFB;
     }
 
@@ -96,7 +100,7 @@ Cadastro
         border: none;
         overflow: hidden; 
         border-radius: 5px; 
-        background: linear-gradient(90deg, #6A2D3F, #450D0F, #390C0E); 
+        background: var(--input-bg);
         padding: 1px; 
     }
 
@@ -106,7 +110,7 @@ Cadastro
     }
 
     .input-group-text {
-        background-color: #591F2A;
+        background-color: var(--input-bg);
         border: none; 
         color: #FFFAFB;
     }
@@ -137,7 +141,7 @@ Cadastro
 {% endblock %}
 
 {% block body %}
-<div class="bg_Cadastro">
+<div class="bg_Cadastro animate downUp-1">
     <div class="main">
         <form method="post">
             <h2 class="titulo" style="color: white;">Fazer Cadastro</h2>

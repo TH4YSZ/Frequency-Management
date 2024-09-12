@@ -7,6 +7,10 @@ Cursos
 
 {% block head %}
 <style>
+    *{
+        font-family:"Kumbh Sans";
+    }
+
     .container-conteudo {
         min-height: 100vh;
         display: flex;
@@ -24,11 +28,14 @@ Cursos
         border-radius: 10px;
         color: #260104;
     }
+    .upDown-1{
+    animation: upDown 1s forwards;
+}
 
     .curso {
         padding: 18px;
         border-radius: 20px;
-        background-color: #FFECF0;
+        background: var(--list-bg-color);
         display: flex;
         justify-content: space-around;
         align-items: center;
@@ -42,7 +49,7 @@ Cursos
     }
 
     .curso:hover {
-        background-color: #971c32; 
+        background: #971c32; 
         color: #fff; 
         transition: background-color 0.3s ease, color 0.3s ease; 
     }
@@ -69,12 +76,14 @@ Cursos
         flex: 1;
         text-align: center;
         text-decoration: none;
+        color: var(--text-color);
     }
 
     .detalhes-curso {
         font-size: 1.2rem;
         flex: 1;
         text-align: center;
+        color: var(--text-color);
     }
 
     .topo {
@@ -83,24 +92,6 @@ Cursos
         flex-direction: column;
         align-items: center;
         justify-content: center;
-    }
-
-    .voltar {
-        font-family: "Krona One", sans-serif;
-        font-size: 1rem;
-        left: 0;
-        top: 0;
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        cursor: pointer;
-        margin: 10px;
-        flex-direction: left;
-    }
-
-    .voltar i {
-        margin-right: 10px;
-        font-size: 1.5rem;
     }
 
     .titulo {
@@ -120,6 +111,7 @@ Cursos
         flex-wrap: wrap;
         text-align: center;
         padding: 10px;
+    
     }
 
     .ident a {
@@ -133,8 +125,10 @@ Cursos
 
     .opcoes {
         display: flex;
-        justify-content: center;
+        align-self: flex-start;
         align-items: center;
+        margin-left: 4.5rem;
+        margin-bottom: 2rem;
         gap: 10px;
         font-size: 1.2rem;
     }
@@ -162,12 +156,23 @@ Cursos
             font-size: 0.8rem;
             text-align: left;
         }
+
+        .opcoes {
+            display: flex;
+            align-self: center;
+            align-items: center;
+            margin: 0;
+            gap: 0.2rem;
+            font-size: 1rem;
+        }
     }
+
+    
 </style>
 {% endblock %}
 
 {% block body %}
-<div class="container-conteudo">
+<div class="container-conteudo animate downUp-1">
     <div class="topo">
         <h2 class="titulo">Cursos</h2>
         <div class="opcoes">
@@ -214,7 +219,7 @@ Cursos
             </a>
 
             <a href="{% url 'alunos' %}" class="titulo-curso">
-                <div class="curso">
+                <div class="curso animate">
                     <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
                     <div class="detalhes-curso">IS1DSIS-4-16</div>
                     <div class="detalhes-curso">89</div>

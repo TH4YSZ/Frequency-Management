@@ -7,6 +7,10 @@ Gestão de Atrasos
 
 {% block head %}
 <style>
+    *{
+        font-family:"Kumbh Sans";
+    }
+
     .container-conteudo {
         min-height: 100%;
         display: flex;
@@ -27,23 +31,8 @@ Gestão de Atrasos
         margin-bottom: 20px;
     }
 
-    .voltar {
-        font-family: "Krona One", sans-serif;
-        font-size: 1rem;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        margin: 10px;
-        text-align: left;
-    }
-
-    .voltar i {
-        margin-right: 10px;
-        font-size: 1.5rem;
-    }
-
     .titulo {
-        color: var(--color-primary);
+        color: var(--title);
         font-size: 2rem;
         font-weight: 400;
         text-align: center;
@@ -69,12 +58,17 @@ Gestão de Atrasos
     .aluno-info {
         padding: 10px;
         border-radius: 20px;
-        background-color: #FFECF0;
+        background: var(--list-bg-color);
+        color: var(--text-color);
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin: 20px 0;
         flex-wrap: wrap;
+    }
+    
+    .aluno-info i {
+        color: var(--button-home);
     }
 
     .topo {
@@ -88,14 +82,13 @@ Gestão de Atrasos
     .voltar {
         font-family: "Krona One", sans-serif;
         font-size: 1rem;
-        left: 0;
-        top: 0;
         display: flex;
-        justify-content: flex-start;
         align-items: center;
         cursor: pointer;
-        margin: 10px;
-        flex-direction: left;
+        text-align: left;
+        position: absolute; 
+        top: 65px;
+        left: 50px; 
     }
 
     .voltar i {
@@ -103,12 +96,20 @@ Gestão de Atrasos
         font-size: 1.5rem;
     }
 
+
+    .voltar a {
+        text-decoration: none;
+        color: var(--text-color);
+    }
+
+
     .titulo-info, .detalhes-info {
         margin: 0;
         font-size: 0.9rem;
         color: #260104;
         flex: 1;
         text-align: center;
+        color: var(--title);
     }
 
     .ident {
@@ -144,23 +145,39 @@ Gestão de Atrasos
 
     .inform h3 {
         margin: 0;
-        color: #260104;
+        color: var(--text-color);
     }
 
     .inform p {
         margin: 5px 0;
-        color: #260104;
+        color: var(--text-color);
     }
 
     .barra-lateral {
         display: flex;
         flex-direction: column;
-        background-color: #FFECF0;
+        background: var(--list-bg-color);
+    
         border-radius: 20px;
         max-width: 270px;
-        padding: 10px;
+        padding: 1.2rem;
         text-align: left;
         width: 100%;
+    }
+
+    .barra-lateral h3 {
+        align-self: center;
+        font-family: "Krona One", sans-serif;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .barra-lateral p {
+        font-size: 0.9rem;
+    }
+
+    .botao {
+        text-decoration: none;
     }
 
     .botao-lateral {
@@ -170,12 +187,17 @@ Gestão de Atrasos
         gap: 10px;
     }
 
+    .botao-lateral a {
+        text-decoration: none;
+    }
+
     .botao-lateral button {
-        color: #260164;
-        background-color: #FEEEEE;
-        border: none;
+        color: var(--text-color);
+        background: var(--list-bg-color);
+        text-decoration: none;
+        border-bottom: 2px solid transparent;
         border-radius: 10px;
-        width: 250px;
+        width: 270px;
         text-align: center;
         display: flex;
         justify-content: center;
@@ -185,10 +207,12 @@ Gestão de Atrasos
     }
 
     .botao-lateral button:hover {
-        background-color: #8C031C;
-        color: #FFFAFB;
-        text-decoration: none;
+  
+        color: var(--text-color);
+        border: 2px solid #971c32;
     }
+
+
 
     @media (max-width: 768px) {
         .container-atrasos {
@@ -209,7 +233,7 @@ Gestão de Atrasos
 {% endblock %}
 
 {% block body %}
-<div class="container-conteudo">
+<div class="container-conteudo animate downUp-1">
     <div class="topo">
         <div class="voltar">
             <a href="{% url 'cursos' %}">
@@ -288,8 +312,8 @@ Gestão de Atrasos
         <div class="inform">
             <div class="barra-lateral">
                 <h3>Informações</h3>
-                <p><strong>Responsável:</strong> Carlos e Thiago</p>
-                <p><strong>Código da Turma:</strong> ISIDSIS-4-24</p>
+                <p><strong>Responsável: </strong>Carlos e Thiago</p>
+                <p><strong>Código da Turma: </strong>ISIDSIS-4-24</p>
                 <p><strong>Sala:</strong> C13</p>
             </div>
 
