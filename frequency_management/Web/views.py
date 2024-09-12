@@ -42,7 +42,6 @@ def login(request):
     context.update({"form": form})
     return render(request, 'login.html', context)
 
-@login_required
 def cadastro(request):
     context = {}
     dados_senai = Senai.objects.all()
@@ -108,3 +107,6 @@ def relatorio(request):
 
 def alunos(request):
     return render(request, 'alunos.html')
+
+def notificacoes(request):
+    return render(request, 'notificacoes.html')

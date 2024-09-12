@@ -21,14 +21,15 @@ class FormCadastro(forms.Form):
 
     sobrenome = forms.CharField(
         max_length=20,
-        widget=forms.TextInput(attrs={'placeholder': 'Sobrenome', 'class': 'form-control input-group form'})
+        widget=forms.TextInput(attrs={'placeholder': 'Sobrenome', 'class': 'form-control form'})
     )
     
     username = forms.CharField(
         max_length=20,
         widget=forms.TextInput(attrs={'placeholder': 'Nome de usuário', 'class': 'form-control form'})
     )
+    
     senha = forms.CharField(
         max_length=20,
-        widget=forms.PasswordInput(attrs={'placeholder': 'Senha', 'class': 'form-control form'})
+        widget=forms.PasswordInput(attrs={'placeholder': 'Senha', 'class': 'form-control form '})
     )

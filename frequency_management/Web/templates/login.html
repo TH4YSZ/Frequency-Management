@@ -29,6 +29,11 @@ Login
         border-radius: 10px;
         margin-top: 20px;
         width: 320px;
+        text-align: center;
+        display: flex;
+        justify-content: center; 
+        align-items: center;
+        font-weight: 500;
     }
 
     .button:hover {
@@ -38,13 +43,12 @@ Login
 
     .main {
         padding: 40px;
-        background: linear-gradient(135deg, #4e0205, #8d0103);
-        border-radius: 40px;
+        background: radial-gradient(circle at 20% 30%, #6A2D3F, #450D0F 50%, #3B0B0E 80%);
+        border-radius: 30px;
         text-align: center;
         width: 100%;
         max-width: 400px;
-        margin-bottom: 20px;
-        align-content: center;
+        margin: 30px
     }
 
     .imag {
@@ -68,17 +72,18 @@ Login
 
     .form {
         border: none;
-        background: linear-gradient(to right, #913744, #7C0D1D);
+        background: radial-gradient(circle at 20% 30%, #6A2D3F, #450D0F 50%, #390C0E 80%);
         color: #FFFAFB;
     }
 
     .form::placeholder {
         color: #FFFAFB;
+        font-size: 13px;
     }
 
     .form:focus {
         border: none;
-        background: linear-gradient(to right, #913744, #7C0D1D);
+        background: radial-gradient(circle at 20% 30%, #6A2D3F, #450D0F 50%, #390C0E 80%);
         color: #FFFAFB;
     }
 
@@ -91,17 +96,22 @@ Login
     }
 
     .input-group {
-        border: 1px solid;
-        border-image: linear-gradient(to left, #913744, #7C0D1D);
-        border-image-slice: 1;
-        border-radius: 5px;
+        border: none;
+        overflow: hidden; /* Garante que o conteúdo interno respeite os cantos arredondados */
+        border-radius: 5px; /* Aplica o arredondamento à borda do input-group completo */
+        background: linear-gradient(90deg, #6A2D3F, #450D0F, #390C0E); /* Aplica o gradiente à borda do input-group */
+        padding: 1px; /* Adiciona um pequeno espaço para criar o efeito da borda */
+    }
+
+    .input-group .form-control {
+        border: none; /* Remove a borda interna do input */
+        border-radius: 0; /* Remove o arredondamento interno do campo input */
     }
 
     .input-group-text {
-        background-color: #913744;
-        border: none;
+        background-color: #591F2A;
+        border: none; /* Remove a borda da área do ícone */
         color: #FFFAFB;
-        margin: 0; 
     }
 
     .esconder_senha {
@@ -141,7 +151,7 @@ Login
         <form action="{% url 'login' %}" method="post">
             {% csrf_token %}
             <div class="mb-3">
-                <h2 class="titulo" style="color: white;">Fazer Login</h2>
+                <h2 class="titulo">Fazer Login</h2>
                 <label for="username" class="form-label">Nome de Usuário</label>
                 <div class="input-group">
                     <span class="input-group-text">
@@ -150,20 +160,18 @@ Login
                     {{ form.username }}
                 </div>
             </div>
-
-            <!-- INPUTA A SENHA -->
+            <!-- INPUT DA SENHA -->
             <div class="mb-3">
                 <label for="senha" class="form-label">Senha</label>
                 <div class="input-group">
                     <span class="input-group-text">
-                        <i class="bi bi-lock icone"></i>
+                        <i class="bi bi-key icone"></i>
                     </span>
                     {{ form.senha }}
                     <i class="bi bi-eye esconder_senha" onclick="mostrar()" id="btnSenha"></i>
                 </div>
             </div>
             <button class="button" type="submit">Entrar</button>
-
             {% if messages %}
                 {% for mensagem in messages %}
                     <div class="mt-2 alert alert-warning" role="alert">

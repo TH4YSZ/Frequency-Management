@@ -8,40 +8,62 @@ Gestão de Atrasos
 {% block head %}
 <style>
     .container-conteudo {
-        min-height: 100vh;
+        min-height: 100%;
         display: flex;
         justify-content: center;
+        flex-direction: column;
         align-items: center;
-        align-content: center;
         background-color: var(--background-color);
-        padding: 20px;
+        padding: 60px;
         box-sizing: border-box;
-        flex-direction: column; 
     }
 
-    .titulo-cabecalho {
+    .topo {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .voltar {
+        font-family: "Krona One", sans-serif;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        margin: 10px;
+        text-align: left;
+    }
+
+    .voltar i {
+        margin-right: 10px;
+        font-size: 1.5rem;
+    }
+
+    .titulo {
         color: var(--color-primary);
-        font-size: 2.5rem;
-        font-weight: 600;
+        font-size: 2rem;
+        font-weight: 400;
         text-align: center;
-        margin: 30px ;
-        width: 100%; 
-        padding:30px
-   
     }
 
     .container-atrasos {
         display: flex;
-        justify-content: space-between;
+        flex-direction: row;
         width: 100%; 
+        max-width: 1200px;
         border-radius: 10px;
         box-sizing: border-box;
+        margin: 0 auto;
     }
 
     .lista-alunos {
-        flex: 3;
+        flex: 2;
         padding: 20px;
         border-radius: 10px;
+        margin-right: 20px;
     }
 
     .aluno-info {
@@ -49,10 +71,36 @@ Gestão de Atrasos
         border-radius: 20px;
         background-color: #FFECF0;
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
         align-items: center;
         margin: 20px 0;
         flex-wrap: wrap;
+    }
+
+    .topo {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .voltar {
+        font-family: "Krona One", sans-serif;
+        font-size: 1rem;
+        left: 0;
+        top: 0;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        cursor: pointer;
+        margin: 10px;
+        flex-direction: left;
+    }
+
+    .voltar i {
+        margin-right: 10px;
+        font-size: 1.5rem;
     }
 
     .titulo-info, .detalhes-info {
@@ -61,12 +109,11 @@ Gestão de Atrasos
         color: #260104;
         flex: 1;
         text-align: center;
-    
     }
 
     .ident {
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
         align-items: center;
         margin-bottom: 15px;
         flex-wrap: wrap;
@@ -74,8 +121,9 @@ Gestão de Atrasos
 
     .options {
         display: flex;
-        justify-content: space-around;
+        justify-content: center;
         align-items: center;
+        gap: 10px;
     }
 
     .options a {
@@ -90,15 +138,13 @@ Gestão de Atrasos
         flex-direction: column;
         padding: 20px;
         border-radius: 10px;
-        margin-left: 20px;
-        gap: 20px;
         align-items: center;
+        gap: 20px;
     }
 
     .inform h3 {
         margin: 0;
         color: #260104;
-        padding:10px
     }
 
     .inform p {
@@ -107,38 +153,41 @@ Gestão de Atrasos
     }
 
     .barra-lateral {
-        flex: 1;
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: column;
         background-color: #FFECF0;
         border-radius: 20px;
         max-width: 270px;
-        max-height: 200px;
-        padding: 20px;
-        
+        padding: 10px;
+        text-align: left;
+        width: 100%;
     }
 
     .botao-lateral {
         display: flex;
-        flex-direction: column; 
-        align-items: center; 
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
     }
 
     .botao-lateral button {
+        color: #260164;
         background-color: #FEEEEE;
         border: none;
         border-radius: 10px;
-        color: #260104;
-        font-weight: 400;
-        cursor: pointer;
-        padding: 10px 20px;
         width: 250px;
-        height: 40px;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        padding: 10px;
     }
 
     .botao-lateral button:hover {
         background-color: #8C031C;
         color: #FFFAFB;
+        text-decoration: none;
     }
 
     @media (max-width: 768px) {
@@ -147,11 +196,13 @@ Gestão de Atrasos
             align-items: center;
         }
 
-        .inform {
-            margin-left: 0;
-            margin-top: 20px;
+        .lista-alunos, .inform {
             width: 100%;
             max-width: none;
+        }
+
+        .aluno-info {
+            flex-direction: column;
         }
     }
 </style>
@@ -159,8 +210,15 @@ Gestão de Atrasos
 
 {% block body %}
 <div class="container-conteudo">
-    <h2 class="titulo-cabecalho">Análise e Desenvolvimento de Sistemas</h2>
-    
+    <div class="topo">
+        <div class="voltar">
+            <a href="{% url 'cursos' %}">
+            <i class="bi bi-house-fill"></i>
+            <span>Voltar</span>
+            </a>
+        </div>
+        <h2 class="titulo">Análise e Desenvolvimento de Sistemas</h2>
+    </div>
     <div class="container-atrasos">
         <div class="lista-alunos">
             <div class="ident">
@@ -228,9 +286,8 @@ Gestão de Atrasos
         </div>
 
         <div class="inform">
-            
             <div class="barra-lateral">
-                <div style="margin-left: 25px"><h3>Informações</h3></div>
+                <h3>Informações</h3>
                 <p><strong>Responsável:</strong> Carlos e Thiago</p>
                 <p><strong>Código da Turma:</strong> ISIDSIS-4-24</p>
                 <p><strong>Sala:</strong> C13</p>
@@ -241,10 +298,7 @@ Gestão de Atrasos
                 <a href="#"><button>Excluir -</button></a>
                 <a href="{% url 'relatorio' %}"><button>Relatório <i class="bi bi-file-earmark-arrow-down"></i></button></a>
             </div>
-
         </div>
-
-
     </div>
 </div>
 {% endblock %}

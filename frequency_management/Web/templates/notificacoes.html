@@ -1,0 +1,215 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}
+Cursos
+{% endblock %}
+
+{% block head %}
+<style>
+    .container-conteudo {
+        min-height: 100%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        background-color: var(--background-color);
+        padding: 60px;
+        box-sizing: border-box;
+    }
+
+    .container-cursos {
+        width: 100%;
+        max-width: 1000px;
+        border-radius: 10px;
+        color: #260104;
+    }
+
+    .curso {
+        padding: 18px;
+        border-radius: 20px;
+        background-color: #FFECF0;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin: 15px 0;
+        flex-wrap: wrap;
+    }
+
+    .fundo-curso a:hover .nome-aluno,
+    .fundo-curso a:hover .detalhes-aluno {
+        color: #fff;
+    }
+
+    .fundo-curso :hover {
+        background-color: #971C32;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .nome-aluno, .detalhes-aluno{
+        margin: 0;
+        font-size: 0.9rem;
+        color: #454444;
+        flex: 1;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .detalhes-aluno {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #454444;
+        flex: 1;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .topo {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .voltar {
+        font-family: "Krona One", sans-serif;
+        font-size: 1rem;
+        left: 0;
+        top: 0;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        cursor: pointer;
+        margin: 10px;
+        flex-direction: left;
+    }
+
+    .voltar i {
+        margin-right: 10px;
+        font-size: 1.5rem;
+    }
+
+    .titulo {
+        color: var(--text-color);
+        font-size: 2rem;
+        font-weight: 400;
+        margin: 20px;
+        padding:40px
+    }
+
+    .ident {
+        display: flex;
+        color: #ff0000;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
+        text-align: center;
+        padding: 10px;
+
+    }
+
+    .detalhes-aluno {
+        font-size: 1.2rem;
+        flex: 1;
+        text-align: center;
+    }
+
+    .titulo-curso{
+        color:black
+    }
+
+    .opcoes {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.2rem;
+    }
+
+    @media (max-width: 768px) {
+        .titulo-cabecalho {
+            font-size: 2rem;
+        }
+
+        .curso, .ident {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .nome-aluno, .detalhes-aluno {
+            font-size: 0.8rem;
+            text-align: left;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container-conteudo">
+    <div class="topo">
+        <div class="voltar">
+            <a href="{% url 'cursos' %}">
+                <i class="bi bi-house-fill"></i>
+                <span>Voltar</span>
+            </a>
+        </div>
+    <h2 class="titulo">Notificações</h2>
+    <div class="opcoes">
+        <span>Notificações |</span><i class="bi bi-sliders"></i> 
+    </div>
+    </div>
+    <div class="container-cursos">
+        <div class="ident">
+            <h5 class="nome-aluno">Nome:</h5>
+            <div class="detalhes-aluno">Atrasos:</div>
+            <div class="detalhes-aluno">Opções:</div>
+        </div>
+    <div class="fundo-curso">    
+        <a href="{% url 'alunos' %}" class="titulo-curso">
+        <div class="curso">
+            <h5 class="nome-aluno">Carlos Eduardo Ribeiro Silva</h5>
+            <div class="detalhes-aluno">IS1DSIS-4-16</div>
+            <div class="detalhes-aluno">89</div>
+        </div>
+        </a>
+
+        <a href="{% url 'alunos' %}" class="titulo-curso">
+            <div class="curso">
+                <h5 class="nome-aluno">Ruan Duarte dos Santos</h5>
+                <div class="detalhes-aluno">IS1DSIS-4-16</div>
+                <div class="detalhes-aluno">89</div>
+            </div>
+        </a>
+
+        <a href="{% url 'alunos' %}" class="titulo-curso">
+            <div class="curso">
+                <h5 class="nome-aluno">Leonardo Pereira Gomes</h5>
+                <div class="detalhes-aluno">IS1DSIS-4-16</div>
+                <div class="detalhes-aluno">89</div>
+            </div>
+        </a>
+
+        <a href="{% url 'alunos' %}" class="titulo-curso">
+            <div class="curso">
+                <h5 class="nome-aluno">Ana Carolina Martins Costa</h5>
+                <div class="detalhes-aluno">IS1DSIS-4-16</div>
+                <div class="detalhes-aluno">89</div>
+            </div>
+        </a>
+
+        <a href="{% url 'alunos' %}" class="titulo-curso">
+            <div class="curso">
+                <h5 class="nome-aluno">Rodrigo Henrique Ferreira</h5>
+                <div class="detalhes-aluno">IS1DSIS-4-16</div>
+                <div class="detalhes-aluno">89</div>
+            </div>
+        </a>
+    </div>
+        <div class="ident">
+            <a href="{% url 'relatorio' %}" class="titulo-curso">Relatório <i class="bi bi-file-earmark-arrow-down"></i></a>
+        </div>
+    </div>
+</div>
+{% endblock %}

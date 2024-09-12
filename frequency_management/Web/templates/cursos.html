@@ -41,9 +41,24 @@ Cursos
         color: #fff;
     }
 
-    .fundo-curso :hover {
-        background-color: #971C32;
-        color: #fff;
+    .curso:hover {
+        background-color: #971c32; 
+        color: #fff; 
+        transition: background-color 0.3s ease, color 0.3s ease; 
+    }
+
+    .fundo-curso a {
+        text-decoration: none;
+        display: block; 
+    }
+
+
+    .cabecalho{
+        margin: 0;
+        font-size: 1.5rem;
+        color: var(--text-color);
+        flex: 1;
+        text-align: center;
         text-decoration: none;
     }
 
@@ -56,34 +71,85 @@ Cursos
         text-decoration: none;
     }
 
-    .titulo-cabecalho {
-        color: var(--text-color);
-        font-size: 2.5rem;
-        font-weight: 600;
-        margin: 20px;
-        padding:40px
-    }
-
-    .ident {
-        display: flex;
-        color: #ff0000;
-        justify-content: space-around;
-        align-items: center;
-        margin: 0 15px;
-        flex-wrap: wrap;
-        text-align: center;
-        padding: 10px;
-
-    }
-
     .detalhes-curso {
         font-size: 1.2rem;
         flex: 1;
         text-align: center;
     }
 
+    .topo {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .voltar {
+        font-family: "Krona One", sans-serif;
+        font-size: 1rem;
+        left: 0;
+        top: 0;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        cursor: pointer;
+        margin: 10px;
+        flex-direction: left;
+    }
+
+    .voltar i {
+        margin-right: 10px;
+        font-size: 1.5rem;
+    }
+
+    .titulo {
+        color: var(--text-color);
+        font-size: 2rem;
+        font-weight: 400;
+        margin: 20px;
+        padding: 40px;
+    }
+
+    .ident {
+        display: flex;
+        color: var(--text-color);
+        justify-content: space-around;
+        align-items: center;
+        margin: 0 15px;
+        flex-wrap: wrap;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .ident a {
+        color: var(--text-color);
+        text-decoration: none;
+    }
+
+    .ident a:hover {
+        color: #8C031C; 
+    }
+
+    .opcoes {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.2rem;
+    }
+
+    .opcoes a {
+        color: var(--text-color); 
+        text-decoration: none;
+    }
+
+    .opcoes a:hover {
+        color: #8C031C; 
+    }
+
     @media (max-width: 768px) {
-        .titulo-cabecalho {
+        .titulo {
             font-size: 2rem;
         }
 
@@ -102,55 +168,59 @@ Cursos
 
 {% block body %}
 <div class="container-conteudo">
-    <h2 class="titulo-cabecalho">Cursos</h2>
-    <div class="container-cursos">
-
-        <div class="ident">
-            <h5 class="titulo-curso">Turma:</h5>
-            <div class="detalhes-curso">Código do Curso:</div>
-            <div class="detalhes-curso">Atrasos:</div>
+    <div class="topo">
+        <h2 class="titulo">Cursos</h2>
+        <div class="opcoes">
+            <span>Cursos |</span> <a href="{% url 'notificacoes' %}"><i class="bi bi-bell"></i></a> <span> | </span> <i class="bi bi-sliders"></i> 
         </div>
-    <div class="fundo-curso">    
-        <a href="{% url 'alunos' %}" class="titulo-curso">
-        <div class="curso">
-            <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
-            <div class="detalhes-curso">IS1DSIS-4-16</div>
-            <div class="detalhes-curso">89</div>
-        </div>
-        </a>
-
-        <a href="{% url 'alunos' %}" class="titulo-curso">
-            <div class="curso">
-                <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
-                <div class="detalhes-curso">IS1DSIS-4-16</div>
-                <div class="detalhes-curso">89</div>
-            </div>
-        </a>
-
-        <a href="{% url 'alunos' %}" class="titulo-curso">
-            <div class="curso">
-                <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
-                <div class="detalhes-curso">IS1DSIS-4-16</div>
-                <div class="detalhes-curso">89</div>
-            </div>
-        </a>
-
-        <a href="{% url 'alunos' %}" class="titulo-curso">
-            <div class="curso">
-                <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
-                <div class="detalhes-curso">IS1DSIS-4-16</div>
-                <div class="detalhes-curso">89</div>
-            </div>
-        </a>
-
-        <a href="{% url 'alunos' %}" class="titulo-curso">
-            <div class="curso">
-                <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
-                <div class="detalhes-curso">IS1DSIS-4-16</div>
-                <div class="detalhes-curso">89</div>
-            </div>
-        </a>
     </div>
+    <div class="container-cursos">
+        <div class="ident">
+            <h5 class="cabecalho">Turma:</h5>
+            <div class="cabecalho">Código do Curso:</div>
+            <div class="cabecalho">Atrasos:</div>
+        </div>
+        <div class="fundo-curso">    
+            <a href="{% url 'alunos' %}" class="titulo-curso">
+                <div class="curso">
+                    <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
+                    <div class="detalhes-curso">IS1DSIS-4-16</div>
+                    <div class="detalhes-curso">89</div>
+                </div>
+            </a>
+
+            <a href="{% url 'alunos' %}" class="titulo-curso">
+                <div class="curso">
+                    <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
+                    <div class="detalhes-curso">IS1DSIS-4-16</div>
+                    <div class="detalhes-curso">89</div>
+                </div>
+            </a>
+
+            <a href="{% url 'alunos' %}" class="titulo-curso">
+                <div class="curso">
+                    <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
+                    <div class="detalhes-curso">IS1DSIS-4-16</div>
+                    <div class="detalhes-curso">89</div>
+                </div>
+            </a>
+
+            <a href="{% url 'alunos' %}" class="titulo-curso">
+                <div class="curso">
+                    <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
+                    <div class="detalhes-curso">IS1DSIS-4-16</div>
+                    <div class="detalhes-curso">89</div>
+                </div>
+            </a>
+
+            <a href="{% url 'alunos' %}" class="titulo-curso">
+                <div class="curso">
+                    <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
+                    <div class="detalhes-curso">IS1DSIS-4-16</div>
+                    <div class="detalhes-curso">89</div>
+                </div>
+            </a>
+        </div>
         <div class="ident">
             <a href="{% url 'relatorio' %}" class="titulo-curso">Relatório <i class="bi bi-file-earmark-arrow-down"></i></a>
         </div>

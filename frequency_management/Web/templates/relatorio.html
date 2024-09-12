@@ -8,54 +8,80 @@ Relatório
 {% block head %}
 <style>
     .bg_relatorio {
-        min-height: 100vh;
-        background-color: var(--background-color);
-        padding: 20px;
-        align-items: center;
+        min-height: 100%;
         display: flex;
-        align-content: center;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        background-color: var(--background-color);
+        gap: 10px;
+        padding: 80px;
+    }
+
+    .topo {
+        width: 100%;
+        display: flex;
         flex-direction: column;
+        align-items: center;
         justify-content: center;
     }
 
-    .titulo-cabecalho {
-        font-size: 2.5rem;
-        padding-top: 20px;
-        color: #000;
-        font-weight: 600;
-        margin-bottom: 20px;
+    .voltar {
+        font-family: "Krona One", sans-serif;
+        font-size: 1rem;
+        left: 0;
+        top: 0;
         display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        cursor: pointer;
+        margin: 10px;
+        flex-direction: left;
+    }
+
+    .voltar i {
+        margin-right: 10px;
+        font-size: 1.5rem;
+    }
+
+    .titulo {
+        font-size: 2rem;
+        color: #000;
+        font-weight: 400;
+        margin-bottom: 20px;
+        text-align: center;
     }
 
     .container-cursos {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        justify-content: center;
+        align-items: flex-start;
         flex-wrap: wrap;
-        margin-top: 20px;
+        width: 100%;
     }
 
-    .imag {
-        max-width: 450px;
+    .imagem {
+        max-width: 400px;
         text-align: center;
+        margin: 20px 0;
     }
 
-    .imag img {
+    .imagem img {
         width: 100%;
         height: auto;
     }
 
     .relatorio-lista {
         flex-grow: 1;
+        max-width: 450px;
         margin-right: 30px;
     }
 
     .relatorio-item {
         background-color: #FEEEEE;
-        padding: 20px 20px;
+        padding: 20px;
         border-radius: 15px;
         display: flex;
-        align-items: center;
         justify-content: space-between;
         margin-bottom: 15px;
     }
@@ -65,13 +91,13 @@ Relatório
         color: #7C0D1D;
     }
 
-    .relatorio-item .icons {
+    .icons {
         display: flex;
         align-items: center;
     }
 
-    .relatorio-item .icons i {
-        margin-left: 20px;
+    .icons i {
+        margin-left: 10px;
         cursor: pointer;
         color: #7C0D1D;
     }
@@ -90,6 +116,7 @@ Relatório
         color: #7C0D1D;
         font-weight: bold;
         cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .relatorio-geral button:hover {
@@ -100,53 +127,72 @@ Relatório
     @media (max-width: 768px) {
         .container-cursos {
             flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
 
         .relatorio-lista {
             margin-right: 0;
-            margin-bottom: 20px;
+            width: 100%;
         }
 
-        .imag {
+        .imagem {
             max-width: 300px;
+        }
+
+        .relatorio-item {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .voltar {
+            left: 10px;
+            top: 10px;
         }
     }
 </style>
 {% endblock %}
 
 {% block body %}
-<div class="bg_relatorio">
-    <h2 class="titulo-cabecalho">Relatórios</h2>
-    <div class="container-cursos">
-        
-        <div class="relatorio-lista">
-            <h5>Mais Recentes</h5>
-            <div class="relatorio-item">
-                <h5>Relatório ISIDSIS – 4-16 agosto de 2024</i></h5>
-                <div class="icons">
-                    <i class="bi bi-download"></i>
-                </div>
-            </div>
-            <h5>Mês de julho de 2024</h5>
-            <div class="relatorio-item">
-                <h5>Relatório geral julho de 2024</h5>
-                <div class="icons">
-                    <i class="bi bi-download"></i>                
-                </div>
-            </div>
-            <h5>Relatorios Anteriores</h5>
-            <div class="relatorio-item">
-                <h5>-</h5>
-            </div>
-            <div class="relatorio-geral">
-                <button>Gerar relatório geral</button>
-            </div>
-        </div>
 
-        <div class="imag">
-            <img src="{% static 'img/img_relatorios.webp' %}" alt="Imagem">
-            
+<div class="bg_relatorio">
+    <div class="topo">
+        <div class="voltar">
+            <a href="{% url 'cursos' %}">
+                <i class="bi bi-house-fill"></i>
+                <span>Voltar</span>
+            </a>
+        </div>
+        <h2 class="titulo">Relatórios</h2>
+    </div>
+        <div class="container-cursos">
+            <div class="relatorio-lista">
+                <h5>Mais Recentes</h5>
+                <div class="relatorio-item">
+                    <h5>Relatório ISIDSIS – 4-16 agosto de 2024</h5>
+                    <div class="icons">
+                        <i class="bi bi-download"></i>
+                    </div>
+                </div>
+                <h5>Mês de julho de 2024</h5>
+                <div class="relatorio-item">
+                    <h5>Relatório geral julho de 2024</h5>
+                    <div class="icons">
+                        <i class="bi bi-download"></i>                
+                    </div>
+                </div>
+                <h5>Relatórios Anteriores</h5>
+                <div class="relatorio-item">
+                    <h5>-</h5>
+                </div>
+                <div class="relatorio-geral">
+                    <button>Gerar relatório geral</button>
+                </div>
+            </div>
+
+            <div class="imagem">
+                <img src="{% static 'img/img_relatorios.webp' %}" alt="Imagem">
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}

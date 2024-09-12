@@ -6,13 +6,14 @@
 .navbar {
     background-color: var(--navbar-bg-color);
     width: 100%;
-    padding: 9px;
     position: fixed;
-    bottom: 1;
-    left: 1;
+    top: 0; /* Adicione isto para fixar no topo */
+    left: 0; /* Certifique-se de que está começando do lado esquerdo */
+    z-index: 1000; /* Certifique-se de que está acima de outros elementos */
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 10px; /* Adicione algum padding para espaçamento */
 }
 
 .navbar img {
@@ -34,26 +35,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px; /* Ajuste conforme necessário */
-    height: 40px; /* Ajuste conforme necessário */
-    background-color: transparent; /* Fundo transparente para o ícone */
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
     border: none;
     cursor: pointer;
 }
 
 .material-symbols-outlined {
-    font-size: 24px; /* Ajuste conforme necessário */
-    color: #ffffff; /* Cor branca para o ícone */
+    font-size: 24px;
+    color: #ffffff;
 }
+
 
 
 </style>
 
 <nav class="navbar">
     <img class="logo_senai" src="{% static 'img/senai_logo.png' %}" alt="Senai Logo">
-    <div class="Buttons-component">
-        <a class="nav-link active" aria-current="page" href="{% url 'cadastro' %}">Cadastro</a>
-    </div>
     <div class="Buttons-component">
         <a id="theme-toggle" class="IconButton-homepage">
             <span class="material-symbols-outlined">
