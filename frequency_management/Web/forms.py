@@ -7,10 +7,21 @@ TIPO_USUARIOS = (
 
 
 class FormLogin(forms.Form):
-    username = forms.CharField(max_length=20,
-        widget=forms.TextInput(attrs={'placeholder': 'Nome de usuário', 'class': 'form-control form'}))
-    senha = forms.CharField(max_length=20,
-        widget=forms.PasswordInput(attrs={'placeholder': 'Senha', 'class': 'form-control form', 'id': 'id_password'}))
+    username = forms.CharField(
+        max_length=20,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Nome de usuário', 
+            'class': 'form-control form'  
+        })
+    )
+    senha = forms.CharField(
+        max_length=20,
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Senha', 
+            'class': 'form-control form', 
+            'id': 'id_password'  
+        })
+    )
 
 
 class FormCadastro(forms.Form):

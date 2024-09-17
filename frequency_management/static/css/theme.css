@@ -2,7 +2,7 @@
 /* Definição das cores */
 :root {
     --text-color: #FFFAFB;
-    --title-color: #260104;
+    --title-color: #FFFAFB;
     --background-color: #260104;
     --button-gradient-start: #DF79A9;
     --button-gradient-middle: #CC5854;
@@ -18,7 +18,7 @@
 
 [data-theme="dark"] {
     --text-color: #260104;
-    --title-color: #FFFAFB;
+    --title-color: #260104;
     --background-color: #FFFAFB;
     --button-gradient-start: #FFFAFB;
     --button-gradient-middle: #FFFAFB;

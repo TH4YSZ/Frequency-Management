@@ -29,12 +29,13 @@ def login(request):
             user = authenticate(username=var_username, password=var_senha)
             if user is not None:
                 # Fazer login do usuário
+                
                 auth_login(request, user)
                 # Redirecionar para a página de cursos após login bem-sucedido
                 return redirect("cursos")
             else:
                 # Adicionar mensagem de erro se as credenciais forem inválidas
-                messages.error(request, "Nome de usuário ou senha incorretos")
+                messages.error(request, "Nome de usuário ou senha incorretos.")
                 redirect("login")
     else:
         form = FormLogin()
@@ -42,6 +43,7 @@ def login(request):
     context.update({"form": form})
     return render(request, 'login.html', context)
 
+@login_required
 def cadastro(request):
     context = {}
     dados_senai = Senai.objects.all()
@@ -75,7 +77,7 @@ def cadastro(request):
                 )
                 messages.success(request, "Usuário cadastrado.")
                 return redirect("cadastro")
-            
+
             except IntegrityError:
                 messages.error(request, "Nome de usuário já existe. Por favor, escolha outro nome de usuário.")
                 #Renderizar o formulário com dados existentes
@@ -99,14 +101,18 @@ def cadastro(request):
     context.update({"form": form})
     return render(request, 'cadastro.html', context)
 
+@login_required
 def cursos(request):
     return render(request, 'cursos.html')
 
+@login_required
 def relatorio(request):
     return render(request, 'relatorio.html')
 
+@login_required
 def alunos(request):
     return render(request, 'alunos.html')
 
+@login_required
 def notificacoes(request):
     return render(request, 'notificacoes.html')

@@ -186,6 +186,13 @@ Cadastro
                     {{ form.senha }}
                 </div>
             </div>
+            {% if messages %}
+        {% for mensagem in messages %}
+        <div class="mt-2 alert alert-warning" role="alert" style="border-radius: 8px;">
+            {{ mensagem }}
+        </div>
+        {% endfor %}
+        {% endif %}
             <div style="justify-content: center; align-items: center">
                 <button class="button" type="submit" style="color: #40010D; text-decoration: none; text-align:center;">Cadastrar</button>
             </div>
