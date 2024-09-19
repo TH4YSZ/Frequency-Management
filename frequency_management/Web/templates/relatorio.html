@@ -7,10 +7,10 @@ Relatório
 
 {% block head %}
 <style>
-    *{
-        font-family:"Kumbh Sans";
+    * {
+        font-family: "Kumbh Sans";
     }
-    
+
     .bg_relatorio {
         min-height: 100%;
         display: flex;
@@ -37,14 +37,14 @@ Relatório
         align-items: center;
         cursor: pointer;
         text-align: left;
-        position: absolute; 
+        position: absolute;
         top: 65px;
-        left: 50px; 
+        left: 50px;
     }
 
     .voltar i {
-        margin-right: 10px;
-        font-size: 1.5rem;
+        margin-right: 8px;
+        font-size: 1.2rem;
     }
 
 
@@ -174,34 +174,34 @@ Relatório
         </div>
         <h2 class="titulo">Relatórios</h2>
     </div>
-        <div class="container-cursos">
-            <div class="relatorio-lista">
-                <h5>Mais Recentes</h5>
-                <div class="relatorio-item">
-                    <h5>Relatório ISIDSIS – 4-16 agosto de 2024</h5>
-                    <div class="icons">
-                        <i class="bi bi-download"></i>
-                    </div>
-                </div>
-                <h5>Mês de julho de 2024</h5>
-                <div class="relatorio-item">
-                    <h5>Relatório geral julho de 2024</h5>
-                    <div class="icons">
-                        <i class="bi bi-download"></i>                
-                    </div>
-                </div>
-                <h5>Relatórios Anteriores</h5>
-                <div class="relatorio-item">
-                    <h5>-</h5>
-                </div>
-                <div class="relatorio-geral">
-                    <button>Gerar relatório geral</button>
+    <div class="container-cursos">
+        <div class="relatorio-lista">
+            <h5>Mais Recentes</h5>
+            <div class="relatorio-item">
+                <h5>Relatório ISIDSIS – 4-16 agosto de 2024</h5>
+                <div class="icons">
+                    <i class="bi bi-download"></i>
                 </div>
             </div>
-
-            <div class="imagem">
-                <img src="{% static 'img/img_relatorios.webp' %}" alt="Imagem">
+            <h5>Mês de julho de 2024</h5>
+            <div class="relatorio-item">
+                <h5>Relatório geral julho de 2024</h5>
+                <div class="icons">
+                    <i class="bi bi-download"></i>
+                </div>
+            </div>
+            <h5>Relatórios Anteriores</h5>
+            <div class="relatorio-item">
+                <h5>-</h5>
+            </div>
+            <div class="relatorio-geral">
+                <button>Gerar relatório geral</button>
             </div>
         </div>
+
+        <div class="imagem">
+            <img src="{% static 'img/img_relatorios.webp' %}" alt="Imagem">
+        </div>
     </div>
+</div>
 {% endblock %}
