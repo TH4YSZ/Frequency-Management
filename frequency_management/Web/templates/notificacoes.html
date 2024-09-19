@@ -7,10 +7,10 @@ Cursos
 
 {% block head %}
 <style>
-    *{
-        font-family:"Kumbh Sans";
+    * {
+        font-family: "Kumbh Sans";
     }
-    
+
     .container-conteudo {
         min-height: 100%;
         display: flex;
@@ -52,7 +52,7 @@ Cursos
         text-decoration: none;
     }
 
-    .nome-aluno{
+    .nome-aluno {
         margin: 0;
         font-size: 0.9rem;
         color: var(--text-color);
@@ -76,6 +76,7 @@ Cursos
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        margin-top: 10px;
     }
 
     .voltar {
@@ -85,9 +86,9 @@ Cursos
         align-items: center;
         cursor: pointer;
         text-align: left;
-        position: absolute; 
+        position: absolute;
         top: 70px;
-        left: 50px; 
+        left: 50px;
     }
 
     .voltar i {
@@ -106,7 +107,7 @@ Cursos
         font-size: 2rem;
         font-weight: 400;
         margin: 20px;
-        padding:40px
+        padding: 40px
     }
 
     .ident {
@@ -126,10 +127,10 @@ Cursos
     }
 
     .ident a:hover {
-        color: #971C32; 
+        color: #971C32;
     }
 
-    .titulo-curso{
+    .titulo-curso {
         color: black;
     }
 
@@ -146,12 +147,14 @@ Cursos
             font-size: 2rem;
         }
 
-        .curso, .ident {
+        .curso,
+        .ident {
             flex-direction: column;
             text-align: center;
         }
 
-        .nome-aluno, .detalhes-aluno {
+        .nome-aluno,
+        .detalhes-aluno {
             font-size: 0.8rem;
             text-align: left;
         }
@@ -168,10 +171,10 @@ Cursos
                 <span>Voltar</span>
             </a>
         </div>
-    <h2 class="titulo">Notificações</h2>
-    <div class="opcoes">
-        <span>Notificações |</span><i class="bi bi-sliders"></i> 
-    </div>
+        <h2 class="titulo">Notificações</h2>
+        <div class="opcoes">
+            <span>Notificações |</span><i class="bi bi-sliders"></i>
+        </div>
     </div>
     <div class="container-cursos">
         <div class="ident">
@@ -179,49 +182,50 @@ Cursos
             <div class="detalhes-aluno">Atrasos:</div>
             <div class="detalhes-aluno">Opções:</div>
         </div>
-    <div class="fundo-curso">    
-        <a href="{% url 'alunos' %}" class="titulo-curso">
-        <div class="curso">
-            <h5 class="nome-aluno">Carlos Eduardo Ribeiro Silva</h5>
-            <div class="detalhes-aluno">IS1DSIS-4-16</div>
-            <div class="detalhes-aluno">89</div>
+        <div class="fundo-curso">
+            <a href="{% url 'alunos' %}" class="titulo-curso">
+                <div class="curso">
+                    <h5 class="nome-aluno">Carlos Eduardo Ribeiro Silva</h5>
+                    <div class="detalhes-aluno">IS1DSIS-4-16</div>
+                    <div class="detalhes-aluno">89</div>
+                </div>
+            </a>
+
+            <a href="{% url 'alunos' %}" class="titulo-curso">
+                <div class="curso">
+                    <h5 class="nome-aluno">Ruan Duarte dos Santos</h5>
+                    <div class="detalhes-aluno">IS1DSIS-4-16</div>
+                    <div class="detalhes-aluno">89</div>
+                </div>
+            </a>
+
+            <a href="{% url 'alunos' %}" class="titulo-curso">
+                <div class="curso">
+                    <h5 class="nome-aluno">Leonardo Pereira Gomes</h5>
+                    <div class="detalhes-aluno">IS1DSIS-4-16</div>
+                    <div class="detalhes-aluno">89</div>
+                </div>
+            </a>
+
+            <a href="{% url 'alunos' %}" class="titulo-curso">
+                <div class="curso">
+                    <h5 class="nome-aluno">Ana Carolina Martins Costa</h5>
+                    <div class="detalhes-aluno">IS1DSIS-4-16</div>
+                    <div class="detalhes-aluno">89</div>
+                </div>
+            </a>
+
+            <a href="{% url 'alunos' %}" class="titulo-curso">
+                <div class="curso">
+                    <h5 class="nome-aluno">Rodrigo Henrique Ferreira</h5>
+                    <div class="detalhes-aluno">IS1DSIS-4-16</div>
+                    <div class="detalhes-aluno">89</div>
+                </div>
+            </a>
         </div>
-        </a>
-
-        <a href="{% url 'alunos' %}" class="titulo-curso">
-            <div class="curso">
-                <h5 class="nome-aluno">Ruan Duarte dos Santos</h5>
-                <div class="detalhes-aluno">IS1DSIS-4-16</div>
-                <div class="detalhes-aluno">89</div>
-            </div>
-        </a>
-
-        <a href="{% url 'alunos' %}" class="titulo-curso">
-            <div class="curso">
-                <h5 class="nome-aluno">Leonardo Pereira Gomes</h5>
-                <div class="detalhes-aluno">IS1DSIS-4-16</div>
-                <div class="detalhes-aluno">89</div>
-            </div>
-        </a>
-
-        <a href="{% url 'alunos' %}" class="titulo-curso">
-            <div class="curso">
-                <h5 class="nome-aluno">Ana Carolina Martins Costa</h5>
-                <div class="detalhes-aluno">IS1DSIS-4-16</div>
-                <div class="detalhes-aluno">89</div>
-            </div>
-        </a>
-
-        <a href="{% url 'alunos' %}" class="titulo-curso">
-            <div class="curso">
-                <h5 class="nome-aluno">Rodrigo Henrique Ferreira</h5>
-                <div class="detalhes-aluno">IS1DSIS-4-16</div>
-                <div class="detalhes-aluno">89</div>
-            </div>
-        </a>
-    </div>
         <div class="ident">
-            <a href="{% url 'relatorio' %}" class="titulo-curso">Relatório <i class="bi bi-file-earmark-arrow-down"></i></a>
+            <a href="{% url 'relatorio' %}" class="titulo-curso">Relatório <i
+                    class="bi bi-file-earmark-arrow-down"></i></a>
         </div>
     </div>
 </div>

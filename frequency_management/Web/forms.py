@@ -1,7 +1,7 @@
 from django import forms
 
 TIPO_USUARIOS = (
-    ("COORDENAÇÃO", "Coordenação"),
+    ("COORDENACAO", "Coordenacao"),
     ("ADMINISTRAÇÃO", "Administração"),
 )
 

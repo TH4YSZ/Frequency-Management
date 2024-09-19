@@ -1,7 +1,7 @@
 from django.db import models
 
 TIPO_USUARIOS = (
-    ("COORDENAÇÃO", "Coordenação"),
+    ("COORDENACAO", "Coordenacao"),
     ("ADMINISTRAÇÃO", "Administração")
 )
 
@@ -14,26 +14,8 @@ class Senai(models.Model):
     def __str__(self):
         return self.nome_instituicao
 
-class Aluno(models.Model):
-    nome = models.CharField(max_length=50)
-    id_carteirinha = models.IntegerField()
-    id_curso = models.IntegerField()
-    nome_curso = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.nome
-
-class Frequencia(models.Model):
-    id_aluno = models.IntegerField()
-    horario_entrada = models.TimeField()
-    horario_saida = models.TimeField()
-    data = models.DateField()
-
-    def __str__(self):
-        return f"Frequência de {self.id_aluno} em {self.data}"
-
 class Curso(models.Model):
-    id_curso = models.IntegerField()
+    id = models.AutoField(primary_key=True)  # Use AutoField para id automático
     nome_curso = models.CharField(max_length=20)
     horario_entrada = models.TimeField()
     horario_saida = models.CharField(max_length=20)
@@ -41,6 +23,23 @@ class Curso(models.Model):
 
     def __str__(self):
         return self.nome_curso
+
+class Aluno(models.Model):
+    nome = models.CharField(max_length=50)
+    id_carteirinha = models.IntegerField(primary_key=True)
+    id_curso = models.ForeignKey(Curso, on_delete=models.CASCADE)  # FK para id (não precisa de to_field)
+
+    def __str__(self):
+        return self.nome
+
+class Frequencia(models.Model):
+    id_aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE)  # FK para aluno
+    horario_entrada = models.TimeField()
+    horario_saida = models.TimeField()
+    data = models.DateField()
+
+    def __str__(self):
+        return f"Frequência de {self.id_aluno} em {self.data}"
 
 class Usuario(models.Model):
     nome = models.CharField(max_length=60)
@@ -50,4 +49,4 @@ class Usuario(models.Model):
     cargo = models.CharField(max_length=15, choices=TIPO_USUARIOS)
 
     def __str__(self):
-        return self.nome_usuario
+        return self.username

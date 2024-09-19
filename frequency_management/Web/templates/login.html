@@ -7,10 +7,10 @@ Login
 
 {% block head %}
 <style>
-    *{
-        font-family:"Kumbh Sans";
+    * {
+        font-family: "Kumbh Sans";
     }
-    
+
     .bg_Login {
         background-repeat: no-repeat;
         background-attachment: fixed;
@@ -36,7 +36,7 @@ Login
         width: 100%;
         text-align: center;
         display: flex;
-        justify-content: center; 
+        justify-content: center;
         align-items: center;
         font-weight: 500;
     }
@@ -103,8 +103,8 @@ Login
     .input-group {
         border: none;
         overflow: hidden;
-        border-radius: 5px; 
-        background: var(--input-bg); 
+        border-radius: 5px;
+        background: var(--input-bg);
         padding: 1px;
     }
 
@@ -125,6 +125,21 @@ Login
         position: absolute;
         right: 5%;
         top: 20%;
+    }
+
+    .fade-out {
+        opacity: 1;
+        transition: opacity 0.5s ease-out;
+    }
+
+    .fade-out-hidden {
+        opacity: 0;
+        height: 0;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+        transition: opacity 0.5s ease-out, height 0s 0.5s;
+        pointer-events: none;
     }
 
     @media (min-width: 768px) {
@@ -176,14 +191,14 @@ Login
                     <i class="bi bi-eye esconder_senha" onclick="mostrar()" id="btnSenha"></i>
                 </div>
             </div>
-            <button class="button" type="submit">Entrar</button>
             {% if messages %}
+            <div id="alert-container" class="mt-2 alert alert-warning fade-out" role="alert">
                 {% for mensagem in messages %}
-                    <div class="mt-2 alert alert-warning" role="alert">
-                        {{ mensagem }}
-                    </div>
+                {{ mensagem }}
                 {% endfor %}
+            </div>
             {% endif %}
+            <button class="button" type="submit">Entrar</button>
         </form>
     </div>
     <div class="imag">

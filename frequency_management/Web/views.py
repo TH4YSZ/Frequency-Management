@@ -1,17 +1,15 @@
 from django.shortcuts import render, redirect
-from .models import *
-from .forms import *
+from .models import Senai, Usuario
+from .forms import FormCadastro, FormLogin
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.models import Group
 from django.db import IntegrityError
 from django.contrib import messages
-from .forms import FormLogin
 from django.contrib.auth.decorators import login_required
 
-
 def homepage(request):
-    context= {}
+    context = {}
     return render(request, 'homepage.html', context)
 
 def login(request):
@@ -29,14 +27,12 @@ def login(request):
             user = authenticate(username=var_username, password=var_senha)
             if user is not None:
                 # Fazer login do usuário
-                
                 auth_login(request, user)
-                # Redirecionar para a página de cursos após login bem-sucedido
                 return redirect("cursos")
             else:
                 # Adicionar mensagem de erro se as credenciais forem inválidas
                 messages.error(request, "Nome de usuário ou senha incorretos.")
-                redirect("login")
+                return redirect("login")
     else:
         form = FormLogin()
 
@@ -48,7 +44,6 @@ def cadastro(request):
     context = {}
     dados_senai = Senai.objects.all()
     context["dados_senai"] = dados_senai
-
 
     if request.method == "POST":
         form = FormCadastro(request.POST)
@@ -67,7 +62,7 @@ def cadastro(request):
                 coordenacao_group = Group.objects.get(name='COORDENAÇÃO')
                 user.groups.add(coordenacao_group)
 
-                #Cria o perfil do usuário personalizado
+                # Cria o perfil do usuário personalizado
                 Usuario.objects.create(
                     nome=var_nome,
                     sobrenome=var_sobrenome,
@@ -80,23 +75,13 @@ def cadastro(request):
 
             except IntegrityError:
                 messages.error(request, "Nome de usuário já existe. Por favor, escolha outro nome de usuário.")
-                #Renderizar o formulário com dados existentes
                 context.update({"form": form})
                 return render(request, 'cadastro.html', context)
         else:
-            #Se o formulário não for válido, renderize a página com erros do formulário
             context.update({"form": form})
             return render(request, 'cadastro.html', context)
     else:
         form = FormCadastro()
-
-    #Definindo as variáveis de permissão no contexto
-    if request.user.is_authenticated:
-        context['is_coordenacao'] = request.user.groups.filter(name='Coordenação').exists()
-        context['is_administracao'] = request.user.groups.filter(name='Administração').exists()
-    else:
-        context['is_coordenacao'] = False
-        context['is_administracao'] = False
 
     context.update({"form": form})
     return render(request, 'cadastro.html', context)

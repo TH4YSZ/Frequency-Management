@@ -7,10 +7,10 @@ Cadastro
 
 {% block head %}
 <style>
-    *{
-        font-family:"Kumbh Sans";
+    * {
+        font-family: "Kumbh Sans";
     }
-    
+
     .bg_Cadastro {
         height: 100%;
         display: flex;
@@ -23,6 +23,29 @@ Cadastro
         padding-top: 60px;
     }
 
+    .voltar {
+        font-family: "Krona One", sans-serif;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        text-align: left;
+        position: absolute;
+        top: 65px;
+        left: 50px;
+    }
+
+    .voltar i {
+        margin-right: 8px;
+        font-size: 1.2rem;
+    }
+
+
+    .voltar a {
+        text-decoration: none;
+        color: var(--text-color);
+    }
+
     .main {
         padding: 40px;
         background: var(--background);
@@ -30,7 +53,7 @@ Cadastro
         text-align: center;
         width: 100%;
         max-width: 400px;
-        margin: 30px
+        margin: 30px;
     }
 
     .button {
@@ -51,6 +74,16 @@ Cadastro
     .button:hover {
         background-color: #f2f2f2;
         color: #40010D;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .alert-warning {
+        background-color: #fff3cd;
+        color: #856404;
     }
 
     .imag {
@@ -98,25 +131,25 @@ Cadastro
 
     .input-group {
         border: none;
-        overflow: hidden; 
-        border-radius: 5px; 
+        overflow: hidden;
+        border-radius: 5px;
         background: var(--input-bg);
-        padding: 1px; 
+        padding: 1px;
     }
 
     .input-group .form-control {
-        border: none; 
+        border: none;
         border-radius: 0;
     }
 
     .input-group-text {
         background-color: var(--input-bg);
-        border: none; 
+        border: none;
         color: #FFFAFB;
     }
 
     @media (min-width: 768px) {
-        .bg_Cadastro {  
+        .bg_Cadastro {
             justify-content: space-between;
             gap: 10px;
         }
@@ -137,16 +170,21 @@ Cadastro
         }
     }
 </style>
-
 {% endblock %}
 
 {% block body %}
 <div class="bg_Cadastro animate downUp-1">
+    <div class="voltar">
+        <a href="{% url 'cursos' %}">
+            <i class="bi bi-house-fill"></i>
+            <span>Voltar</span>
+        </a>
+    </div>
     <div class="main">
         <form method="post">
             <h2 class="titulo" style="color: white;">Fazer Cadastro</h2>
             {% csrf_token %}
-            
+
             <div class="mb-3">
                 <label for="exampleInputName" class="form-label">Nome</label>
                 <div class="input-group">
@@ -186,15 +224,19 @@ Cadastro
                     {{ form.senha }}
                 </div>
             </div>
+
             {% if messages %}
-        {% for mensagem in messages %}
-        <div class="mt-2 alert alert-warning" role="alert" style="border-radius: 8px;">
-            {{ mensagem }}
-        </div>
-        {% endfor %}
-        {% endif %}
+            {% for mensagem in messages %}
+            <div class="mt-2 alert {% if 'success' in mensagem.tags %}alert-success{% else %}alert-warning{% endif %}"
+                role="alert" style="border-radius: 8px;">
+                {{ mensagem }}
+            </div>
+            {% endfor %}
+            {% endif %}
+
             <div style="justify-content: center; align-items: center">
-                <button class="button" type="submit" style="color: #40010D; text-decoration: none; text-align:center;">Cadastrar</button>
+                <button class="button" type="submit"
+                    style="color: #40010D; text-decoration: none; text-align:center;">Cadastrar</button>
             </div>
         </form>
     </div>

@@ -7,8 +7,8 @@ Cursos
 
 {% block head %}
 <style>
-    *{
-        font-family:"Kumbh Sans";
+    * {
+        font-family: "Kumbh Sans";
     }
 
     .container-conteudo {
@@ -28,9 +28,10 @@ Cursos
         border-radius: 10px;
         color: #260104;
     }
-    .upDown-1{
-    animation: upDown 1s forwards;
-}
+
+    .upDown-1 {
+        animation: upDown 1s forwards;
+    }
 
     .curso {
         padding: 18px;
@@ -49,27 +50,28 @@ Cursos
     }
 
     .curso:hover {
-        background: #971c32; 
-        color: #fff; 
-        transition: background-color 0.3s ease, color 0.3s ease; 
+        background: #971c32;
+        color: #fff;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .fundo-curso a {
         text-decoration: none;
-        display: block; 
+        display: block;
     }
 
 
-    .cabecalho{
+    .cabecalho {
         margin: 0;
-        font-size: 1.5rem;
+        font-size: 1.0rem;
         color: var(--text-color);
         flex: 1;
         text-align: center;
         text-decoration: none;
     }
 
-    .titulo-curso, .detalhes-curso {
+    .titulo-curso,
+    .detalhes-curso {
         margin: 0;
         font-size: 0.9rem;
         color: #454444;
@@ -80,7 +82,7 @@ Cursos
     }
 
     .detalhes-curso {
-        font-size: 1.2rem;
+        font-size: 1.0rem;
         flex: 1;
         text-align: center;
         color: var(--text-color);
@@ -99,7 +101,7 @@ Cursos
         font-size: 2rem;
         font-weight: 400;
         margin: 20px;
-        padding: 40px;
+        padding: 30px;
     }
 
     .ident {
@@ -111,7 +113,7 @@ Cursos
         flex-wrap: wrap;
         text-align: center;
         padding: 10px;
-    
+
     }
 
     .ident a {
@@ -120,7 +122,7 @@ Cursos
     }
 
     .ident a:hover {
-        color: #8C031C; 
+        color: #8C031C;
     }
 
     .opcoes {
@@ -134,26 +136,28 @@ Cursos
     }
 
     .opcoes a {
-        color: var(--text-color); 
+        color: var(--text-color);
         text-decoration: none;
     }
 
     .opcoes a:hover {
-        color: #8C031C; 
+        color: #8C031C;
     }
 
     @media (max-width: 768px) {
         .titulo {
-            font-size: 2rem;
+            font-size: 1rem;
         }
 
-        .curso, .ident {
+        .curso,
+        .ident {
             flex-direction: column;
             text-align: center;
         }
 
-        .titulo-curso, .detalhes-curso {
-            font-size: 0.8rem;
+        .titulo-curso,
+        .detalhes-curso {
+            font-size: 0.5rem;
             text-align: left;
         }
 
@@ -166,8 +170,6 @@ Cursos
             font-size: 1rem;
         }
     }
-
-    
 </style>
 {% endblock %}
 
@@ -176,7 +178,8 @@ Cursos
     <div class="topo">
         <h2 class="titulo">Cursos</h2>
         <div class="opcoes">
-            <span>Cursos |</span> <a href="{% url 'notificacoes' %}"><i class="bi bi-bell"></i></a> <span> | </span> <i class="bi bi-sliders"></i> 
+            <span>Cursos |</span> <a href="{% url 'notificacoes' %}"><i class="bi bi-bell"></i></a> <span> | </span> <i
+                class="bi bi-sliders"></i>
         </div>
     </div>
     <div class="container-cursos">
@@ -185,7 +188,7 @@ Cursos
             <div class="cabecalho">Código do Curso:</div>
             <div class="cabecalho">Atrasos:</div>
         </div>
-        <div class="fundo-curso">    
+        <div class="fundo-curso">
             <a href="{% url 'alunos' %}" class="titulo-curso">
                 <div class="curso">
                     <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
@@ -227,7 +230,8 @@ Cursos
             </a>
         </div>
         <div class="ident">
-            <a href="{% url 'relatorio' %}" class="titulo-curso">Relatório <i class="bi bi-file-earmark-arrow-down"></i></a>
+            <a href="{% url 'relatorio' %}" class="titulo-curso">Relatório <i
+                    class="bi bi-file-earmark-arrow-down"></i></a>
         </div>
     </div>
 </div>

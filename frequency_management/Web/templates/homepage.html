@@ -13,8 +13,12 @@ Homepage
 <div class="bg_Home animate downUp-1">
     <div class="main">
         <h2 class="titulo">Gestão de Atrasos</h2>
-        <button style="background-color: var(--button-home);"><a href="{% url 'login' %}" style="color: var(--background-color); text-decoration: none; font-weight: 500;" class="rounded-pill">Login</a></button>
-        <button style="background-color: var(--button-home);"><a href="{% url 'cadastro' %}" style="color: var(--background-color); text-decoration: none; font-weight:500;" class="rounded-pill">Cadastro</a></button>
+        <button style="background-color: var(--button-home);">
+            <a href="{% url 'login' %}"
+                style="color: var(--background-color); text-decoration: none; font-weight: 500; padding: 10px 20px; border-radius: 50px;">
+                Login
+            </a>
+        </button>
     </div>
     <div class="imag">
         <img src="{% static 'img/img_home.webp' %}" alt="Imagem de fundo">
