@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
-from .models import Senai, Usuario
-from .forms import FormCadastro, FormLogin
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login as auth_login
-from django.contrib.auth.models import Group
+from .models import *
+from .forms import *
+from django.contrib.auth.models import User, Group
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.db import IntegrityError
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 
 def homepage(request):
     context = {}
@@ -14,8 +14,6 @@ def homepage(request):
 
 def login(request):
     context = {}
-    dados_senai = Senai.objects.all()
-    context["dados_senai"] = dados_senai
 
     if request.method == "POST":
         form = FormLogin(request.POST)
@@ -101,3 +99,33 @@ def alunos(request):
 @login_required
 def notificacoes(request):
     return render(request, 'notificacoes.html')
+
+@login_required
+def delete_curso(request, id):
+    curso = get_object_or_404(Curso, id=id)
+    alunos = curso.aluno_set.all()
+    
+    if request.method == 'POST':
+        alunos.delete()
+        curso.delete()
+        
+        messages.success(request, "Curso e alunos associados excluídos com sucesso.")
+        return redirect('cursos')
+
+    context = {'curso': curso, 'alunos': alunos}
+    return render(request, 'alunos.html', context)
+
+def delete_aluno(request, id):
+    aluno = get_object_or_404(Aluno, id=id)
+
+    if request.method == 'POST':
+        aluno.delete()
+
+        messages.success(request, "Aluno excluído com sucesso.")
+        return redirect('alunos')
+
+
+@login_required
+def logout(request):
+    auth_logout(request)
+    return redirect("homepage")

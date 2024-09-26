@@ -9,9 +9,22 @@
         left: 0;
         z-index: 1000;
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
         align-items: center;
         padding: 10px;
+    }
+
+    .navbar-toggler {
+        border: none;
+        outline: none;
+    }
+
+    .navbar-toggler:focus,
+    .navbar-toggler:hover {
+        border: none;
+        outline: none;
+        box-shadow: none;
+        /* Remove qualquer sombra de foco ou hover */
     }
 
     .navbar img.logo_senai {
@@ -31,7 +44,8 @@
         transform: scale(1.1);
     }
 
-    .IconButton-homepage {
+    .IconButton-homepage,
+    .navbar-toggler {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -40,12 +54,21 @@
         background-color: transparent;
         border: none;
         cursor: pointer;
-        margin: 0px;
+        margin: 0 5px;
     }
 
     .material-symbols-outlined {
         font-size: 24px;
         color: #ffffff;
+    }
+
+    .navbar-toggler {
+        border: none;
+    }
+
+    .btn-close {
+        align-items: end;
+        right: 0;
     }
 
     @media (max-width: 1200px) {
@@ -78,23 +101,62 @@
     }
 </style>
 
-<nav class="navbar ">
-    <div class="container">
-        <a class="navbar-brand" href="cursos" style="max-width: 40%;">
+<nav class="navbar">
+    <div class="container-fluid">
+        <!-- Logo -->
+        <a class="navbar-brand" href="/" style="max-width: 40%;">
             <img class="logo_senai" src="{% static 'img/senai_logo.png' %}" alt="Senai Logo">
         </a>
-        <div class="justify-content-end" id="navbarNav">
-            <div class="d-flex align-items-center">
-                <ul class="navbar-nav">
-                    {% if user.is_authenticated and user.is_superuser %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cadastro' %}">Cadastro</a>
-                    </li>
-                    {% endif %}
-                </ul>
-                <a id="theme-toggle" class="IconButton-homepage">
-                    <span class="material-symbols-outlined">contrast</span>
-                </a>
+
+        <!-- Ícones à direita -->
+        <div class="d-flex align-items-center">
+            <a id="theme-toggle" class="IconButton-homepage">
+                <span class="material-symbols-outlined">contrast</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar" style="border: none; outline: none;">
+                <i class="bi bi-list" style="color: #FFFAFB; font-size: 30px;"></i>
+            </button>
+
+        </div>
+
+        <!-- Offcanvas Navbar -->
+        <div class="container-fluid">
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                style="background: var(--background); padding: 20px;" aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <div class="icon-container"
+                        style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <!-- Título e ícone à esquerda -->
+                        <div>
+                            <h5 class="offcanvas-title" id="offcanvasNavbarLabel" style="color: #FFFAFB;">Olá, Carlos
+                                Ribeiro!</h5>
+                        </div>
+                        <!-- Botão close à direita -->
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"
+                            style="color: #FFFAFB;"></button>
+                    </div>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        <ul class="navbar-nav">
+                            {% if user.is_authenticated and user.is_superuser %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'cadastro' %}">
+                                    <i class="bi bi-file-earmark-plus" style="font-size: 20px;"></i> Cadastro
+                                </a>
+                            </li>
+                            {% endif %}
+                            <li class="nav-item">
+                                {% if user.is_authenticated %}
+                                <a class="nav-link" href="{% url 'logout' %}">
+                                    <i class="bi bi-box-arrow-right" style="font-size: 20px;"></i> Logout
+                                </a>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

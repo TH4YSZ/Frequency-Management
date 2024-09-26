@@ -9,7 +9,9 @@ Gestão de Atrasos
 <style>
     * {
         font-family: "Kumbh Sans";
+
     }
+
 
     .container-conteudo {
         min-height: 100%;
@@ -213,7 +215,31 @@ Gestão de Atrasos
         border: 2px solid #971c32;
     }
 
+    .modal {
+        justify-content: center;
+        align-content: center;
+    }
 
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .modal-content {
+        background: var(--background);
+        border-radius: 20px;
+    }
+
+    .modal-btn {
+        background: var(--background);
+    }
+
+
+    .btn:hover {
+        background: #971c32;
+        color: #fff;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
 
     @media (max-width: 768px) {
         .container-atrasos {
@@ -305,8 +331,55 @@ Gestão de Atrasos
                 <div class="detalhes-info">95%</div>
                 <div class="detalhes-info">4</div>
                 <div class="detalhes-info options">
-                    <a href="#"><i class="bi bi-pencil"></i></a>
-                    <a href="#"><i class="bi bi-trash3"></i></a>
+                    <a href="#"><i class="bi bi-pencil" data-bs-toggle="modal" data-bs-target="#editarAluno"
+                            data-bs-whatever="@mdo"></i></a>
+                    <a href="#"><i class="bi bi-trash3" data-bs-toggle="modal" data-bs-target="#excluirAluno"
+                            data-bs-whatever="@mdo"></i></a>
+                </div>
+                <div class="modal fade" id="excluirAluno" tabindex="1" aria-labelledby="excluirAlunoModalLabel"
+                    aria-hidden="true" data-bs-backdrop="false">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="excluirAlunoModalLabel" style="color: #FFFAFB;">Excluir
+                                    Aluno
+                                </h5>
+                            </div>
+                            <div class="modal-body" style="color: #FFFAFB;">
+                                Tem certeza que deseja excluir o aluno ?<br><br>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn modal-btn" data-bs-dismiss="modal"
+                                    style="width: 120px; color: #FFFAFB;">Cancelar</button>
+                                <button type="button" class="btn modal-btn" style="width: 120px;">
+                                    <a href="{% url 'del_curso' %}" style="color: var(--text-color);">Excluir</a>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="editarAluno" tabindex="1" aria-labelledby="excluirAlunoModalLabel"
+                    aria-hidden="true" data-bs-backdrop="false">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="excluirAlunoModalLabel" style="color: #FFFAFB;">Editar
+                                    Aluno
+                                </h5>
+                            </div>
+                            <div class="modal-body" style="color: #FFFAFB;">
+                                Tem certeza que deseja editar o aluno ?<br><br>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn modal-btn" data-bs-dismiss="modal"
+                                    style="width: 120px;">Cancelar</button>
+                                <button type="button" class="btn modal-btn" style="width: 120px;">
+                                    <a href="#" style="color: var(--text-color);">Salvar Alterações</a>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -320,7 +393,37 @@ Gestão de Atrasos
             </div>
 
             <div class="botao-lateral">
-                <a href="#"><button>Excluir -</button></a>
+
+                <button type="button" class="btn botao-lateral" data-bs-toggle="modal" data-bs-target="#excluirModal"
+                    data-bs-whatever="@mdo">
+                    Excluir
+                </button>
+
+                <div class="modal fade" id="excluirModal" tabindex="1" aria-labelledby="excluirModalLabel"
+                    aria-hidden="true" data-bs-backdrop="false">
+                    <div class=" modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="excluirModalLabel" style="color: var(--text-color);">Excluir
+                                    Curso
+                                </h5>
+                            </div>
+                            <div class="modal-body" style="color: #FFFAFB;">
+                                Tem certeza que deseja excluir este curso?<br><br>
+
+                                Observação: Ao deletar o curso, os alunos serão excluídos.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn modal-btn" data-bs-dismiss="modal"
+                                    style="width: 120px;">Cancelar</button>
+                                <button type="button" class="btn modal-btn" style="width: 120px;">
+                                    <a href="{% url 'del_curso' %}" style="color: var(--text-color);">Excluir</a>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <a href="{% url 'relatorio' %}"><button>Relatório <i
                             class="bi bi-file-earmark-arrow-down"></i></button></a>
             </div>

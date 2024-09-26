@@ -9,4 +9,6 @@ urlpatterns = [
     path('relatorio', views.relatorio, name='relatorio'),
     path('alunos', views.alunos, name='alunos'),
     path('notificacoes', views.notificacoes, name='notificacoes'),
+    path('delete_curso/int:id>', views.delete_curso, name="del_curso"),
+    path('logout', views.logout, name='logout')
 ]   
