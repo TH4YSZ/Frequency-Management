@@ -9,8 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 
 def homepage(request):
-    context = {}
-    return render(request, 'homepage.html', context)
+    return render(request, 'homepage.html')
 
 def login(request):
     context = {}
@@ -40,8 +39,6 @@ def login(request):
 @login_required
 def cadastro(request):
     context = {}
-    dados_senai = Senai.objects.all()
-    context["dados_senai"] = dados_senai
 
     if request.method == "POST":
         form = FormCadastro(request.POST)
@@ -113,7 +110,7 @@ def delete_curso(request, id):
         return redirect('cursos')
 
     context = {'curso': curso, 'alunos': alunos}
-    return render(request, 'alunos.html', context)
+    return render(request, 'alunos.html')
 
 def delete_aluno(request, id):
     aluno = get_object_or_404(Aluno, id=id)
