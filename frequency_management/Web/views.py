@@ -126,3 +126,8 @@ def delete_aluno(request, id):
 def logout(request):
     auth_logout(request)
     return redirect("homepage")
+
+
+def nomeUsuario(request):
+    usuario = Usuario.objects.get(username=request.user.username)
+    return usuario.nome

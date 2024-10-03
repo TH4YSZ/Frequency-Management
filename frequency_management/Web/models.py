@@ -15,7 +15,7 @@ class Senai(models.Model):
         return self.nome_instituicao
 
 class Curso(models.Model):
-    id = models.AutoField(primary_key=True)  # Use AutoField para id automático
+    id = models.AutoField(primary_key=True) 
     nome_curso = models.CharField(max_length=20)
     horario_entrada = models.TimeField()
     horario_saida = models.CharField(max_length=20)
@@ -27,13 +27,13 @@ class Curso(models.Model):
 class Aluno(models.Model):
     nome = models.CharField(max_length=50)
     id_carteirinha = models.IntegerField(primary_key=True)
-    id_curso = models.ForeignKey(Curso, on_delete=models.CASCADE)  # FK para id (não precisa de to_field)
+    id_curso = models.ForeignKey(Curso, on_delete=models.CASCADE) 
 
     def __str__(self):
         return self.nome
 
 class Frequencia(models.Model):
-    id_aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE)  # FK para aluno
+    id_aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE)
     horario_entrada = models.TimeField()
     horario_saida = models.TimeField()
     data = models.DateField()

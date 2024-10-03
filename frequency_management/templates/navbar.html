@@ -65,6 +65,14 @@
     .btn-close {
         align-items: end;
         right: 0;
+        color: #FFFFFF;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-close:hover {
+        color: #FFFFFF;
     }
 
     @media (max-width: 1200px) {
@@ -124,13 +132,14 @@
                     <div class="icon-container"
                         style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                         <!-- Título e ícone à esquerda -->
+                        {% if user.is_authenticated and user.is_superuser %}
                         <div>
-                            <h5 class="offcanvas-title" id="offcanvasNavbarLabel" style="color: #FFFAFB;">Olá, Carlos
-                                Ribeiro!</h5>
+                            <h5 class="offcanvas-title" id="offcanvasNavbarLabel" style="color: #FFFAFB;">Olá {{ nome }}
+                            </h5>
                         </div>
+                        {% endif %}
                         <!-- Botão close à direita -->
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"
-                            style="color: #FFFAFB;"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                 </div>
                 <div class="offcanvas-body">
