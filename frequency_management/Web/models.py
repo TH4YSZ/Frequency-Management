@@ -1,9 +1,18 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 TIPO_USUARIOS = (
     ("COORDENACAO", "Coordenacao"),
     ("ADMINISTRAÇÃO", "Administração")
 )
+
+DIAS_DA_SEMANA = [
+        ('SEG', 'Segunda-feira'),
+        ('TER', 'Terça-feira'),
+        ('QUA', 'Quarta-feira'),
+        ('QUI', 'Quinta-feira'),
+        ('SEX', 'Sexta-feira'),
+    ]
 
 class Senai(models.Model):
     nome_instituicao = models.CharField(max_length=50)
@@ -20,6 +29,11 @@ class Curso(models.Model):
     horario_entrada = models.TimeField()
     horario_saida = models.CharField(max_length=20)
     responsavel = models.CharField(max_length=20)
+    dias_funcionamento = ArrayField(
+        models.CharField(max_length=3, choices=DIAS_DA_SEMANA),
+        blank=True,
+        default=list
+    )
 
     def __str__(self):
         return self.nome_curso

@@ -7,6 +7,7 @@ from django.db import IntegrityError
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
+import pandas as pd
 
 def homepage(request):
     return render(request, 'homepage.html')
@@ -131,3 +132,19 @@ def logout(request):
 def nomeUsuario(request):
     usuario = Usuario.objects.get(username=request.user.username)
     return usuario.nome
+
+def criar_cursos(request):
+    # Carrega o DataFrame salvo pelo teste_curso.py
+    df = pd.read_pickle('cursos_df.pkl')
+    
+    # Itera sobre as linhas do DataFrame e cria os cursos no banco de dados
+    for _, row in df.iterrows():
+        Curso.objects.create(
+            nome_curso=row['nome_curso'],
+            horario_entrada=row['horario_entrada'],
+            horario_saida=row['horario_saida'],
+            responsavel=row['responsavel'],
+            dias_funcionamento=row['dias_funcionamento']
+        )
+    
+    return print("Cursos criados com sucesso!")
