@@ -1,0 +1,21 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<form action="{% url 'criar_aluno' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="alunos">Selecione o arquivo:</label>
+    <input type="file" id="alunos" name="alunos" accept=".csv">
+    <button type="submit">Enviar</button>
+</form>
+
+
+{% endblock %}

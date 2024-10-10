@@ -29,10 +29,6 @@ Cursos
         color: #260104;
     }
 
-    .upDown-1 {
-        animation: upDown 1s forwards;
-    }
-
     .curso {
         padding: 18px;
         border-radius: 20px;
@@ -44,30 +40,10 @@ Cursos
         flex-wrap: wrap;
     }
 
-    .fundo-curso a:hover .titulo-curso,
-    .fundo-curso a:hover .detalhes-curso {
-        color: #fff;
-    }
-
     .curso:hover {
         background: #971c32;
         color: #fff;
         transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    .fundo-curso a {
-        text-decoration: none;
-        display: block;
-    }
-
-
-    .cabecalho {
-        margin: 0;
-        font-size: 1.0rem;
-        color: var(--text-color);
-        flex: 1;
-        text-align: center;
-        text-decoration: none;
     }
 
     .titulo-curso,
@@ -78,13 +54,6 @@ Cursos
         flex: 1;
         text-align: center;
         text-decoration: none;
-        color: var(--text-color);
-    }
-
-    .detalhes-curso {
-        font-size: 1.0rem;
-        flex: 1;
-        text-align: center;
         color: var(--text-color);
     }
 
@@ -113,16 +82,15 @@ Cursos
         flex-wrap: wrap;
         text-align: center;
         padding: 10px;
-
     }
 
-    .ident a {
+    .cabecalho {
+        margin: 0;
+        font-size: 1.0rem;
         color: var(--text-color);
+        flex: 1;
+        text-align: center;
         text-decoration: none;
-    }
-
-    .ident a:hover {
-        color: #8C031C;
     }
 
     .opcoes {
@@ -138,37 +106,18 @@ Cursos
     .opcoes a {
         color: var(--text-color);
         text-decoration: none;
+
     }
 
     .opcoes a:hover {
         color: #8C031C;
     }
 
-    @media (max-width: 768px) {
-        .titulo {
-            font-size: 1rem;
-        }
+    a:hover,
+    a:focus {
+        text-decoration: none;
+        color: inherit;
 
-        .curso,
-        .ident {
-            flex-direction: column;
-            text-align: center;
-        }
-
-        .titulo-curso,
-        .detalhes-curso {
-            font-size: 0.5rem;
-            text-align: left;
-        }
-
-        .opcoes {
-            display: flex;
-            align-self: center;
-            align-items: center;
-            margin: 0;
-            gap: 0.2rem;
-            font-size: 1rem;
-        }
     }
 </style>
 {% endblock %}
@@ -184,50 +133,22 @@ Cursos
     </div>
     <div class="container-cursos">
         <div class="ident">
+            <h5 class="cabecalho">Curso</h5>
             <h5 class="cabecalho">Turma</h5>
-            <div class="cabecalho">Código do Curso</div>
-            <div class="cabecalho">Atrasos</div>
+            <h5 class="cabecalho">Atrasos</h5>
         </div>
         <div class="fundo-curso">
-            <a href="{% url 'alunos' %}" class="titulo-curso">
+            {% for curso in cursos %}
+            <a href="{% url 'alunos' curso.turma %}" class="link_bloco">
                 <div class="curso">
-                    <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
-                    <div class="detalhes-curso">IS1DSIS-4-16</div>
-                    <div class="detalhes-curso">89</div>
+                    <h5 class="titulo-curso">{{ curso.nome_curso }}</h5>
+                    <h5 class="titulo-curso">{{curso.turma}}</h5>
+                    <h5 class="titulo-curso">40%</h5>
                 </div>
             </a>
-
-            <a href="{% url 'alunos' %}" class="titulo-curso">
-                <div class="curso">
-                    <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
-                    <div class="detalhes-curso">IS1DSIS-4-16</div>
-                    <div class="detalhes-curso">89</div>
-                </div>
-            </a>
-
-            <a href="{% url 'alunos' %}" class="titulo-curso">
-                <div class="curso">
-                    <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
-                    <div class="detalhes-curso">IS1DSIS-4-16</div>
-                    <div class="detalhes-curso">89</div>
-                </div>
-            </a>
-
-            <a href="{% url 'alunos' %}" class="titulo-curso">
-                <div class="curso">
-                    <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
-                    <div class="detalhes-curso">IS1DSIS-4-16</div>
-                    <div class="detalhes-curso">89</div>
-                </div>
-            </a>
-
-            <a href="{% url 'alunos' %}" class="titulo-curso">
-                <div class="curso animate">
-                    <h5 class="titulo-curso">DESENVOLVIMENTO DE SISTEMAS</h5>
-                    <div class="detalhes-curso">IS1DSIS-4-16</div>
-                    <div class="detalhes-curso">89</div>
-                </div>
-            </a>
+            {% empty %}
+            <p>Nenhum curso encontrado.</p>
+            {% endfor %}
         </div>
         <div class="ident">
             <a href="{% url 'relatorio' %}" class="titulo-curso">Relatório <i

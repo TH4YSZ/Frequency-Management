@@ -1,0 +1,43 @@
+MMAN;Mecânico de Manutenção;07:05;16:35;1200;João Silva;SEG, QUA, SEX
+M2C;Mecânico de Usinagem;08:00;14:00;1200;Maria Costa;SEG, QUA, SEX
+M3A ;Eletricista de Manutenção Eletroeletrônica;07:05;16:35;1200;Ana Souza;SEG, QUA, SEX
+M3F;Mecânico de Manutenção;07:05;16:35;1200;Carlos Mendes;SEG, QUA, SEX
+M4A;Eletricista de Manutenção;07:05;16:35;1200;Laura Ferreira;SEG, QUA, SEX
+M4C;Mecânico de Usinagem;07:05;16:35;1200;Paulo Rocha;SEG, QUA, SEX
+ALPR;Auxiliar de Linha de Produção;14:00;20:00;1200;Juliana Neves;SEG, QUA, SEX
+ELME;Eletricista de Manutenção Eletroeletrônica;07:05;16:35;1200;André Costa;SEG, QUA, SEX
+MUSI;Mecânico de Usinagem;08:00;14:00;1200;Roberta Lima;SEG, QUA, SEX
+ADM SIEMENS;Técnico em Administração;08:00;14:00;1200;Renato Oliveira;SEG, QUA, SEX
+T2A;Eletricista de Manutenção Eletroeletrônica;08:00;14:00;1200;Mariana Nunes;SEG, QUA, SEX
+T2F;Mecânico de Manutenção;08:00;14:00;1200;Fernando Batista;SEG, QUA, SEX
+T3C;Mecânico de Usinagem;08:00;14:00;1200;Beatriz Santos;SEG, QUA, SEX
+T4F;Mecânico de Manutenção;08:00;14:00;1200;Adriana Ribeiro;SEG, QUA, SEX
+T1LOG;Assistente de Logística;08:00;14:00;1200;Diego Cardoso;SEG, QUA, SEX
+ALMO;Almoxarife;08:00;14:00;1200;Igor Moreira;SEG, QUA, SEX
+N3P;Técnico em Plástico;07:05;16:35;1200;Clara Vieira;SEG, QUA, SEX
+N3Q;Técnico em Qualidade;07:05;16:35;1200;Lucas Almeida;SEG, QUA, SEX
+I1CER-ROCA;Ceramista de Louças Sanitárias;07:05;16:35;1200;Diana Ramos;TER, QUI
+I1CER-DEXCO;Ceramista de Louças Sanitárias;07:05;16:35;1200;Amanda Borges;TER, QUI
+ADM-S1;Técnico em Administração;07:05;16:35;1200;Ricardo Pereira;TER, QUI
+IS2ADM;Técnico em Administração;07:05;16:35;1200;Thiago Martins;QUA, SEX
+MMI;Técnico em Manutenção de Máquinas Industriais;07:05;16:35;1200;Bruna Monteiro;TER, QUI
+DSIST-S1;Técnico em Desenvolvimento de Sistemas;07:05;16:35;1200;Vitor Carvalho;TER, QUI
+IS2DSIST;Técnico em Desenvolvimento de Sistemas;07:05;16:35;1200;Sophia Duarte;QUA, SEX
+ELET-S1-A;Técnico em Eletroeletrônica;07:05;16:35;1200;Rodrigo Azevedo;TER, QUI
+ELET-S1-B;Técnico em Eletroeletrônica;07:05;16:35;1200;Marcela Farias;TER, QUI
+ISELET1;Técnico em Eletroeletrônica;07:05;16:35;1200;Bruno Santiago;QUA, SEX
+ISELET2;Técnico em Eletroeletrônica;07:05;16:35;1200;Camila Dias;QUA, SEX
+LOG-S1-A;Técnico em Logística;07:05;16:35;1200;Felipe Pires;TER, QUI
+LOG-S1-B;Técnico em Logística;07:05;16:35;1200;Eduardo Vasconcelos;TER, QUI
+ISLOG1;Técnico em Logística;07:05;16:35;1200;Larissa Vieira;QUA, SEX
+ISLOG2;Técnico em Logística;07:05;16:35;1200;Gustavo Teixeira;QUA, SEX
+PLAST-S1-A;Técnico em Plástico;07:05;16:35;1200;Fernanda Sousa;TER, QUI
+PLAST-S1-B;Técnico em Plástico;07:05;16:35;1200;Aline Moraes;TER, QUI
+ISPLAST1;Técnico em Plástico;07:05;16:35;1200;Leonardo Cunha;TER, QUI
+ISPLAST2;Técnico em Plástico;07:05;16:35;1200;Helena Castro;TER, QUI
+CONS;Construtor de Moldes para Plásticos;07:05;16:35;1200;Vinícius Lima;TER, QUI
+PROJ;Projetista de Moldes para Plásticos;07:05;16:35;1200;Simone Figueira;TER, QUI
+MUMP-A;Mecânico de Usinagem de Moldes para Plásticos;07:05;16:35;1200;Rafael Mendes;TER, QUI
+MUMP-B;Mecânico de Usinagem de Moldes para Plásticos;07:05;16:35;1200;Evelyn Nogueira;TER, QUI
+MUMP-C;Mecânico de Usinagem de Moldes para Plásticos;07:05;16:35;1200;Murilo Tavares;TER, QUI
+MLOC;Mantenedor Eletromecânico de Locomotivas;07:05;16:35;1200;Yuri Dias;TER, QUI

@@ -7,7 +7,9 @@ from django.db import IntegrityError
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
-import pandas as pd
+import csv
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse
 
 def homepage(request):
     return render(request, 'homepage.html')
@@ -84,7 +86,9 @@ def cadastro(request):
 
 @login_required
 def cursos(request):
-    return render(request, 'cursos.html')
+    cursos_list = Curso.objects.all()
+    return render(request, 'cursos.html', {'cursos': cursos_list})
+
 
 @login_required
 def relatorio(request):
@@ -133,18 +137,80 @@ def nomeUsuario(request):
     usuario = Usuario.objects.get(username=request.user.username)
     return usuario.nome
 
+
+
 def criar_cursos(request):
-    # Carrega o DataFrame salvo pelo teste_curso.py
-    df = pd.read_pickle('cursos_df.pkl')
+    if request.method == 'POST' and 'cursos' in request.FILES:
+        csv_file = request.FILES['cursos']
+        
     
-    # Itera sobre as linhas do DataFrame e cria os cursos no banco de dados
-    for _, row in df.iterrows():
-        Curso.objects.create(
-            nome_curso=row['nome_curso'],
-            horario_entrada=row['horario_entrada'],
-            horario_saida=row['horario_saida'],
-            responsavel=row['responsavel'],
-            dias_funcionamento=row['dias_funcionamento']
-        )
+        fs = FileSystemStorage()
+        filename = fs.save(csv_file.name, csv_file)
+        
+
+        with open(fs.path(filename), newline='', encoding='ISO-8859-1') as csvfile:
+            reader = csv.reader(csvfile, delimiter=';') 
+            next(reader) 
+            
+           
+            for row in reader:
+                try:
+                    
+                    dias = [dia.strip() for dia in row[6].split(',')]  
+                    
+                    Curso.objects.create(
+                        turma=row[0],
+                        nome_curso=row[1],             
+                        horario_entrada=row[2],       
+                        horario_saida=row[3],          
+                        responsavel=row[4],            
+                        dias_funcionamento=dias        
+                    )
+                except IndexError:
+                    print(f"Linha mal formatada, ignorando: {row}")
+
+        # Mensagem de sucesso ou redirecionamento
+        messages.success(request, "Cursos criados com sucesso.")
+        return redirect("cursos")
     
-    return print("Cursos criados com sucesso!")
+    return render(request, 'criar_curso.html')
+
+def criar_alunos(request):
+    if request.method == 'POST' and 'alunos' in request.FILES:
+        csv_file = request.FILES['alunos']
+        
+ 
+        fs = FileSystemStorage()
+        filename = fs.save(csv_file.name, csv_file)
+        
+      
+        with open(fs.path(filename), newline='', encoding='ISO-8859-1') as csvfile:
+            reader = csv.reader(csvfile, delimiter=';') 
+            next(reader)  
+            
+           
+            for row in reader:
+                try:
+                    
+                    curso_id = row[2].strip()  
+                    curso = Curso.objects.get(turma=curso_id) 
+                    
+                    
+                    Aluno.objects.create(
+                        nome=row[0].strip(),  
+                        id_carteirinha=int(row[1].strip()),  
+                        id_curso=curso  
+                    )
+                except IndexError:
+                    print(f"Linha mal formatada, ignorando: {row}")
+                except Curso.DoesNotExist:
+                    print(f"Curso com turma '{curso_id}' não encontrado, ignorando: {row}")
+                except ValueError:
+                    print(f"Erro ao converter id_carteirinha para inteiro: {row[1].strip()}")
+                except Exception as e:
+                    print(f"Erro ao criar aluno: {e}, ignorando linha: {row}")
+
+        messages.success(request, "Alunos criados com sucesso.")
+        return redirect("alunos")
+    
+    return render(request, 'criar_aluno.html')

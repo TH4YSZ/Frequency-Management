@@ -65,14 +65,9 @@
     .btn-close {
         align-items: end;
         right: 0;
-        color: #FFFFFF;
         background-color: transparent;
         border: none;
         cursor: pointer;
-    }
-
-    .btn-close:hover {
-        color: #FFFFFF;
     }
 
     @media (max-width: 1200px) {
@@ -108,12 +103,15 @@
 <nav class="navbar">
     <div class="container-fluid">
         <!-- Logo -->
-        <a class="navbar-brand" href="/" style="max-width: 40%;">
+        <a class="navbar-brand" href="" style="max-width: 40%;">
             <img class="logo_senai" src="{% static 'img/senai_logo.png' %}" alt="Senai Logo">
         </a>
 
         <!-- Ícones à direita -->
         <div class="d-flex align-items-center">
+            {% if user.is_authenticated %}
+            <span class="navbar-text" style="color: #FFFAFB;">Olá, {{ user.username }}</span>
+            {% endif %}
             <a id="theme-toggle" class="IconButton-homepage">
                 <span class="material-symbols-outlined">contrast</span>
             </a>
@@ -132,14 +130,14 @@
                     <div class="icon-container"
                         style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                         <!-- Título e ícone à esquerda -->
-                        {% if user.is_authenticated and user.is_superuser %}
-                        <div>
-                            <h5 class="offcanvas-title" id="offcanvasNavbarLabel" style="color: #FFFAFB;">Olá {{ nome }}
-                            </h5>
-                        </div>
+                        {% if user.is_authenticated %}
+                        <span class="navbar-text" style="color: #FFFAFB;">Olá, {{ user.username }}</span>
                         {% endif %}
                         <!-- Botão close à direita -->
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        <div data-bs-theme="dark">
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                aria-label="Close"></button>
+                        </div>
                     </div>
                 </div>
                 <div class="offcanvas-body">
