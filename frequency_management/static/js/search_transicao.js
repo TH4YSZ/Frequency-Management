@@ -5,11 +5,12 @@ document.addEventListener('DOMContentLoaded', function () {
     searchIcon.addEventListener('click', function () {
         searchContainer.classList.toggle('visible');
         if (searchContainer.classList.contains('visible')) {
-            searchContainer.querySelector('input').focus();
+            setTimeout(() => {
+                searchContainer.querySelector('input').focus();
+            }, 500);
         }
     });
 
-    // Fechar a pesquisa quando clicar fora dela
     document.addEventListener('click', function (event) {
         if (!searchContainer.contains(event.target) && !searchIcon.contains(event.target)) {
             searchContainer.classList.remove('visible');
