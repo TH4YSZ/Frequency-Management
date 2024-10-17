@@ -1,15 +1,17 @@
-from django.shortcuts import render, redirect
 from .models import *
 from .forms import *
+from django.utils import timezone
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User, Group
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.db.models import Count
 from django.db import IntegrityError
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404
-import csv
 from django.core.files.storage import FileSystemStorage
-from django.http import HttpResponse
+from datetime import datetime, timedelta
+from django.http import HttpResponse, JsonResponse
+import csv
 
 def homepage(request):
     return render(request, 'homepage.html')
@@ -86,8 +88,8 @@ def cadastro(request):
 
 @login_required
 def cursos(request):
-    cursos_list = Curso.objects.all()
-    return render(request, 'cursos.html', {'cursos': cursos_list})
+    cursos = Curso.objects.all()
+    return render(request, 'cursos.html', {'cursos': cursos})
 
 
 @login_required
@@ -95,8 +97,16 @@ def relatorio(request):
     return render(request, 'relatorio.html')
 
 @login_required
-def alunos(request):
-    return render(request, 'alunos.html')
+def alunos(request, turma):
+    curso = get_object_or_404(Curso, turma=turma)
+    alunos = Aluno.objects.filter(id_curso=curso)
+    
+    context = {
+        'curso': curso,
+        'alunos': alunos 
+    }
+
+    return render(request, 'alunos.html', context)
 
 @login_required
 def notificacoes(request):
@@ -120,6 +130,7 @@ def delete_curso(request, id):
 def delete_aluno(request, id):
     aluno = get_object_or_404(Aluno, id=id)
 
+
     if request.method == 'POST':
         aluno.delete()
 
@@ -127,7 +138,6 @@ def delete_aluno(request, id):
         return redirect('alunos')
 
 
-@login_required
 def logout(request):
     auth_logout(request)
     return redirect("homepage")
@@ -143,33 +153,38 @@ def criar_cursos(request):
     if request.method == 'POST' and 'cursos' in request.FILES:
         csv_file = request.FILES['cursos']
         
-    
         fs = FileSystemStorage()
         filename = fs.save(csv_file.name, csv_file)
         
 
         with open(fs.path(filename), newline='', encoding='ISO-8859-1') as csvfile:
-            reader = csv.reader(csvfile, delimiter=';') 
-            next(reader) 
+            reader = csv.reader(csvfile, delimiter=';')
+ 
             
-           
             for row in reader:
                 try:
-                    
+
                     dias = [dia.strip() for dia in row[6].split(',')]  
                     
-                    Curso.objects.create(
-                        turma=row[0],
-                        nome_curso=row[1],             
-                        horario_entrada=row[2],       
-                        horario_saida=row[3],          
-                        responsavel=row[4],            
-                        dias_funcionamento=dias        
-                    )
-                except IndexError:
-                    print(f"Linha mal formatada, ignorando: {row}")
 
-        # Mensagem de sucesso ou redirecionamento
+                    data_inicio = datetime.strptime(row[7], '%d/%m/%Y').date()
+                    data_fim = datetime.strptime(row[8], '%d/%m/%Y').date()
+
+                    Curso.objects.create(
+                        turma=row[0],                     
+                        nome_curso=row[1],                
+                        horario_entrada=row[2],            
+                        horario_saida=row[3],
+                        carga_horaria=row[4],             
+                        responsavel=row[5],                
+                        dias_funcionamento=dias,          
+                        data_inicio=data_inicio,           
+                        data_fim=data_fim                  
+                    )
+                except (IndexError, ValueError) as e:
+    
+                    print(f"Linha mal formatada ou erro: {row}, Erro: {e}")
+
         messages.success(request, "Cursos criados com sucesso.")
         return redirect("cursos")
     
@@ -179,16 +194,14 @@ def criar_alunos(request):
     if request.method == 'POST' and 'alunos' in request.FILES:
         csv_file = request.FILES['alunos']
         
- 
+
         fs = FileSystemStorage()
         filename = fs.save(csv_file.name, csv_file)
         
-      
+
         with open(fs.path(filename), newline='', encoding='ISO-8859-1') as csvfile:
-            reader = csv.reader(csvfile, delimiter=';') 
-            next(reader)  
-            
-           
+            reader = csv.reader(csvfile, delimiter=';')  
+
             for row in reader:
                 try:
                     
@@ -202,15 +215,10 @@ def criar_alunos(request):
                         id_curso=curso  
                     )
                 except IndexError:
-                    print(f"Linha mal formatada, ignorando: {row}")
-                except Curso.DoesNotExist:
-                    print(f"Curso com turma '{curso_id}' não encontrado, ignorando: {row}")
-                except ValueError:
-                    print(f"Erro ao converter id_carteirinha para inteiro: {row[1].strip()}")
-                except Exception as e:
-                    print(f"Erro ao criar aluno: {e}, ignorando linha: {row}")
+                    messages.error(request, "Erro ao criar alunos.")
 
         messages.success(request, "Alunos criados com sucesso.")
-        return redirect("alunos")
+        return redirect("cursos")   
     
     return render(request, 'criar_aluno.html')
+

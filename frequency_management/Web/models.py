@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
+
 TIPO_USUARIOS = (
     ("COORDENACAO", "Coordenacao"),
     ("ADMINISTRAÇÃO", "Administração")
@@ -28,12 +29,16 @@ class Curso(models.Model):
     nome_curso = models.CharField(max_length=100)
     horario_entrada = models.TimeField()
     horario_saida = models.CharField(max_length=20)
+    carga_horaria = models.IntegerField(default=1200)
     responsavel = models.CharField(max_length=100)
     dias_funcionamento = ArrayField(
         models.CharField(max_length=3, choices=DIAS_DA_SEMANA),
         blank=True,
         default=list
     )
+    data_inicio = models.DateField(default='2024-01-26')
+    data_fim = models.DateField(default='2024-12-17')
+
 
     def __str__(self):
         return self.nome_curso
@@ -41,7 +46,7 @@ class Curso(models.Model):
 
 class Aluno(models.Model):
     nome = models.CharField(max_length=150)
-    id_carteirinha = models.BigIntegerField(primary_key=True)
+    id_carteirinha = models.CharField(primary_key=True)
     id_curso = models.ForeignKey(Curso, on_delete=models.CASCADE) 
 
     def __str__(self):
