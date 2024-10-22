@@ -47,7 +47,7 @@ class Curso(models.Model):
 class Aluno(models.Model):
     nome = models.CharField(max_length=150)
     id_carteirinha = models.CharField(primary_key=True)
-    id_curso = models.ForeignKey(Curso, on_delete=models.CASCADE) 
+    id_curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.nome

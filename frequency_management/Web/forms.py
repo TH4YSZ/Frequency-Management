@@ -44,3 +44,23 @@ class FormCadastro(forms.Form):
         max_length=20,
         widget=forms.PasswordInput(attrs={'placeholder': 'Senha', 'class': 'form-control form '})
     )
+
+class FormPesquisa(forms.Form):
+    search = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Digite aqui o curso ou a turma',
+            'class': 'form-control',
+            'id': 'search-input'
+        }),
+        error_messages={
+            'required': 'Este campo é obrigatório.',
+            'max_length': 'Máximo de 100 caracteres permitido.'
+        }
+    )
+    
+    def clean_search(self):
+        search = self.cleaned_data.get('search')
+        if not search:
+            raise forms.ValidationError('Este campo não pode estar vazio.')
+        return search.strip()  # Remove espaços em branco extras

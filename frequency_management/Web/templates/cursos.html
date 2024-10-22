@@ -213,12 +213,13 @@ Cursos
     <div class="topo">
         <h2 class="titulo">Cursos</h2>
         <div class="opcoes">
-            <span>Cursos |</span> <a href="{% url 'notificacoes' %}"><i class="bi bi-bell"
-                    style="cursor: pointer;"></i></a> <span> | </span> <i class="bi bi-search lupa"
-                style="cursor: pointer;" id="search-icon"></i>
-            <div class="search-container" id="search-container">
-                <form action="">
-                    <input type="text" placeholder="Digite aqui o curso ou a turma" name="search">
+            <span>Cursos |</span>
+            <a href="{% url 'notificacoes' %}"><i class="bi bi-bell" style="cursor: pointer;"></i></a>
+            <span> | </span>
+            <i class="bi bi-search lupa" style="cursor: pointer;" id="search-icon"></i>
+            <div class="search-container visible" id="search-container">
+                <form id="search-form" method="GET" action="{% url 'cursos' %}">
+                    {{ form.search }} <!-- Campo de pesquisa -->
                     <button type="submit">Pesquisar</button>
                 </form>
             </div>
@@ -230,9 +231,8 @@ Cursos
             <h5 class="cabecalho">Turma</h5>
             <h5 class="cabecalho">Frequência média</h5>
         </div>
-        <div class="fundo-curso">
+        <div class="fundo-curso" id="results-container">
             {% for curso in cursos %}
-
             <a href="{% url 'alunos' curso.turma %}">
                 <div class="curso">
                     <h5 class="titulo-curso">{{ curso.nome_curso }}</h5>
@@ -250,5 +250,4 @@ Cursos
         </div>
     </div>
 </div>
-
 {% endblock %}

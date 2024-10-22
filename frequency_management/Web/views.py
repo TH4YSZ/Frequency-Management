@@ -1,17 +1,15 @@
 from .models import *
 from .forms import *
-from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from django.db.models import Count
 from django.db import IntegrityError
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from datetime import datetime, timedelta
-from django.http import HttpResponse, JsonResponse
 import csv
+
 
 def homepage(request):
     return render(request, 'homepage.html')
@@ -88,8 +86,15 @@ def cadastro(request):
 
 @login_required
 def cursos(request):
-    cursos = Curso.objects.all()
-    return render(request, 'cursos.html', {'cursos': cursos})
+    search_query = request.GET.get('search', '')
+    if search_query:
+        cursos = Curso.objects.filter(nome_curso__icontains=search_query)
+    else:
+        cursos = Curso.objects.all()  # Pegar todos os cursos se não houver pesquisa
+
+    form = FormPesquisa(initial={'search': search_query})  # Preencher o campo de pesquisa
+
+    return render(request, 'cursos.html', {'form': form, 'cursos': cursos})
 
 
 @login_required
@@ -98,90 +103,9 @@ def relatorio(request):
 
 @login_required
 def alunos(request, turma):
-    curso = get_object_or_404(Curso, turma=turma)
-    alunos = Aluno.objects.filter(id_curso=curso)
-    
-    def processar_frequencia_aluno(aluno):
-        # Frequências entre a data de início e a data ajustada (descontando 30 dias do fim)
-        frequencias = Frequencia.objects.filter(
-            id_aluno=aluno, 
-            data__range=[curso.data_inicio, curso.data_fim - timedelta(days=30)]
-        )
-        
-        # Contagem de dias letivos baseados nos dias de funcionamento do curso
-        dias_funcionamento = set(curso.dias_funcionamento)  # Ex: ['SEG', 'TER', 'QUA']
-        data_atual = curso.data_inicio
-        dias_letivos = 0
+   
 
-        # Iteramos pelos dias do curso, considerando as datas de início e fim ajustadas
-        while data_atual <= curso.data_fim - timedelta(days=30):
-            # Obtém o nome do dia da semana em português (ex: 'SEG', 'TER', etc.)
-            nome_dia_semana = data_atual.strftime('%a').upper()[:3]  # Abreviação do dia da semana em PT-BR
-            if nome_dia_semana in dias_funcionamento:
-                dias_letivos += 1
-            data_atual += timedelta(days=1)
-
-        # Inicializando variáveis
-        faltas = 0
-        atrasos = 0
-        carga_aluno = 0
-        
-        # Processando as frequências
-        for dia in range(dias_letivos):
-            registros_dia = frequencias.filter(data=data_atual)
-            registro_entrada = registros_dia.filter(identificador=1).first()
-            registro_saida = registros_dia.filter(identificador=2).last()
-
-            # Contagem de faltas
-            if not registro_entrada:  # Se não há registro de entrada no dia letivo
-                faltas += 1
-            else:
-                # Verificando se há atraso
-                if registro_entrada.hora > curso.horario_entrada:
-                    atrasos += 1
-                
-                # Contagem de carga horária
-                if registro_saida:
-                    # Se o aluno saiu antes do horário de saída do curso
-                    if registro_saida.hora < curso.horario_saida:
-                        # Calculando quanto tempo o aluno ficou
-                        tempo_frequentado = (registro_saida.hora - registro_entrada.hora).total_seconds() / 3600
-                        
-                        # Descontando da carga horária total (1200h)
-                        carga_aluno += tempo_frequentado
-                    else:
-                        # Se o aluno saiu após o horário de saída do curso ou exatamente na hora
-                        tempo_maximo = (curso.horario_saida - registro_entrada.hora).total_seconds() / 3600
-                        carga_aluno += tempo_maximo
-
-        # Cálculo da porcentagem da carga horária cumprida
-        porcentagem_carga_horaria = (carga_aluno / curso.carga_horaria) * 100
-
-        return {
-            'faltas': faltas,
-            'atrasos': atrasos,
-            'carga_horaria_aluno': carga_aluno,
-            'porcentagem_carga_horaria': porcentagem_carga_horaria
-        }
-
-    # Processando a frequência para cada aluno
-    alunos_detalhes = []
-    for aluno in alunos:
-        detalhes_aluno = processar_frequencia_aluno(aluno)
-        alunos_detalhes.append({
-            'aluno': aluno,
-            'faltas': detalhes_aluno['faltas'],
-            'atrasos': detalhes_aluno['atrasos'],
-            'carga_horaria_aluno': detalhes_aluno['carga_horaria_aluno'],
-            'porcentagem_carga_horaria': detalhes_aluno['porcentagem_carga_horaria']
-        })
-
-    context = {
-        'curso': curso,
-        'alunos_detalhes': alunos_detalhes  # Enviamos a lista de alunos com detalhes
-    }
-
-    return render(request, 'alunos.html', context)
+    return render(request, 'alunos.html')
 
 @login_required
 def notificacoes(request):
@@ -223,7 +147,6 @@ def nomeUsuario(request):
     return usuario.nome
 
 
-
 def criar_cursos(request):
     if request.method == 'POST' and 'cursos' in request.FILES:
         csv_file = request.FILES['cursos']
@@ -234,13 +157,11 @@ def criar_cursos(request):
 
         with open(fs.path(filename), newline='', encoding='ISO-8859-1') as csvfile:
             reader = csv.reader(csvfile, delimiter=';')
- 
             
             for row in reader:
                 try:
 
-                    dias = [dia.strip() for dia in row[6].split(',')]  
-                    
+                    dias = [dia.strip() for dia in row[6].split(',')]
 
                     data_inicio = datetime.strptime(row[7], '%d/%m/%Y').date()
                     data_fim = datetime.strptime(row[8], '%d/%m/%Y').date()
@@ -296,55 +217,3 @@ def criar_alunos(request):
         return redirect("cursos")   
     
     return render(request, 'criar_aluno.html')
-
-def processar_frequencia_aluno(aluno):
-    curso = aluno.id_curso
-    frequencias = Frequencia.objects.filter(id_aluno=aluno, data__range=[curso.data_inicio, curso.data_fim])
-    
-    # Calculando dias letivos com base nos dias de funcionamento do curso
-    dias_funcionamento = set(curso.dias_funcionamento)
-    data_atual = curso.data_inicio
-    dias_letivos = 0
-
-    while data_atual <= curso.data_fim:
-        if data_atual.strftime('%a') in dias_funcionamento:
-            dias_letivos += 1
-        data_atual += timedelta(days=1)
-
-    # Inicializando variáveis
-    faltas = 0
-    atrasos = 0
-    carga_aluno = 0
-    
-    # Processando as frequências
-    for dia in range(dias_letivos):
-        registros_dia = frequencias.filter(data=data_atual)
-        registro_entrada = registros_dia.filter(identificador=1).first()
-        registro_saida = registros_dia.filter(identificador=2).last()
-
-        # Contagem de faltas
-        if not registro_entrada:  # Se não há registro de entrada no dia letivo
-            faltas += 1
-        else:
-            # Verificando se há atraso
-            if registro_entrada.hora > curso.horario_entrada:
-                atrasos += 1
-            
-            # Contagem de carga horária
-            if registro_saida:
-                # Se saiu antes da hora de saída do curso
-                if registro_saida.hora <= curso.horario_saida:
-                    carga_aluno += (registro_saida.hora - registro_entrada.hora).total_seconds() / 3600  # Convertendo segundos para horas
-                else:
-                    # Se saiu após o horário de saída, conta o horário do curso
-                    carga_aluno += (curso.horario_saida - registro_entrada.hora).total_seconds() / 3600
-
-    # Cálculo da porcentagem da carga horária cumprida
-    porcentagem_carga_horaria = (carga_aluno / curso.carga_horaria) * 100
-
-    return {
-        'faltas': faltas,
-        'atrasos': atrasos,
-        'carga_horaria_aluno': carga_aluno,
-        'porcentagem_carga_horaria': porcentagem_carga_horaria
-    }
