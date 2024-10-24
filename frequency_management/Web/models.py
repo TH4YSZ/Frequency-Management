@@ -12,7 +12,7 @@ DIAS_DA_SEMANA = [
         ('TER', 'Terça-feira'),
         ('QUA', 'Quarta-feira'),
         ('QUI', 'Quinta-feira'),
-        ('SEX', 'Sexta-feira'),
+        ('SEX', 'Sexta-feira')
     ]
 
 class Senai(models.Model):
@@ -28,7 +28,7 @@ class Curso(models.Model):
     turma = models.CharField(max_length=100, primary_key=True)
     nome_curso = models.CharField(max_length=100)
     horario_entrada = models.TimeField()
-    horario_saida = models.CharField(max_length=20)
+    horario_saida = models.TimeField()
     carga_horaria = models.IntegerField(default=1200)
     responsavel = models.CharField(max_length=100)
     dias_funcionamento = ArrayField(
@@ -54,11 +54,11 @@ class Aluno(models.Model):
 
 
 class Frequencia(models.Model):
+    id = models.AutoField(primary_key=True)
     id_aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE)
     data = models.DateField()
     hora = models.TimeField()
     identificador = models.IntegerField()
-    
 
     def __str__(self):
         return f"Frequência de {self.id_aluno} em {self.data}"
@@ -72,3 +72,4 @@ class Usuario(models.Model):
 
     def __str__(self):
         return self.username
+

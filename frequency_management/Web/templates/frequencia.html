@@ -1,0 +1,21 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<form action="{% url 'freq' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="freq">Selecione o arquivo:</label>
+    <input type="file" id="freq" name="freq" accept=".txt">
+    <button type="submit">Enviar</button>
+</form>
+
+
+{% endblock %}

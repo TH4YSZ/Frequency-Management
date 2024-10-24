@@ -12,7 +12,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.addEventListener('click', function (event) {
-        if (!searchContainer.contains(event.target) && !searchIcon.contains(event.target)) {
+        if (
+            !searchContainer.contains(event.target) &&
+            !searchIcon.contains(event.target)
+        ) {
             searchContainer.classList.remove('visible');
         }
     });

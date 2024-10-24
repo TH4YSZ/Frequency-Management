@@ -207,6 +207,7 @@ Gestão de Atrasos
 
     .modal-btn {
         background: var(--background);
+        color: var(--text-color);
     }
 
     .btn:hover {
@@ -298,7 +299,7 @@ Gestão de Atrasos
     data-bs-backdrop="false">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" data-bs-theme="dark">
                 <h5 class="modal-title" id="excluirModalLabel">Excluir Curso</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -306,7 +307,7 @@ Gestão de Atrasos
                 Tem certeza que deseja excluir este curso?<br><br>
                 Observação: Ao deletar o curso, os alunos serão excluídos.
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" data-bs-theme="dark">
                 <button type="button" class="btn modal-btn" data-bs-dismiss="modal">Cancelar</button>
                 <a href="{% url 'del_curso' %}" class="btn modal-btn">Excluir</a>
             </div>

@@ -49,9 +49,10 @@ class FormPesquisa(forms.Form):
     search = forms.CharField(
         max_length=100,
         widget=forms.TextInput(attrs={
-            'placeholder': 'Digite aqui o curso ou a turma',
+            'placeholder': 'Insira o curso ou turma',
             'class': 'form-control',
-            'id': 'search-input'
+            'id': 'search-input',
+            'onchange':'this.form.submit()'
         }),
         error_messages={
             'required': 'Este campo é obrigatório.',

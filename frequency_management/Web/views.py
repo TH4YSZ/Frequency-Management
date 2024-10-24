@@ -7,8 +7,12 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.db import IntegrityError
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
-from datetime import datetime, timedelta
+from datetime import datetime
 import csv
+from django.db import connection
+
+
+from django.db import connection
 
 
 def homepage(request):
@@ -87,25 +91,120 @@ def cadastro(request):
 @login_required
 def cursos(request):
     search_query = request.GET.get('search', '')
-    if search_query:
-        cursos = Curso.objects.filter(nome_curso__icontains=search_query)
-    else:
-        cursos = Curso.objects.all()  # Pegar todos os cursos se não houver pesquisa
 
-    form = FormPesquisa(initial={'search': search_query})  # Preencher o campo de pesquisa
+    if search_query:
+        cursos = Curso.objects.filter(
+            nome_curso__icontains=search_query
+        ) | Curso.objects.filter(
+            turma__icontains=search_query
+        )
+    else:
+        cursos = Curso.objects.all()
+
+    form = FormPesquisa(initial={'search': search_query})
 
     return render(request, 'cursos.html', {'form': form, 'cursos': cursos})
 
 
 @login_required
 def relatorio(request):
+    
     return render(request, 'relatorio.html')
+
+
 
 @login_required
 def alunos(request, turma):
-   
+    curso = get_object_or_404(Curso, turma=turma)
 
-    return render(request, 'alunos.html')
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            WITH frequencias_calculadas AS (
+                SELECT 
+                    f.id_aluno_id,
+                    f.data,
+                    f.hora,
+                    LEAD(f.hora) OVER (PARTITION BY f.id_aluno_id ORDER BY f.data, f.hora) AS proxima_hora,
+                    CAST(f.identificador AS INTEGER) AS identificador
+                FROM 
+                    web_frequencia AS f
+            ),
+            dias_letivos AS (
+                SELECT 
+                    aluno.id_carteirinha,
+                    COUNT(DISTINCT CASE WHEN CAST(f.identificador AS INTEGER) = 1 AND f.hora IS NULL THEN f.data END) AS total_faltas,
+                    COUNT(DISTINCT CASE WHEN CAST(f.identificador AS INTEGER) = 1 AND (f.hora IS NULL OR f.hora > c.horario_entrada) THEN f.data END) AS total_atrasos,
+                    SUM(
+                        CASE 
+                            WHEN CAST(f.identificador AS INTEGER) = 1 THEN 
+                                GREATEST(0, 
+                                    LEAST(
+                                        EXTRACT(EPOCH FROM (COALESCE(f.proxima_hora, c.horario_saida) - COALESCE(f.hora, c.horario_entrada))) / 3600, 
+                                        EXTRACT(EPOCH FROM (c.horario_saida - c.horario_entrada)) / 3600
+                                    ) 
+                                    - CASE WHEN COALESCE(f.hora, c.horario_entrada) < c.horario_entrada THEN 
+                                        EXTRACT(EPOCH FROM (c.horario_entrada - COALESCE(f.hora, c.horario_entrada))) / 3600
+                                    ELSE 0
+                                    END
+                                )
+                            ELSE 0
+                        END
+                    ) AS carga_horaria_total
+                FROM 
+                    web_aluno AS aluno
+                LEFT JOIN 
+                    frequencias_calculadas AS f ON aluno.id_carteirinha = f.id_aluno_id
+                JOIN 
+                    web_curso AS c ON aluno.id_curso_id = c.turma
+                WHERE 
+                    c.turma = %s
+                    AND f.data BETWEEN c.data_inicio AND c.data_fim
+                GROUP BY 
+                    aluno.id_carteirinha
+            )
+            SELECT 
+                aluno.nome,
+                dl.total_faltas,
+                dl.total_atrasos,
+                dl.carga_horaria_total,
+                CASE 
+                    WHEN c.carga_horaria > 0 THEN 
+                        LEAST(100, (dl.carga_horaria_total / c.carga_horaria) * 100)
+                    ELSE 0
+                END AS porcentagem_carga_horaria
+            FROM 
+                dias_letivos AS dl
+            JOIN 
+                web_aluno AS aluno ON dl.id_carteirinha = aluno.id_carteirinha
+            JOIN 
+                web_curso AS c ON aluno.id_curso_id = c.turma
+            WHERE 
+                c.turma = %s
+        """, [curso.turma, curso.turma])
+
+        resultados = cursor.fetchall()
+
+    if not resultados:
+        alunos_detalhes = []
+    else:
+        alunos_detalhes = []
+        for resultado in resultados:
+            alunos_detalhes.append({
+                'aluno': resultado[0],
+                'faltas': resultado[1],
+                'atrasos': resultado[2],
+                'carga_horaria_aluno': resultado[3],
+                'porcentagem_carga_horaria': round(resultado[4], 2),  
+            })
+
+    context = {
+        'curso': curso,
+        'alunos_detalhes': alunos_detalhes,
+    }
+
+    return render(request, 'alunos.html', context)
+
+
 
 @login_required
 def notificacoes(request):
@@ -157,7 +256,7 @@ def criar_cursos(request):
 
         with open(fs.path(filename), newline='', encoding='ISO-8859-1') as csvfile:
             reader = csv.reader(csvfile, delimiter=';')
-            
+
             for row in reader:
                 try:
 
@@ -167,15 +266,15 @@ def criar_cursos(request):
                     data_fim = datetime.strptime(row[8], '%d/%m/%Y').date()
 
                     Curso.objects.create(
-                        turma=row[0],                     
-                        nome_curso=row[1],                
-                        horario_entrada=row[2],            
+                        turma=row[0],
+                        nome_curso=row[1],
+                        horario_entrada=row[2],
                         horario_saida=row[3],
-                        carga_horaria=row[4],             
-                        responsavel=row[5],                
-                        dias_funcionamento=dias,          
-                        data_inicio=data_inicio,           
-                        data_fim=data_fim                  
+                        carga_horaria=row[4],
+                        responsavel=row[5],
+                        dias_funcionamento=dias,
+                        data_inicio=data_inicio,
+                        data_fim=data_fim
                     )
                 except (IndexError, ValueError) as e:
     
@@ -214,6 +313,48 @@ def criar_alunos(request):
                     messages.error(request, "Erro ao criar alunos.")
 
         messages.success(request, "Alunos criados com sucesso.")
-        return redirect("cursos")   
+        return redirect("cursos")
     
     return render(request, 'criar_aluno.html')
+
+def upload_frequencia(request):
+    if request.method == 'POST' and 'freq' in request.FILES:
+        txt_file = request.FILES['freq']
+
+        fs = FileSystemStorage()
+        filename = fs.save(txt_file.name, txt_file)
+
+        # Abrir o arquivo TXT
+        with open(fs.path(filename), newline='', encoding='ISO-8859-1') as txtfile:
+            reader = csv.reader(txtfile, delimiter='\t')  # Usando tabulação como delimitador
+
+            for row in reader:
+                try:
+                    # Assumindo que o TXT contém as colunas na ordem: data, id_carteirinha, hora, identificador
+                    data = row[0].strip()  # Data da frequência
+                    id_carteirinha = int(row[1].strip())
+                    hora = row[2].strip()  # Hora da frequência
+                    identificador = int(row[3].strip())  # Identificador de entrada ou saída
+
+                    # Buscar o aluno pelo id_carteirinha
+                    aluno = Aluno.objects.get(id_carteirinha=id_carteirinha)
+
+                    # Criar a frequência no banco
+                    Frequencia.objects.create(
+                        id_aluno=aluno,
+                        data=data,
+                        hora=hora,
+                        identificador=identificador
+                    )
+
+                except Aluno.DoesNotExist:
+                    messages.error(request, f"Aluno com carteirinha {id_carteirinha} não encontrado.")
+                except IndexError:
+                    messages.error(request, "Erro no formato do arquivo TXT.")
+                except Exception as e:
+                    messages.error(request, f"Erro ao salvar a frequência: {str(e)}")
+
+        messages.success(request, "Frequências carregadas com sucesso.")
+        return redirect("homepage")
+
+    return render(request, 'frequencia.html')
