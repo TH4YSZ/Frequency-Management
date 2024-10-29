@@ -129,27 +129,35 @@ def alunos(request, turma):
                 FROM 
                     web_frequencia AS f
             ),
-            dias_letivos AS (
+            presenca_por_dia AS (
                 SELECT 
                     aluno.id_carteirinha,
-                    COUNT(DISTINCT CASE WHEN CAST(f.identificador AS INTEGER) = 1 AND f.hora IS NULL THEN f.data END) AS total_faltas,
-                    COUNT(DISTINCT CASE WHEN CAST(f.identificador AS INTEGER) = 1 AND (f.hora IS NULL OR f.hora > c.horario_entrada) THEN f.data END) AS total_atrasos,
-                    SUM(
-                        CASE 
-                            WHEN CAST(f.identificador AS INTEGER) = 1 THEN 
-                                GREATEST(0, 
-                                    LEAST(
-                                        EXTRACT(EPOCH FROM (COALESCE(f.proxima_hora, c.horario_saida) - COALESCE(f.hora, c.horario_entrada))) / 3600, 
-                                        EXTRACT(EPOCH FROM (c.horario_saida - c.horario_entrada)) / 3600
-                                    ) 
-                                    - CASE WHEN COALESCE(f.hora, c.horario_entrada) < c.horario_entrada THEN 
-                                        EXTRACT(EPOCH FROM (c.horario_entrada - COALESCE(f.hora, c.horario_entrada))) / 3600
-                                    ELSE 0
-                                    END
-                                )
-                            ELSE 0
-                        END
-                    ) AS carga_horaria_total
+                    f.data,
+                    -- Calcula as horas de presença efetiva por dia
+                    CASE 
+                        WHEN CAST(f.identificador AS INTEGER) = 1 THEN
+                            CASE 
+                                -- Quando há falta (hora IS NULL)
+                                WHEN f.hora IS NULL THEN 0
+                                -- Quando há presença
+                                ELSE
+                                    EXTRACT(EPOCH FROM (
+                                        LEAST(
+                                            COALESCE(f.proxima_hora, c.horario_saida), -- Horário de saída do aluno
+                                            c.horario_saida -- Não considera tempo extra após horário de saída
+                                        ) - 
+                                        GREATEST(
+                                            f.hora, -- Horário real de entrada
+                                            c.horario_entrada -- Não considera chegada antecipada
+                                        )
+                                    )) / 3600 -- Converte segundos para horas
+                            END
+                        ELSE 0
+                    END AS horas_presenca,
+                    -- Indica se houve falta no dia
+                    CASE WHEN f.hora IS NULL AND CAST(f.identificador AS INTEGER) = 1 THEN 1 ELSE 0 END AS teve_falta,
+                    -- Indica se houve atraso no dia
+                    CASE WHEN f.hora > c.horario_entrada AND CAST(f.identificador AS INTEGER) = 1 THEN 1 ELSE 0 END AS teve_atraso
                 FROM 
                     web_aluno AS aluno
                 LEFT JOIN 
@@ -159,43 +167,51 @@ def alunos(request, turma):
                 WHERE 
                     c.turma = %s
                     AND f.data BETWEEN c.data_inicio AND c.data_fim
+            ),
+            totais_aluno AS (
+                SELECT 
+                    id_carteirinha,
+                    SUM(horas_presenca) AS total_horas_presenca,
+                    COUNT(DISTINCT CASE WHEN teve_falta = 1 THEN data END) AS total_faltas,
+                    COUNT(DISTINCT CASE WHEN teve_atraso = 1 THEN data END) AS total_atrasos
+                FROM 
+                    presenca_por_dia
                 GROUP BY 
-                    aluno.id_carteirinha
+                    id_carteirinha
             )
             SELECT 
                 aluno.nome,
-                dl.total_faltas,
-                dl.total_atrasos,
-                dl.carga_horaria_total,
+                t.total_faltas,
+                t.total_atrasos,
+                t.total_horas_presenca AS carga_horaria_cumprida,
                 CASE 
                     WHEN c.carga_horaria > 0 THEN 
-                        LEAST(100, (dl.carga_horaria_total / c.carga_horaria) * 100)
+                        LEAST(100, ROUND((t.total_horas_presenca / c.carga_horaria) * 100, 2)) 
                     ELSE 0
-                END AS porcentagem_carga_horaria
+                END AS porcentagem_frequencia
             FROM 
-                dias_letivos AS dl
+                totais_aluno t
             JOIN 
-                web_aluno AS aluno ON dl.id_carteirinha = aluno.id_carteirinha
+                web_aluno AS aluno ON t.id_carteirinha = aluno.id_carteirinha
             JOIN 
                 web_curso AS c ON aluno.id_curso_id = c.turma
             WHERE 
                 c.turma = %s
-        """, [curso.turma, curso.turma])
+            ORDER BY 
+                aluno.nome;
+        """, [curso.turma, curso.turma])  # Usando o mesmo parâmetro para evitar inconsistências.
 
         resultados = cursor.fetchall()
 
-    if not resultados:
-        alunos_detalhes = []
-    else:
-        alunos_detalhes = []
-        for resultado in resultados:
-            alunos_detalhes.append({
-                'aluno': resultado[0],
-                'faltas': resultado[1],
-                'atrasos': resultado[2],
-                'carga_horaria_aluno': resultado[3],
-                'porcentagem_carga_horaria': round(resultado[4], 2),  
-            })
+    alunos_detalhes = []
+    for resultado in resultados:
+        alunos_detalhes.append({
+            'aluno': resultado[0],
+            'faltas': resultado[1],
+            'atrasos': resultado[2],
+            'carga_horaria_aluno': resultado[3],
+            'porcentagem_carga_horaria': round(resultado[4], 2),  
+        })
 
     context = {
         'curso': curso,
@@ -274,7 +290,9 @@ def criar_cursos(request):
                         responsavel=row[5],
                         dias_funcionamento=dias,
                         data_inicio=data_inicio,
-                        data_fim=data_fim
+                        data_fim=data_fim,
+                        carga_horaria_intervalo=row[9],
+                        dias_ferias=row[10]
                     )
                 except (IndexError, ValueError) as e:
     

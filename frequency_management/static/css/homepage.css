@@ -3,7 +3,7 @@
 }
 
 .bg_Home {
-    background-image: url("{% static 'img/bg_home.jpg' %}");
+
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center center;
@@ -74,9 +74,11 @@ button:hover {
         font-size: 4rem;
     }
 }
+
 .IconButton-homepage {
     text-decoration: none;
-    color: var(--text-color); /* Cor baseada no tema */
+    color: var(--text-color);
+    /* Cor baseada no tema */
     transition: color 0.3s ease, transform 0.3s ease;
     cursor: pointer;
     margin-right: 30px;

@@ -38,6 +38,8 @@ class Curso(models.Model):
     )
     data_inicio = models.DateField(default='2024-01-26')
     data_fim = models.DateField(default='2024-12-17')
+    carga_horaria_intervalo = models.TimeField(default='02:00:00')
+    dias_ferias = models.IntegerField(default='30')
 
 
     def __str__(self):

@@ -1,0 +1,48 @@
+MMAN;Mecânico de Manutenção;07:05;16:35;1200;João Silva;SEG, QUA, SEX;26/01/2024;17/12/2024
+M2C;Mecânico de Usinagem;08:00;14:00;1200;Maria Costa;SEG, QUA, SEX;26/01/2024;17/12/2024
+M3A;Eletricista de Manutenção Eletroeletrônica;07:05;16:35;1200;Ana Souza;SEG, QUA, SEX;26/01/2024;17/12/2024
+M3F;Mecânico de Manutenção;07:05;16:35;1200;Carlos Mendes;SEG, QUA, SEX;26/01/2024;17/12/2024
+M4A;Eletricista de Manutenção;07:05;16:35;1200;Laura Ferreira;SEG, QUA, SEX;26/01/2024;17/12/2024
+M4C;Mecânico de Usinagem;07:05;16:35;1200;Paulo Rocha;SEG, QUA, SEX;26/01/2024;17/12/2024
+ALPR;Auxiliar de Linha de Produção;14:00;20:00;1200;Juliana Neves;SEG, QUA, SEX;26/01/2024;17/12/2024
+ELME;Eletricista de Manutenção Eletroeletrônica;07:05;16:35;1200;André Costa;SEG, QUA, SEX;26/01/2024;17/12/2024
+MUSI;Mecânico de Usinagem;08:00;14:00;1200;Roberta Lima;SEG, QUA, SEX;26/01/2024;17/12/2024
+ADM SIEMENS;Técnico em Administração;08:00;14:00;1200;Renato Oliveira;SEG, QUA, SEX;26/01/2024;17/12/2024
+T2A;Eletricista de Manutenção Eletroeletrônica;08:00;14:00;1200;Mariana Nunes;SEG, QUA, SEX;26/01/2024;17/12/2024
+T2F;Mecânico de Manutenção;08:00;14:00;1200;Fernando Batista;SEG, QUA, SEX;26/01/2024;17/12/2024
+T3C;Mecânico de Usinagem;08:00;14:00;1200;Beatriz Santos;SEG, QUA, SEX;26/01/2024;17/12/2024
+T4F;Mecânico de Manutenção;08:00;14:00;1200;Adriana Ribeiro;SEG, QUA, SEX;26/01/2024;17/12/2024
+T1LOG;Assistente de Logística;08:00;14:00;1200;Diego Cardoso;SEG, QUA, SEX;26/01/2024;17/12/2024
+ALMO;Almoxarife;08:00;14:00;1200;Igor Moreira;SEG, QUA, SEX;26/01/2024;17/12/2024
+N3P;Técnico em Plástico;07:05;16:35;1200;Clara Vieira;SEG, QUA, SEX;26/01/2024;17/12/2024
+N3Q;Técnico em Qualidade;07:05;16:35;1200;Lucas Almeida;SEG, QUA, SEX;26/01/2024;17/12/2024
+I1CER-ROCA;Ceramista de Louças Sanitárias;07:05;16:35;1200;Diana Ramos;TER, QUI;26/01/2024;17/12/2024
+I1CER-DEXCO;Ceramista de Louças Sanitárias;07:05;16:35;1200;Amanda Borges;TER, QUI;26/01/2024;17/12/2024
+ADM-S1;Técnico em Administração;07:05;16:35;1200;Ricardo Pereira;TER, QUI;26/01/2024;17/12/2024
+IS2ADM;Técnico em Administração;07:05;16:35;1200;Thiago Martins;QUA, SEX;26/01/2024;17/12/2024
+MMI;Técnico em Manutenção de Máquinas Industriais;07:05;16:35;1200;Bruna Monteiro;TER, QUI;26/01/2024;17/12/2024
+DSIST-S1;Técnico em Desenvolvimento de Sistemas;07:05;16:35;1200;Vitor Carvalho;TER, QUI;26/01/2024;17/12/2024
+IS2DSIST;Técnico em Desenvolvimento de Sistemas;07:05;16:35;1200;Sophia Duarte;QUA, SEX;26/01/2024;17/12/2024
+ELET-S1-A;Técnico em Eletroeletrônica;07:05;16:35;1200;Rodrigo Azevedo;TER, QUI;26/01/2024;17/12/2024
+ELET-S1-B;Técnico em Eletroeletrônica;07:05;16:35;1200;Marcela Farias;TER, QUI;26/01/2024;17/12/2024
+ISELET1;Técnico em Eletroeletrônica;07:05;16:35;1200;Bruno Santiago;QUA, SEX;26/01/2024;17/12/2024
+ISELET2;Técnico em Eletroeletrônica;07:05;16:35;1200;Camila Dias;QUA, SEX;26/01/2024;17/12/2024
+LOG-S1-A;Técnico em Logística;07:05;16:35;1200;Felipe Pires;TER, QUI;26/01/2024;17/12/2024
+LOG-S1-B;Técnico em Logística;07:05;16:35;1200;Eduardo Vasconcelos;TER, QUI;26/01/2024;17/12/2024
+ISLOG1;Técnico em Logística;07:05;16:35;1200;Larissa Vieira;QUA, SEX;26/01/2024;17/12/2024
+ISLOG2;Técnico em Logística;07:05;16:35;1200;Gustavo Teixeira;QUA, SEX;26/01/2024;17/12/2024
+PLAST-S1-A;Técnico em Plástico;07:05;16:35;1200;Fernanda Sousa;TER, QUI;26/01/2024;17/12/2024
+PLAST-S1-B;Técnico em Plástico;07:05;16:35;1200;Aline Moraes;TER, QUI;26/01/2024;17/12/2024
+ISPLAST1;Técnico em Plástico;07:05;16:35;1200;Leonardo Cunha;TER, QUI;26/01/2024;17/12/2024
+ISPLAST2;Técnico em Plástico;07:05;16:35;1200;Helena Castro;TER, QUI;26/01/2024;17/12/2024
+CONS;Construtor de Moldes para Plásticos;07:05;16:35;1200;Vinícius Lima;TER, QUI;26/01/2024;17/12/2024
+PROJ;Projetista de Moldes para Plásticos;07:05;16:35;1200;Simone Figueira;TER, QUI;26/01/2024;17/12/2024
+MUMP-A;Mecânico de Usinagem de Moldes para Plásticos;07:05;16:35;1200;Rafael Mendes;TER, QUI;26/01/2024;17/12/2024
+MUMP-B;Mecânico de Usinagem de Moldes para Plásticos;07:05;16:35;1200;Evelyn Nogueira;TER, QUI;26/01/2024;17/12/2024
+MUMP-C;Mecânico de Usinagem de Moldes para Plásticos;07:05;16:35;1200;Murilo Tavares;TER, QUI;26/01/2024;17/12/2024
+MLOC;Mantenedor Eletromecânico de Locomotivas;07:05;16:35;1200;Yuri Dias;TER, QUI;26/01/2024;17/12/2024
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;

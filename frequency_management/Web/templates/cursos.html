@@ -7,10 +7,6 @@ Cursos
 
 {% block head %}
 <style>
-    * {
-        font-family: "Kumbh Sans";
-    }
-
     .container-conteudo {
         min-height: 100vh;
         display: flex;
@@ -48,12 +44,10 @@ Cursos
 
     .titulo-curso,
     .detalhes-curso {
-        margin: 0;
         font-size: 0.9rem;
         color: #454444;
         flex: 1;
         text-align: center;
-        text-decoration: none;
         color: var(--text-color);
     }
 
@@ -85,18 +79,14 @@ Cursos
     }
 
     .cabecalho {
-        margin: 0;
         font-size: 1.0rem;
-        color: var(--text-color);
         flex: 1;
         text-align: center;
-        text-decoration: none;
     }
 
     .opcoes {
         display: flex;
         max-height: 35px;
-        align-self: flex-start;
         align-items: center;
         align-content: center;
         margin-left: 4.5rem;
@@ -105,26 +95,14 @@ Cursos
         font-size: 1.2rem;
     }
 
-    .opcoes a {
+    .lupa,
+    .sino {
         color: var(--text-color);
-        text-decoration: none;
+        cursor: pointer;
     }
 
-    .opcoes a:hover {
-        color: #8C031C;
-    }
-
-    a:hover,
-    a:focus {
-        text-decoration: none;
-        color: inherit;
-    }
-
-    .lupa {
-        color: var(--text-color)
-    }
-
-    .lupa:hover {
+    .lupa:hover,
+    .sino:hover {
         color: #8C031C;
     }
 
@@ -227,9 +205,9 @@ Cursos
         <h2 class="titulo">Cursos</h2>
         <div class="opcoes">
             <span>Cursos |</span>
-            <a href="{% url 'notificacoes' %}"><i class="bi bi-bell" style="cursor: pointer;"></i></a>
+            <a href="{% url 'notificacoes' %}"><i class="bi bi-bell sino"></i></a>
             <span> | </span>
-            <i class="bi bi-search lupa" style="cursor: pointer;" id="search-icon"></i>
+            <i class="bi bi-search lupa" id="search-icon"></i>
             <div class="search-container" id="search-container">
                 <form id="search-form" method="GET" action="{% url 'cursos' %}">
                     {{ form.search }}
