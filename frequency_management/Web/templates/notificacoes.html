@@ -37,8 +37,16 @@ Cursos
         display: flex;
         justify-content: space-around;
         align-items: center;
+        align-content: center;
         margin: 15px 0;
         flex-wrap: wrap;
+    }
+
+    .curso .nome-aluno,
+    .curso .detalhes-aluno,
+    .curso .detalhes-info {
+        flex: 1;
+        text-align: center;
     }
 
     .fundo-curso a:hover .nome-aluno,
@@ -67,6 +75,19 @@ Cursos
         color: var(--text-color);
         flex: 1;
         text-align: center;
+        text-decoration: none;
+    }
+
+    .detalhes-info,
+    .options {
+        text-decoration: none;
+        color: var(--text-color);
+        display: flexbox;
+        gap: 10px;
+    }
+
+    .options a {
+        color: var(--text-color);
         text-decoration: none;
     }
 
@@ -134,14 +155,6 @@ Cursos
         color: black;
     }
 
-    .opcoes {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        font-size: 1.2rem;
-    }
-
     @media (max-width: 768px) {
         .titulo-cabecalho {
             font-size: 2rem;
@@ -172,9 +185,6 @@ Cursos
             </a>
         </div>
         <h2 class="titulo">Notificações</h2>
-        <div class="opcoes">
-            <span>Notificações |</span><i class="bi bi-sliders"></i>
-        </div>
     </div>
     <div class="container-cursos">
         <div class="ident">
@@ -183,45 +193,26 @@ Cursos
             <div class="detalhes-aluno">Opções</div>
         </div>
         <div class="fundo-curso">
-            <a href="{% url 'alunos' %}" class="titulo-curso">
-                <div class="curso">
-                    <h5 class="nome-aluno">Carlos Eduardo Ribeiro Silva</h5>
-                    <div class="detalhes-aluno">3</div>
-                    <div class="detalhes-aluno">Desenvolvendo</div>
+            {% for aluno in alunos_notificados %}
+            <div class="curso">
+                <h5 class="nome-aluno">{{ aluno.nome }}</h5>
+                <div class="detalhes-aluno">{{ aluno.total_atrasos }}</div>
+                <div class="detalhes-info options" role="cell">
+                    <a href="#" aria-label="Lido">
+                        <i class="bi bi-check-lg"></i>
+                    </a>
+                    <a href="#" aria-label="Excluir">
+                        <i class="bi bi-trash3" aria-hidden="true"></i>
+                    </a>
                 </div>
-            </a>
-
-            <a href="{% url 'alunos' %}" class="titulo-curso">
-                <div class="curso">
-                    <h5 class="nome-aluno">Ruan Duarte dos Santos</h5>
-                    <div class="detalhes-aluno">3</div>
-                    <div class="detalhes-aluno">Desenvolvendo</div>
-                </div>
-            </a>
-
-            <a href="{% url 'alunos' %}" class="titulo-curso">
-                <div class="curso">
-                    <h5 class="nome-aluno">Leonardo Pereira Gomes</h5>
-                    <div class="detalhes-aluno">12</div>
-                    <div class="detalhes-aluno">Desenvolvendo</div>
-                </div>
-            </a>
-
-            <a href="{% url 'alunos' %}" class="titulo-curso">
-                <div class="curso">
-                    <h5 class="nome-aluno">Ana Carolina Martins Costa</h5>
-                    <div class="detalhes-aluno">7</div>
-                    <div class="detalhes-aluno">Desenvolvendo</div>
-                </div>
-            </a>
-
-            <a href="{% url 'alunos' %}" class="titulo-curso">
-                <div class="curso">
-                    <h5 class="nome-aluno">Rodrigo Henrique Ferreira</h5>
-                    <div class="detalhes-aluno">6</div>
-                    <div class="detalhes-aluno">Desenvolvendo</div>
-                </div>
-            </a>
+            </div>
+            {% empty %}
+            <div class="curso">
+                <h5 class="nome-aluno">Nenhum aluno com notificações.</h5>
+                <div class="detalhes-aluno">0</div>
+                <div class="detalhes-aluno">N/A</div>
+            </div>
+            {% endfor %}
         </div>
         <div class="ident">
             <a href="{% url 'relatorio' %}" class="titulo-curso">Relatório <i

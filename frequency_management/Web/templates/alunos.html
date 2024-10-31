@@ -8,26 +8,26 @@ Gestão de Atrasos
 {% block head %}
 <style>
     * {
-        font-family: "Kumbh Sans";
+        font-family: "Kumbh Sans", sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
 
     .container-conteudo {
-        min-height: 100%;
+        min-height: 100vh;
         display: flex;
         justify-content: center;
         flex-direction: column;
         align-items: center;
         background-color: var(--background-color);
         padding: 50px;
-        box-sizing: border-box;
+        text-align: center;
     }
 
     .topo {
         width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        text-align: center;
         margin-bottom: 20px;
     }
 
@@ -42,8 +42,8 @@ Gestão de Atrasos
         width: 90%;
         max-width: 1200px;
         border-radius: 10px;
-        box-sizing: border-box;
         margin: 0 auto;
+        display: flex;
         justify-content: space-between;
     }
 
@@ -52,6 +52,13 @@ Gestão de Atrasos
         padding: 20px;
         border-radius: 10px;
         margin-right: 20px;
+    }
+
+    .ident {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-weight: bold;
     }
 
     .aluno-info {
@@ -66,25 +73,13 @@ Gestão de Atrasos
         flex-wrap: wrap;
     }
 
-    .aluno-info i {
-        color: var(--button-home);
-    }
-
     .voltar {
         font-family: "Krona One", sans-serif;
         font-size: 1rem;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        text-align: left;
         position: absolute;
         top: 5rem;
         left: 4.6rem;
-    }
-
-    .voltar i {
-        margin-right: 4px;
-        font-size: 1rem;
+        cursor: pointer;
     }
 
     .voltar a {
@@ -94,20 +89,10 @@ Gestão de Atrasos
 
     .titulo-info,
     .detalhes-info {
-        margin: 0;
         font-size: 0.9rem;
-        color: #260104;
+        color: var(--title);
         flex: 1;
         text-align: center;
-        color: var(--title);
-    }
-
-    .ident {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-        flex-wrap: wrap;
     }
 
     .options {
@@ -118,9 +103,9 @@ Gestão de Atrasos
     }
 
     .options a {
+        color: var(--text-color);
+        font-size: 1.2rem;
         text-decoration: none;
-        color: #870000;
-        font-size: 18px;
     }
 
     .inform {
@@ -137,11 +122,6 @@ Gestão de Atrasos
 
     .inform h3 {
         margin: 0;
-        color: var(--text-color);
-    }
-
-    .inform p {
-        margin: 5px 0;
         color: var(--text-color);
     }
 
@@ -162,10 +142,6 @@ Gestão de Atrasos
         margin-bottom: 1rem;
     }
 
-    .barra-lateral p {
-        font-size: 0.9rem;
-    }
-
     .botao-lateral {
         display: flex;
         flex-direction: column;
@@ -174,45 +150,25 @@ Gestão de Atrasos
         width: 100%;
     }
 
-    .botao-lateral a {
-        text-decoration: none;
-        width: 100%;
-    }
-
     .botao-lateral button {
         color: var(--text-color);
         background: var(--list-bg-color);
-        text-decoration: none;
-        border-bottom: 2px solid transparent;
         border-radius: 10px;
         width: 100%;
         text-align: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
         padding: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .botao-lateral button:hover {
-        color: var(--text-color);
-        border: 2px solid #971c32;
+        background: #971c32;
+        color: #fff;
     }
 
     .modal-content {
         background: var(--background);
         border-radius: 20px;
-    }
-
-    .modal-btn {
-        background: var(--background);
-        color: var(--text-color);
-    }
-
-    .btn:hover {
-        background: #971c32;
-        color: #fff;
-        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     @media (max-width: 768px) {
@@ -221,10 +177,11 @@ Gestão de Atrasos
             align-items: center;
         }
 
-        .lista-alunos,
-        .inform {
-            width: 100%;
-            max-width: none;
+        .container-conteudo {
+            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: center;
+            align-content: center;
         }
 
         .aluno-info {
@@ -234,6 +191,16 @@ Gestão de Atrasos
         .inform {
             margin-top: 20px;
         }
+
+        .ident {
+            gap: 20px;
+            align-items: center;
+            align-content: center;
+            text-align: center;
+            padding: 5px;
+            margin-bottom: 60px;
+        }
+
     }
 </style>
 {% endblock %}
@@ -242,32 +209,34 @@ Gestão de Atrasos
 <div class="container-conteudo animate downUp-1">
     <div class="topo">
         <div class="voltar">
-            <a href="{% url 'cursos' %}">
-                <i class="bi bi-house-fill"></i>
+            <a href="{% url 'cursos' %}" aria-label="Voltar para a lista de cursos">
+                <i class="bi bi-house-fill" aria-hidden="true"></i>
                 <span>Voltar</span>
             </a>
         </div>
         <h2 class="titulo">{{ curso.nome_curso }}</h2>
     </div>
     <div class="container-atrasos">
-        <div class="lista-alunos">
-            <div class="ident">
-                <h5 class="titulo-info">Aluno</h5>
-                <div class="detalhes-info">Atrasos</div>
-                <div class="detalhes-info">Frequência</div>
-                <div class="detalhes-info">Faltas</div>
-                <div class="detalhes-info">Opções</div>
+        <div class="lista-alunos" role="table" aria-labelledby="alunos-table">
+            <div class="ident" role="row">
+                <div class="detalhes-info" role="columnheader">Aluno</div>
+                <div class="detalhes-info" role="columnheader">Atrasos</div>
+                <div class="detalhes-info" role="columnheader">Frequência</div>
+                <div class="detalhes-info" role="columnheader">Faltas</div>
+                <div class="detalhes-info" role="columnheader">Opções</div>
             </div>
 
             {% for aluno in alunos_detalhes %}
-            <div class="aluno-info">
-                <h5 class="titulo-info">{{ aluno.aluno }}</h5>
-                <div class="detalhes-info">{{ aluno.atrasos }}</div>
-                <div class="detalhes-info">{{ aluno.porcentagem_carga_horaria }}%</div>
-                <div class="detalhes-info">{{ aluno.faltas }}</div>
-                <div class="detalhes-info options">
-                    <a href="#"><i class="bi bi-pencil"></i></a>
-                    <a href="#"><i class="bi bi-trash3"></i></a>
+            <div class="aluno-info" role="row">
+                <h5 class="titulo-info" role="cell">{{ aluno.aluno }}</h5>
+                <div class="detalhes-info" role="cell">{{ aluno.atrasos }}</div>
+                <div class="detalhes-info" role="cell">{{ aluno.porcentagem_carga_horaria }}%</div>
+                <div class="detalhes-info" role="cell">{{ aluno.faltas }}</div>
+                <div class="detalhes-info options" role="cell">
+                    <a href="{% url 'del_aluno' curso.turma aluno.id_carteirinha %}" onclick="confirmDelete(event)">
+                        <i class="bi bi-trash" aria-hidden="true"></i>
+                    </a>
+
                 </div>
             </div>
             {% empty %}
@@ -276,42 +245,62 @@ Gestão de Atrasos
         </div>
 
         <div class="inform">
-            <div class="barra-lateral">
-                <h3>Informações</h3>
+            <div class="barra-lateral" aria-labelledby="informacoes-title">
+                <h3 id="informacoes-title">Informações</h3>
                 <p><strong>Responsável: </strong>{{ curso.responsavel }}</p>
                 <p><strong>Código da Turma: </strong>{{ curso.turma }}</p>
             </div>
 
             <div class="botao-lateral">
-                <button type="button" class="btn botao-lateral" data-bs-toggle="modal" data-bs-target="#excluirModal"
-                    data-bs-whatever="@mdo">
+                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#excluirModal"
+                    aria-label="Excluir curso">
                     Excluir
                 </button>
-                <a href="{% url 'relatorio' %}"><button>Relatório <i
-                            class="bi bi-file-earmark-arrow-down"></i></button></a>
+                <a href="{% url 'relatorio' %}">
+                    <button aria-label="Gerar relatório">
+                        Relatório <i class="bi bi-file-earmark-arrow-down" aria-hidden="true"></i>
+                    </button>
+                </a>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="excluirModal" tabindex="-1" aria-labelledby="excluirModalLabel" aria-hidden="true"
-    data-bs-backdrop="false">
+<div class="modal fade" id="excluirModal" tabindex="-1" aria-labelledby="excluirModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header" data-bs-theme="dark">
+            <div class="modal-header">
                 <h5 class="modal-title" id="excluirModalLabel">Excluir Curso</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
-                Tem certeza que deseja excluir este curso?<br><br>
-                Observação: Ao deletar o curso, os alunos serão excluídos.
+                <p>Tem certeza que deseja excluir o curso {{ curso.nome_curso }}?</p>
             </div>
-            <div class="modal-footer" data-bs-theme="dark">
-                <button type="button" class="btn modal-btn" data-bs-dismiss="modal">Cancelar</button>
-                <a href="{% url 'del_curso' %}" class="btn modal-btn">Excluir</a>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    aria-label="Cancelar">Cancelar</button>
+                <form action="{% url 'del_curso' curso.turma %}" method="post" aria-label="Confirmar exclusão do curso">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Confirmar</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    function confirmDelete(event) {
+        // Previne o redirecionamento imediato ao clicar no link
+        event.preventDefault();
+
+        // Exibe um alerta de confirmação
+        const confirmation = confirm("Tem certeza de que deseja excluir este aluno?");
+
+        // Se o usuário confirmar, redireciona para a URL de exclusão
+        if (confirmation) {
+            window.location.href = event.currentTarget.href;
+        }
+    }
+</script>
 
 {% endblock %}

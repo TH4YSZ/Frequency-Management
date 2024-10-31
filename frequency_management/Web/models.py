@@ -39,7 +39,7 @@ class Curso(models.Model):
     data_inicio = models.DateField(default='2024-01-26')
     data_fim = models.DateField(default='2024-12-17')
     carga_horaria_intervalo = models.TimeField(default='02:00:00')
-    dias_ferias = models.IntegerField(default='30')
+    dias_letivos = models.IntegerField(default='80')
 
 
     def __str__(self):
@@ -65,6 +65,13 @@ class Frequencia(models.Model):
     def __str__(self):
         return f"Frequência de {self.id_aluno} em {self.data}"
 
+# class FrequenciaResumoAluno(models.Model):
+#     id_aluno_id = models.ForeignKey(Aluno, on_delete=models.CASCADE)
+#     data = models.DateField()
+#     horas_presenca = models.FloatField()
+#     teve_falta = models.BooleanField()
+#     teve_atraso = models.BooleanField()
+
 class Usuario(models.Model):
     nome = models.CharField(max_length=60)
     sobrenome = models.CharField(max_length=60)
@@ -74,4 +81,3 @@ class Usuario(models.Model):
 
     def __str__(self):
         return self.username
-
