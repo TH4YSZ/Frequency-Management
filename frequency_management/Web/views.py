@@ -12,7 +12,8 @@ from django.db import connection
 from django.db import connection
 from django.http import FileResponse
 from reportlab.pdfgen import canvas
-from reportlab.pdfbase import pdfmetrics
+from reportlab.platypus import Table
+from io import BytesIO
 import csv
 
 
@@ -235,6 +236,8 @@ def alunos(request, turma):
     }
 
     return render(request, 'alunos.html', context)
+
+
 
 
 @login_required
@@ -581,12 +584,41 @@ def relatorio(request):
             'frequencia_porcentagem': aluno[4],
         })
 
+    buffer = BytesIO()
+    
+    objeto_pdf = canvas.Canvas(buffer)
+    objeto_pdf.setTitle("Relatório")
+    subTitle = "Subtítulo do Relatório"
+
+    objeto_pdf.setFont("Times-Roman", 36)
+    objeto_pdf.drawCentredString(300, 770, "Relatório geral")
+    objeto_pdf.setFont("Times-Roman", 24)
+    objeto_pdf.drawCentredString(290, 720, subTitle)
+
+    dados_tabela = [['Categoria', 'Nome', 'Turma', 'Atrasos', 'Frequência (%)']]
+    for aluno in relatorio:
+        dados_tabela.append([
+            aluno['categoria'],
+            aluno['nome'],
+            aluno['turma'],
+            str(aluno['total_atrasos']),
+            f"{aluno['frequencia_porcentagem']}%"
+        ])
+
+    tabela = Table(dados_tabela)
+
+    tabela.wrapOn(objeto_pdf, 400, 600)
+    tabela.drawOn(objeto_pdf, 100, 600)
+    
+    objeto_pdf.showPage()
+    objeto_pdf.save()
+    buffer.seek(0)
+
     context = {
         'relatorio': relatorio,
     }
 
+    if request.GET.get('format') == 'pdf':
+        return FileResponse(buffer, filename="relatorio.pdf")
     
-    
-    print(context)
-
     return render(request, 'relatorio.html', context)
