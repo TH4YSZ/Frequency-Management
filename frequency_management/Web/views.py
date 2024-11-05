@@ -9,13 +9,15 @@ from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from datetime import datetime
 from django.db import connection
-from django.db import connection
 from django.http import FileResponse
-from reportlab.pdfgen import canvas
 from reportlab.platypus import Table
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from reportlab.platypus import Table, TableStyle, Paragraph, SimpleDocTemplate
 from io import BytesIO
 import csv
-
 
 def homepage(request):
     return render(request, 'homepage.html')
@@ -126,7 +128,7 @@ def alunos(request, turma):
                             AND CAST(f2.identificador AS INTEGER) = 1
                         ) THEN true
                         ELSE false
-                    END as apenas_saida
+                    END AS apenas_saida
                 FROM 
                     web_frequencia AS f
             ),
@@ -168,7 +170,15 @@ def alunos(request, turma):
                         WHEN f.apenas_saida THEN 0
                         WHEN f.hora > c.horario_entrada + INTERVAL '10 minutes' AND CAST(COALESCE(f.identificador, 0) AS INTEGER) = 1 THEN 1 
                         ELSE 0 
-                    END AS teve_atraso
+                    END AS teve_atraso,
+                    CASE 
+                        WHEN CAST(COALESCE(f.identificador, 0) AS INTEGER) = 1 
+                            OR CAST(COALESCE(f.identificador, 0) AS INTEGER) = 2
+                            OR f.apenas_saida
+                            OR f.hora IS NOT NULL
+                        THEN 1
+                        ELSE 0
+                    END AS presenca
                 FROM 
                     web_aluno AS aluno
                 CROSS JOIN
@@ -183,8 +193,8 @@ def alunos(request, turma):
                 SELECT 
                     aluno.id_carteirinha,
                     COALESCE(SUM(p.horas_presenca), 0) AS total_horas_presenca,
-                    COALESCE(COUNT(DISTINCT CASE WHEN p.teve_falta = 1 THEN p.data END), 0) AS total_faltas,
-                    COALESCE(COUNT(DISTINCT CASE WHEN p.teve_atraso = 1 THEN p.data END), 0) AS total_atrasos
+                    COALESCE(COUNT(DISTINCT CASE WHEN p.teve_atraso = 1 THEN p.data END), 0) AS total_atrasos,
+                    COALESCE(COUNT(DISTINCT CASE WHEN p.presenca = 1 THEN p.data END), 0) AS total_presencas
                 FROM 
                     web_aluno AS aluno
                 LEFT JOIN 
@@ -197,8 +207,9 @@ def alunos(request, turma):
             SELECT 
                 aluno.id_carteirinha,
                 aluno.nome,
-                t.total_faltas,
+                GREATEST(c.dias_letivos - t.total_presencas, 0) AS total_faltas,  -- Atualizado para calcular total_faltas
                 t.total_atrasos,
+                t.total_presencas,
                 LEAST(t.total_horas_presenca, 600) AS carga_horaria_cumprida,
                 CASE 
                     WHEN c.dias_letivos > 0 THEN 
@@ -222,12 +233,13 @@ def alunos(request, turma):
     alunos_detalhes = []
     for resultado in resultados:
         alunos_detalhes.append({
-            'id_carteirinha': resultado[0],  # ou pode armazenar diretamente o ID aqui
+            'id_carteirinha': resultado[0],
             'aluno': resultado[1],
             'faltas': resultado[2],
             'atrasos': resultado[3],
-            'carga_horaria_aluno': resultado[4],
-            'porcentagem_carga_horaria': round(resultado[5], 2),
+            'presencas': resultado[4],
+            'carga_horaria_aluno': resultado[5],
+            'porcentagem_carga_horaria': round(resultado[6], 2),
         })
 
     context = {
@@ -236,8 +248,6 @@ def alunos(request, turma):
     }
 
     return render(request, 'alunos.html', context)
-
-
 
 
 @login_required
@@ -303,13 +313,13 @@ def notificacoes(request):
             'total_atrasos': notificacao[2],
         })
 
+    tem_notificacoes = len(alunos_notificados) > 0
     context = {
         'alunos_notificados': alunos_notificados,
+        'tem_notificacoes': tem_notificacoes,
     }
 
     return render(request, 'notificacoes.html', context)
-
-
 
 
 @login_required
@@ -360,7 +370,7 @@ def nomeUsuario(request):
     usuario = Usuario.objects.get(username=request.user.username)
     return usuario.nome
 
-
+@login_required
 def criar_cursos(request):
     if request.method == 'POST' and 'cursos' in request.FILES:
         csv_file = request.FILES['cursos']
@@ -402,6 +412,7 @@ def criar_cursos(request):
     
     return render(request, 'criar_curso.html')
 
+@login_required
 def criar_alunos(request): 
     if request.method == 'POST' and 'alunos' in request.FILES:
         csv_file = request.FILES['alunos']
@@ -432,6 +443,11 @@ def criar_alunos(request):
                         print(f"Curso com turma '{curso_id}' não encontrado para o aluno '{nome}'. Verifique o arquivo CSV.")
                         continue  # Pula este registro e continua com o próximo
 
+                    # Verifica se o aluno já existe
+                    if Aluno.objects.filter(id_carteirinha=id_carteirinha).exists():
+                        print(f"Aluno com ID de carteirinha '{id_carteirinha}' já existe. Ignorando...")
+                        continue  # Ignora este registro e continua com o próximo
+
                     # Criação do aluno
                     Aluno.objects.create(
                         nome=nome,
@@ -447,6 +463,7 @@ def criar_alunos(request):
 
     return render(request, 'criar_aluno.html')
 
+@login_required
 def upload_frequencia(request):
     if request.method == 'POST' and 'freq' in request.FILES:
         txt_file = request.FILES['freq']
@@ -511,7 +528,7 @@ def relatorio(request):
                             AND CAST(f2.identificador AS INTEGER) = 1
                         ) THEN true
                         ELSE false
-                    END as apenas_saida
+                    END AS apenas_saida
                 FROM 
                     web_frequencia AS f
             ),
@@ -522,7 +539,8 @@ def relatorio(request):
                     c.turma,
                     COUNT(DISTINCT CASE WHEN f.hora > c.horario_entrada + INTERVAL '10 minutes' AND CAST(COALESCE(f.identificador, 0) AS INTEGER) = 1 THEN f.data END) AS total_atrasos,
                     COUNT(DISTINCT f.data) AS dias_presenca,
-                    c.dias_letivos
+                    c.dias_letivos,
+                    GREATEST(c.dias_letivos - COUNT(DISTINCT f.data), 0) AS total_faltas
                 FROM 
                     web_aluno AS aluno
                 JOIN 
@@ -540,18 +558,19 @@ def relatorio(request):
                     total_atrasos,
                     dias_presenca,
                     dias_letivos,
+                    total_faltas,
                     ROUND((dias_presenca::decimal / dias_letivos) * 100, 2) AS frequencia_porcentagem
                 FROM 
                     atrasos_aluno
             ),
             top_atrasos AS (
-                SELECT nome, turma, total_atrasos, frequencia_porcentagem
+                SELECT nome, turma, total_atrasos, frequencia_porcentagem, total_faltas
                 FROM frequencia_aluno
                 ORDER BY total_atrasos DESC
                 LIMIT 5
             ),
             baixa_frequencia AS (
-                SELECT nome, turma, total_atrasos, frequencia_porcentagem
+                SELECT nome, turma, total_atrasos, frequencia_porcentagem, total_faltas
                 FROM frequencia_aluno
                 ORDER BY frequencia_porcentagem ASC
                 LIMIT 5
@@ -559,66 +578,78 @@ def relatorio(request):
             
             SELECT 
                 'Top Atrasos' AS categoria, 
-                nome, turma, total_atrasos, frequencia_porcentagem
+                nome, turma, total_atrasos, frequencia_porcentagem, total_faltas
             FROM 
                 top_atrasos
             UNION ALL
             SELECT 
                 'Baixa Frequência' AS categoria, 
-                nome, turma, total_atrasos, frequencia_porcentagem
+                nome, turma, total_atrasos, frequencia_porcentagem, total_faltas
             FROM 
                 baixa_frequencia
             ORDER BY 
                 categoria, total_atrasos DESC, frequencia_porcentagem ASC;
         """)
-
         alunos_detalhes = cursor.fetchall()
 
-    relatorio = []
-    for aluno in alunos_detalhes:
-        relatorio.append({
+    relatorio = [
+        {
             'categoria': aluno[0],
             'nome': aluno[1],
             'turma': aluno[2],
             'total_atrasos': aluno[3],
             'frequencia_porcentagem': aluno[4],
-        })
-
-    buffer = BytesIO()
-    
-    objeto_pdf = canvas.Canvas(buffer)
-    objeto_pdf.setTitle("Relatório")
-    subTitle = "Subtítulo do Relatório"
-
-    objeto_pdf.setFont("Times-Roman", 36)
-    objeto_pdf.drawCentredString(300, 770, "Relatório geral")
-    objeto_pdf.setFont("Times-Roman", 24)
-    objeto_pdf.drawCentredString(290, 720, subTitle)
-
-    dados_tabela = [['Categoria', 'Nome', 'Turma', 'Atrasos', 'Frequência (%)']]
-    for aluno in relatorio:
-        dados_tabela.append([
-            aluno['categoria'],
-            aluno['nome'],
-            aluno['turma'],
-            str(aluno['total_atrasos']),
-            f"{aluno['frequencia_porcentagem']}%"
-        ])
-
-    tabela = Table(dados_tabela)
-
-    tabela.wrapOn(objeto_pdf, 400, 600)
-    tabela.drawOn(objeto_pdf, 100, 600)
-    
-    objeto_pdf.showPage()
-    objeto_pdf.save()
-    buffer.seek(0)
-
-    context = {
-        'relatorio': relatorio,
-    }
+            'total_faltas': aluno[5],
+        } for aluno in alunos_detalhes
+    ]
 
     if request.GET.get('format') == 'pdf':
-        return FileResponse(buffer, filename="relatorio.pdf")
+        buffer = BytesIO()
+        doc = SimpleDocTemplate(buffer, pagesize=A4, title="Relatório de Frequência")
+        elementos = []
+
+        # Estilos para título e subtítulo
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name="Subtitle", fontSize=18, leading=22, spaceAfter=12, alignment=1))
+
+        elementos.append(Paragraph("Relatório de Frequência e Atrasos", styles['Title']))
+        elementos.append(Paragraph("Análise de frequência e atrasos dos alunos", styles['Subtitle']))
+
+        # Ajustar o conteúdo da tabela para lidar com nomes longos
+        dados_tabela = [['Categoria', 'Nome', 'Turma', 'Atrasos', 'Frequência (%)', 'Faltas']]
+        for aluno in relatorio:
+            nome_formatado = Paragraph(aluno['nome'], styles['BodyText'])
+            dados_tabela.append([
+                aluno['categoria'],
+                nome_formatado,
+                aluno['turma'],
+                str(aluno['total_atrasos']),
+                f"{aluno['frequencia_porcentagem']}%",
+                str(aluno['total_faltas'])
+            ])
+
+        # Estilização da Tabela com ajustes para nomes longos
+        tabela = Table(dados_tabela, colWidths=[1.2 * inch, 2.5 * inch, 1.0 * inch, 0.8 * inch, 1.2 * inch, 0.8 * inch])
+        tabela.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, 0), 10),
+            ('FONTSIZE', (0, 1), (-1, -1), 8),  # Fonte menor para o conteúdo da tabela
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 10),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.whitesmoke),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+            ('VALIGN', (0, 1), (-1, -1), 'TOP')  # Alinhamento superior para quebras de linha
+        ]))
+
+        elementos.append(tabela)
+
+        # Construção do PDF
+        doc.build(elementos)
+        buffer.seek(0)
+        
+        return FileResponse(buffer, as_attachment=True, filename="relatorio_de_frequencia.pdf")
     
+    context = {'relatorio': relatorio}
     return render(request, 'relatorio.html', context)

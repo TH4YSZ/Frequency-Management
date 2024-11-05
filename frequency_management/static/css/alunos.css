@@ -1,0 +1,205 @@
+body {
+    font-family: "Kumbh Sans", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    margin-top: 80px;
+}
+
+.container-conteudo {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--background-color);
+    padding: 50px;
+    text-align: center;
+}
+
+.topo {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.titulo {
+    color: var(--title);
+    font-size: 2rem;
+    font-weight: 400;
+    text-align: center;
+}
+
+.container-atrasos {
+    width: 90%;
+    max-width: 1200px;
+    border-radius: 10px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    min-height: 200px;
+}
+
+.lista-alunos {
+    flex: 2;
+    padding: 20px;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+.ident {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.aluno-info {
+    padding: 10px;
+    border-radius: 20px;
+    background: var(--list-bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 28px 0;
+    flex-wrap: wrap;
+    min-height: 50px;
+}
+
+.aluno-info button {
+    background-color: transparent;
+    margin: 0;
+}
+
+.aluno-info i {
+    color: var(--text-color);
+}
+
+.voltar {
+    font-family: "Krona One", sans-serif;
+    font-size: 1rem;
+    position: absolute;
+    top: 5rem;
+    left: 4.6rem;
+    cursor: pointer;
+}
+
+.voltar a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.titulo-info,
+.detalhes-info {
+    font-size: 0.9rem;
+    color: var(--title);
+    flex: 1;
+    text-align: center;
+}
+
+.inform {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    padding-top: 64px;
+    border-radius: 10px;
+    align-items: flex-start;
+    gap: 10px;
+    max-width: 270px;
+}
+
+.inform h3 {
+    margin: 0;
+    color: var(--text-color);
+}
+
+.barra-lateral {
+    display: flex;
+    flex-direction: column;
+    background: var(--list-bg-color);
+    border-radius: 20px;
+    width: 100%;
+    padding: 1.2rem;
+    text-align: left;
+}
+
+.barra-lateral h3 {
+    align-self: center;
+    font-family: "Krona One", sans-serif;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.botao-lateral {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.botao-lateral button {
+    color: var(--text-color);
+    background: var(--list-bg-color);
+    border-radius: 10px;
+    width: 100%;
+    text-align: center;
+    padding: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    min-width: 150px;
+}
+
+.botao-lateral button:hover {
+    background: #971c32;
+    color: #fff;
+}
+
+.modal-content {
+    background: var(--background);
+    border-radius: 20px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+form {
+    margin-top: 0;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .container-atrasos {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .container-conteudo {
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
+        align-content: center;
+    }
+
+    .aluno-info {
+        flex-direction: column;
+    }
+
+    .inform {
+        margin-top: 20px;
+    }
+
+    .ident {
+        gap: 20px;
+        align-items: center;
+        align-content: center;
+        text-align: center;
+        padding: 5px;
+        margin-bottom: 60px;
+    }
+}

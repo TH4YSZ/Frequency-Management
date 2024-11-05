@@ -6,203 +6,11 @@ Gestão de Atrasos
 {% endblock %}
 
 {% block head %}
-<style>
-    * {
-        font-family: "Kumbh Sans", sans-serif;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+<link rel="stylesheet" href="{% static 'css/alunos.css' %}">
 
-    .container-conteudo {
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        align-items: center;
-        background-color: var(--background-color);
-        padding: 50px;
-        text-align: center;
-    }
+<meta name="keywords"
+    content="lista de alunos, gestão de frequência estudantil, controle de atrasos, presença de alunos, frequência escolar em tempo real, monitoramento de presença, sistema de gestão escolar">
 
-    .topo {
-        width: 100%;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .titulo {
-        color: var(--title);
-        font-size: 2rem;
-        font-weight: 400;
-        text-align: center;
-    }
-
-    .container-atrasos {
-        width: 90%;
-        max-width: 1200px;
-        border-radius: 10px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .lista-alunos {
-        flex: 2;
-        padding: 20px;
-        border-radius: 10px;
-        margin-right: 20px;
-    }
-
-    .ident {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-        font-weight: bold;
-    }
-
-    .aluno-info {
-        padding: 10px;
-        border-radius: 20px;
-        background: var(--list-bg-color);
-        color: var(--text-color);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 28px 0;
-        flex-wrap: wrap;
-    }
-
-    .voltar {
-        font-family: "Krona One", sans-serif;
-        font-size: 1rem;
-        position: absolute;
-        top: 5rem;
-        left: 4.6rem;
-        cursor: pointer;
-    }
-
-    .voltar a {
-        text-decoration: none;
-        color: var(--text-color);
-    }
-
-    .titulo-info,
-    .detalhes-info {
-        font-size: 0.9rem;
-        color: var(--title);
-        flex: 1;
-        text-align: center;
-    }
-
-    .options {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .options a {
-        color: var(--text-color);
-        font-size: 1.2rem;
-        text-decoration: none;
-    }
-
-    .inform {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        padding: 10px;
-        padding-top: 64px;
-        border-radius: 10px;
-        align-items: flex-start;
-        gap: 10px;
-        max-width: 270px;
-    }
-
-    .inform h3 {
-        margin: 0;
-        color: var(--text-color);
-    }
-
-    .barra-lateral {
-        display: flex;
-        flex-direction: column;
-        background: var(--list-bg-color);
-        border-radius: 20px;
-        width: 100%;
-        padding: 1.2rem;
-        text-align: left;
-    }
-
-    .barra-lateral h3 {
-        align-self: center;
-        font-family: "Krona One", sans-serif;
-        font-size: 1rem;
-        margin-bottom: 1rem;
-    }
-
-    .botao-lateral {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 6px;
-        width: 100%;
-    }
-
-    .botao-lateral button {
-        color: var(--text-color);
-        background: var(--list-bg-color);
-        border-radius: 10px;
-        width: 100%;
-        text-align: center;
-        padding: 10px;
-        cursor: pointer;
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    .botao-lateral button:hover {
-        background: #971c32;
-        color: #fff;
-    }
-
-    .modal-content {
-        background: var(--background);
-        border-radius: 20px;
-    }
-
-    @media (max-width: 768px) {
-        .container-atrasos {
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .container-conteudo {
-            flex-wrap: wrap;
-            flex-direction: column;
-            align-items: center;
-            align-content: center;
-        }
-
-        .aluno-info {
-            flex-direction: column;
-        }
-
-        .inform {
-            margin-top: 20px;
-        }
-
-        .ident {
-            gap: 20px;
-            align-items: center;
-            align-content: center;
-            text-align: center;
-            padding: 5px;
-            margin-bottom: 60px;
-        }
-
-    }
-</style>
 {% endblock %}
 
 {% block body %}
@@ -228,15 +36,19 @@ Gestão de Atrasos
 
             {% for aluno in alunos_detalhes %}
             <div class="aluno-info" role="row">
-                <h5 class="titulo-info" role="cell">{{ aluno.aluno }}</h5>
+                <div class="titulo-info" role="cell">{{ aluno.aluno }}</div>
                 <div class="detalhes-info" role="cell">{{ aluno.atrasos }}</div>
                 <div class="detalhes-info" role="cell">{{ aluno.porcentagem_carga_horaria }}%</div>
                 <div class="detalhes-info" role="cell">{{ aluno.faltas }}</div>
-                <div class="detalhes-info options" role="cell">
-                    <a href="{% url 'del_aluno' curso.turma aluno.id_carteirinha %}" onclick="confirmDelete(event)">
-                        <i class="bi bi-trash" aria-hidden="true"></i>
-                    </a>
-
+                <div class="detalhes-info" role="cell">
+                    <form method="POST" action="{% url 'excluir_aluno' curso.turma aluno.id_carteirinha %}"
+                        aria-label="Confirmar Exclusão">
+                        {% csrf_token %}
+                        <button type="submit" onclick="return confirm('Tem certeza de que deseja excluir este aluno?')"
+                            aria-label="Excluir aluno: {{ aluno.aluno }}">
+                            <i class="bi bi-trash" aria-hidden="true"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
             {% empty %}
@@ -250,57 +62,37 @@ Gestão de Atrasos
                 <p><strong>Responsável: </strong>{{ curso.responsavel }}</p>
                 <p><strong>Código da Turma: </strong>{{ curso.turma }}</p>
             </div>
-
             <div class="botao-lateral">
                 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#excluirModal"
-                    aria-label="Excluir curso">
-                    Excluir
-                </button>
-                <a href="{% url 'relatorio' %}">
-                    <button aria-label="Gerar relatório">
-                        Relatório <i class="bi bi-file-earmark-arrow-down" aria-hidden="true"></i>
-                    </button>
-                </a>
+                    aria-label="Excluir curso {{ curso.nome_curso }}" style="font-size: 1rem;">Excluir Curso</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="excluirModal" tabindex="-1" aria-labelledby="excluirModalLabel" aria-hidden="true">
+<div class="modal fade" id="excluirModal" tabindex="-1" aria-labelledby="excluirModalLabel" aria-hidden="true"
+    data-bs-backdrop="false">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" data-bs-theme="dark">
                 <h5 class="modal-title" id="excluirModalLabel">Excluir Curso</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Tem certeza que deseja excluir o curso {{ curso.nome_curso }}?</p>
+                Tem certeza que deseja excluir este curso?<br><br>
+                Observação: Ao deletar o curso, os alunos serão excluídos.
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                    aria-label="Cancelar">Cancelar</button>
-                <form action="{% url 'del_curso' curso.turma %}" method="post" aria-label="Confirmar exclusão do curso">
+            <div class="modal-footer" data-bs-theme="dark">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form method="POST" action="{% url 'excluir_curso' curso.turma %}" aria-label="Confirmar Exclusão"
+                    style="margin: 0; padding: 0;">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Confirmar</button>
+                    <button type="submit" class="btn btn-secondary" style="margin: 0;">
+                        Excluir
+                    </button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    function confirmDelete(event) {
-        // Previne o redirecionamento imediato ao clicar no link
-        event.preventDefault();
-
-        // Exibe um alerta de confirmação
-        const confirmation = confirm("Tem certeza de que deseja excluir este aluno?");
-
-        // Se o usuário confirmar, redireciona para a URL de exclusão
-        if (confirmation) {
-            window.location.href = event.currentTarget.href;
-        }
-    }
-</script>
-
 {% endblock %}

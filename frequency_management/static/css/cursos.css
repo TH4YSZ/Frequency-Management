@@ -1,0 +1,208 @@
+.container-conteudo {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--background-color);
+    padding: 60px;
+    box-sizing: border-box;
+}
+
+.container-cursos {
+    width: 100%;
+    max-width: 1000px;
+    border-radius: 10px;
+    color: #260104;
+}
+
+.curso {
+    padding: 18px;
+    border-radius: 20px;
+    background: var(--list-bg-color);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 15px 0;
+    flex-wrap: wrap;
+}
+
+
+.curso:hover {
+    background: #971c32;
+    color: #fff;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Tira a sublinha azul dos cursos */
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.titulo-curso,
+.detalhes-curso {
+    font-size: 0.9rem;
+    color: #454444;
+    flex: 1;
+    text-align: center;
+    color: var(--text-color);
+}
+
+.topo {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.titulo {
+    color: var(--text-color);
+    font-size: 2rem;
+    font-weight: 400;
+    margin: 10px;
+    padding: 30px;
+}
+
+.ident {
+    display: flex;
+    color: var(--text-color);
+    justify-content: space-around;
+    align-items: center;
+    margin: 0 15px;
+    flex-wrap: wrap;
+    text-align: center;
+    padding: 10px;
+}
+
+.cabecalho {
+    font-size: 1.0rem;
+    flex: 1;
+    text-align: center;
+}
+
+.opcoes {
+    display: flex;
+    max-height: 35px;
+    align-items: center;
+    align-content: center;
+    margin-left: 2rem;
+    margin-bottom: 2rem;
+    gap: 10px;
+    font-size: 1.2rem;
+    flex-wrap: wrap;
+}
+
+.lupa,
+.pagina,
+.sino {
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.lupa:hover,
+.pagina:hover,
+.sino:hover {
+    color: #8C031C;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    max-width: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-out;
+    overflow: hidden;
+    margin-left: auto;
+}
+
+.search-container.visible {
+    max-width: 660px;
+    opacity: 1;
+    visibility: visible;
+}
+
+.search-container form {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+}
+
+.search-container input {
+    flex: 1;
+    min-width: 200px;
+    max-width: 400px;
+    height: 36px;
+    padding: 8px 16px;
+    background: rgba(124, 13, 29, 0.6);
+    font-size: 14px;
+    border: none;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.search-container input::placeholder {
+    color: #fff;
+}
+
+.search-container input:focus {
+    background: rgba(194, 67, 86, 0.8);
+    box-shadow: 0 0 0 2px rgba(255, 6, 44, 0.3);
+    color: #fff;
+}
+
+.search-container button {
+    margin: 0;
+    height: 36px;
+    min-width: 80px;
+    background: var(--button-home);
+    color: var(--background-color);
+    font-size: 14px;
+    border: none;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-container button:hover {
+    background: var(--button-home-hover, rgb(143, 41, 41));
+}
+
+@media screen and (max-width: 600px) {
+    .search-container {
+        width: 100%;
+        margin: 8px 0;
+    }
+
+    .search-container form {
+        width: 100%;
+        gap: 8px;
+    }
+
+    .search-container input {
+        min-width: 120px;
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .search-container button {
+        padding: 6px 12px;
+        font-size: 12px;
+        min-width: 60px;
+    }
+
+    .opcoes {
+        font-size: 1rem;
+        margin-left: 0.6rem;
+    }
+}

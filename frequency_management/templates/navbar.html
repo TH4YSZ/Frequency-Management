@@ -24,7 +24,6 @@
         border: none;
         outline: none;
         box-shadow: none;
-        /* Remove qualquer sombra de foco ou hover */
     }
 
     .navbar img.logo_senai {
@@ -102,24 +101,22 @@
 
 <nav class="navbar">
     <div class="container-fluid">
-        <!-- Logo -->
         <a class="navbar-brand" href="" style="max-width: 40%;">
-            <img class="logo_senai" src="{% static 'img/senai_logo.webp' %}" alt="Senai Logo">
+            <img class="logo_senai" src="{% static 'img/senai_logo.webp' %}" alt="Logo">
         </a>
 
-        <!-- Ícones à direita -->
         <div class="d-flex align-items-center">
             {% if user.is_authenticated %}
             <span class="navbar-text" style="color: #FFFAFB;">Olá, {{ user.username }}</span>
             {% endif %}
-            <a id="theme-toggle" class="IconButton-homepage">
+            <a id="theme-toggle" class="IconButton-homepage" aria-label="Alternar tema">
                 <span class="material-symbols-outlined">contrast</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-                aria-controls="offcanvasNavbar" style="border: none; outline: none;">
+                aria-controls="offcanvasNavbar" aria-label="Toggle navigation menu"
+                style="border: none; outline: none;">
                 <i class="bi bi-list" style="color: #FFFAFB; font-size: 30px;"></i>
             </button>
-
         </div>
 
         <!-- Offcanvas Navbar -->
@@ -136,7 +133,7 @@
                         <!-- Botão close à direita -->
                         <div data-bs-theme="dark">
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                                aria-label="Close"></button>
+                                aria-label="Fechar menu"></button>
                         </div>
                     </div>
                 </div>
@@ -153,7 +150,7 @@
                             <li class="nav-item">
                                 {% if user.is_authenticated %}
                                 <a class="nav-link" href="{% url 'logout' %}">
-                                    <i class="bi bi-box-arrow-right" style="font-size: 20px; margin: 2px;"></i> Logout
+                                    <i class="bi bi-box-arrow-right" style="font-size: 20px; margin: 2px;"></i> Sair
                                 </a>
                                 {% endif %}
                             </li>

@@ -1,173 +1,18 @@
 {% extends 'index.html' %}
 {% load static %}
 
-{% block title %}
-Relatório
-{% endblock %}
+{% block title %}Relatório{% endblock %}
 
 {% block head %}
-<style>
-    * {
-        font-family: "Kumbh Sans";
-    }
-
-    .bg_relatorio {
-        min-height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        background-color: var(--background-color);
-        gap: 10px;
-        padding: 80px;
-    }
-
-    .topo {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .voltar {
-        font-family: "Krona One", sans-serif;
-        font-size: 1rem;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        text-align: left;
-        position: absolute;
-        top: 5rem;
-        left: 4.6rem;
-    }
-
-    .voltar i {
-        margin-right: 4px;
-        font-size: 1.1rem;
-    }
-
-
-    .voltar a {
-        text-decoration: none;
-        color: var(--text-color);
-    }
-
-    .titulo {
-        font-size: 2rem;
-        color: var(--title);
-        font-weight: 400;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    .container-cursos {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        flex-wrap: wrap;
-        width: 100%;
-    }
-
-    .imagem {
-        max-width: 400px;
-        margin: 60px;
-    }
-
-    .imagem img {
-        width: 100%;
-        height: auto;
-    }
-
-    .relatorio-lista {
-        flex-grow: 1;
-        max-width: 450px;
-        margin-right: 30px;
-    }
-
-    .relatorio-item {
-        background: var(--list-bg-color);
-        padding: 20px;
-        border-radius: 15px;
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 15px;
-    }
-
-    .relatorio-item h5 {
-        margin: 0;
-        color: var(--text-color);
-    }
-
-    .icons {
-        display: flex;
-        align-items: center;
-    }
-
-    .icons i {
-        margin-left: 10px;
-        cursor: pointer;
-        color: var(--text-color);
-    }
-
-    .relatorio-geral {
-        text-align: center;
-        margin-top: 30px;
-        padding: 20px;
-    }
-
-    .relatorio-geral button {
-        background: var(--list-bg-color);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 20px;
-        color: var(--text-color);
-        font-weight: bold;
-        cursor: pointer;
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    .relatorio-geral button:hover {
-        background: #8C031C;
-        color: #fff;
-    }
-
-    @media (max-width: 768px) {
-        .container-cursos {
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .relatorio-lista {
-            margin-right: 0;
-            width: 100%;
-        }
-
-        .imagem {
-            max-width: 300px;
-        }
-
-        .relatorio-item {
-            flex-direction: column;
-            text-align: center;
-        }
-
-        .voltar {
-            left: 10px;
-            top: 10px;
-        }
-    }
-</style>
+<link rel="stylesheet" href="{% static 'css/relatorio.css' %}">
 {% endblock %}
 
 {% block body %}
-
 <div class="bg_relatorio animate downUp-1">
     <div class="topo">
         <div class="voltar">
             <a href="{% url 'cursos' %}">
-                <i class="bi bi-house-fill"></i>
+                <i class="bi bi-house-fill" aria-hidden="true"></i>
                 <span>Voltar</span>
             </a>
         </div>
@@ -175,31 +20,16 @@ Relatório
     </div>
     <div class="container-cursos">
         <div class="relatorio-lista">
-            <h5>Mais Recentes</h5>
-            <div class="relatorio-item">
-                <h5>Relatório {{ curso.turma }} – 4-16 agosto de 2024</h5>
-                <div class="icons">
-                    <i class="bi bi-download"></i>
-                </div>
-            </div>
-            <h5>Mês de julho de 2024</h5>
-            <div class="relatorio-item">
-                <h5>Relatório geral julho de 2024</h5>
-                <div class="icons">
-                    <i class="bi bi-download"></i>
-                </div>
-            </div>
-            <h5>Relatórios Anteriores</h5>
-            <div class="relatorio-item">
-                <h5>-</h5>
-            </div>
             <div class="relatorio-geral">
-                <button>Gerar relatório geral</button>
+                <!-- Botão para gerar o PDF -->
+                <form method="GET" action="{% url 'relatorio' %}">
+                    <input type="hidden" name="format" value="pdf">
+                    <button type="submit">Gerar relatório em PDF</button>
+                </form>
             </div>
         </div>
-
         <div class="imagem">
-            <img src="{% static 'img/Imagem_relatorios.webp' %}" alt="Imagem">
+            <img src="{% static 'img/Imagem_relatorios.webp' %}" alt="Imagem ilustrativa de relatórios">
         </div>
     </div>
 </div>
