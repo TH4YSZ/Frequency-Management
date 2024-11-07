@@ -1,27 +1,32 @@
 from .models import *
 from .forms import *
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from django.db import IntegrityError
+from django.db import IntegrityError, connection
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from datetime import datetime
-from django.db import connection
 from django.http import FileResponse
-from reportlab.platypus import Table
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
+from django.views.decorators.cache import cache_control
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
-from reportlab.platypus import Table, TableStyle, Paragraph, SimpleDocTemplate
+from reportlab.platypus import Table, TableStyle, Paragraph, SimpleDocTemplate, Spacer, Image
+from django.core.cache import cache
+import datetime
 from io import BytesIO
 import csv
+import os
+
 
 def homepage(request):
     return render(request, 'homepage.html')
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def login(request):
     context = {}
 
@@ -45,6 +50,7 @@ def login(request):
     return render(request, 'login.html', context)
 
 @login_required
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def cadastro(request):
     context = {}
 
@@ -69,7 +75,6 @@ def cadastro(request):
                     nome=var_nome,
                     sobrenome=var_sobrenome,
                     username=var_username,
-                    senha=var_senha,
                     cargo="COORDENAÇÃO",
                 )
                 messages.success(request, "Usuário cadastrado.")
@@ -89,6 +94,7 @@ def cadastro(request):
     return render(request, 'cadastro.html', context)
 
 @login_required
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def cursos(request):
     search_query = request.GET.get('search', '')
 
@@ -103,9 +109,69 @@ def cursos(request):
 
     form = FormPesquisa(initial={'search': search_query})
 
-    return render(request, 'cursos.html', {'form': form, 'cursos': cursos})
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            WITH frequencias_calculadas AS (
+                SELECT 
+                    f.id_aluno_id,
+                    f.data,
+                    f.hora,
+                    LEAD(f.hora) OVER (PARTITION BY f.id_aluno_id, f.data ORDER BY f.hora) AS proxima_hora,
+                    CAST(f.identificador AS INTEGER) AS identificador,
+                    CASE 
+                        WHEN CAST(f.identificador AS INTEGER) = 2 
+                        AND NOT EXISTS (
+                            SELECT 1
+                            FROM web_frequencia f2 
+                            WHERE f2.id_aluno_id = f.id_aluno_id 
+                            AND f2.data = f.data 
+                            AND CAST(f2.identificador AS INTEGER) = 1
+                        ) THEN true
+                        ELSE false
+                    END as apenas_saida
+                FROM 
+                    web_frequencia AS f
+            ),
+            atrasos_aluno AS (
+                SELECT 
+                    aluno.id_carteirinha,
+                    aluno.nome,
+                    c.turma,
+                    COUNT(DISTINCT CASE WHEN f.hora > c.horario_entrada + INTERVAL '10 minutes' AND CAST(COALESCE(f.identificador, 0) AS INTEGER) = 1 THEN f.data END) AS total_atrasos
+                FROM 
+                    web_aluno AS aluno
+                JOIN 
+                    web_curso AS c ON aluno.id_curso_id = c.turma
+                LEFT JOIN 
+                    frequencias_calculadas AS f ON aluno.id_carteirinha = f.id_aluno_id
+                    AND f.data BETWEEN c.data_inicio AND c.data_fim
+                GROUP BY 
+                    aluno.id_carteirinha, aluno.nome, c.turma
+                HAVING 
+                    COUNT(DISTINCT CASE WHEN f.hora > c.horario_entrada + INTERVAL '10 minutes' AND CAST(COALESCE(f.identificador, 0) AS INTEGER) = 1 THEN f.data END) >= 3
+            )
+            SELECT 
+                nome,
+                turma,
+                total_atrasos
+            FROM 
+                atrasos_aluno
+            ORDER BY 
+                nome;
+        """)
+
+        notificacoes = cursor.fetchall()
+    
+    tem_notificacoes = len(notificacoes) > 0
+
+    return render(request, 'cursos.html', {
+        'form': form,
+        'cursos': cursos,
+        'tem_notificacoes': tem_notificacoes
+    })
 
 @login_required
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def alunos(request, turma):
     curso = get_object_or_404(Curso, turma=turma)
 
@@ -251,6 +317,7 @@ def alunos(request, turma):
 
 
 @login_required
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def notificacoes(request):
     with connection.cursor() as cursor:
         cursor.execute("""
@@ -321,7 +388,6 @@ def notificacoes(request):
 
     return render(request, 'notificacoes.html', context)
 
-
 @login_required
 def delete_curso(request, turma):
     curso = get_object_or_404(Curso, turma=turma) 
@@ -338,7 +404,6 @@ def delete_curso(request, turma):
     context = {'curso': curso, 'alunos': alunos}
     return render(request, 'alunos.html', context)
 
-
 @login_required
 def delete_aluno(request, turma, id_carteirinha):
     curso = get_object_or_404(Curso, turma=turma)
@@ -346,13 +411,11 @@ def delete_aluno(request, turma, id_carteirinha):
     
     if request.method == 'POST':
         
-        # Depois exclui o aluno
         aluno.delete()
         
-        print('aluno excluido')
-        return redirect('cursos')  # Redireciona após a exclusão
+        messages.success(request, "Aluno excluído com sucesso.")
+        return redirect('cursos')
     
-    # Renderiza a página de confirmação de exclusão
     context = {
         'curso': curso,
         'aluno': aluno,
@@ -360,12 +423,13 @@ def delete_aluno(request, turma, id_carteirinha):
 
     return render(request, 'alunos.html', context)
 
-
+@login_required
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def logout(request):
     auth_logout(request)
     return redirect("homepage")
 
-
+@login_required
 def nomeUsuario(request):
     usuario = Usuario.objects.get(username=request.user.username)
     return usuario.nome
@@ -377,16 +441,17 @@ def criar_cursos(request):
         
         fs = FileSystemStorage()
         filename = fs.save(csv_file.name, csv_file)
-        
 
         with open(fs.path(filename), newline='', encoding='ISO-8859-1') as csvfile:
             reader = csv.reader(csvfile, delimiter=';')
 
             for row in reader:
                 try:
+                    if Curso.objects.filter(turma=row[0], nome_curso=row[1]).exists():
+                        print(f"Curso já existe: {row[0]}, {row[1]}")
+                        continue
 
                     dias = [dia.strip() for dia in row[6].split(',')]
-
                     data_inicio = datetime.strptime(row[7], '%d/%m/%Y').date()
                     data_fim = datetime.strptime(row[8], '%d/%m/%Y').date()
 
@@ -404,7 +469,6 @@ def criar_cursos(request):
                         dias_letivos=row[10]
                     )
                 except (IndexError, ValueError) as e:
-    
                     print(f"Linha mal formatada ou erro: {row}, Erro: {e}")
 
         messages.success(request, "Cursos criados com sucesso.")
@@ -463,7 +527,6 @@ def criar_alunos(request):
 
     return render(request, 'criar_aluno.html')
 
-@login_required
 def upload_frequencia(request):
     if request.method == 'POST' and 'freq' in request.FILES:
         txt_file = request.FILES['freq']
@@ -507,7 +570,121 @@ def upload_frequencia(request):
     return render(request, 'frequencia.html')
 
 
+def gerar_relatorio_pdf(relatorio):
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4, title="Relatório de Frequência")
+    elementos = []
+
+    caminho_imagem = os.path.join(settings.BASE_DIR, 'static', 'img', 'senai_logo.webp')
+
+    if os.path.exists(caminho_imagem):
+        img = Image(caminho_imagem)
+        img.drawHeight = 0.5 * inch 
+        img.drawWidth = 1.5 * inch 
+        elementos.append(img)
+    else:
+        elementos.append(Paragraph("Imagem não encontrada", styles['BodyText']))
+
+    # Estilos para título e subtítulo
+    styles = getSampleStyleSheet()
+    styles.add(ParagraphStyle(name="Subtitle", fontSize=18, leading=22, spaceAfter=12, alignment=1))
+
+    # Capa do Relatório
+    hoje = datetime.datetime.now().strftime('%d/%m/%Y')
+    elementos.append(Spacer(1, 12))
+    elementos.append(Paragraph("Relatório de Frequência e Atrasos", styles['Title']))
+    elementos.append(Paragraph("Análise de Desempenho dos Alunos", styles['Subtitle']))
+    elementos.append(Paragraph(f"Gerado em: {hoje}", styles['BodyText']))
+    elementos.append(Spacer(1, 12))
+
+    # Tabela Resumo
+    elementos.append(Paragraph("Análise de Dados", styles['Heading2']))
+
+    # Tabela de Alunos com Mais Atrasos
+    elementos.append(Paragraph("Alunos com Mais Atrasos", styles['Heading3']))
+    top_atrasos_data = [['Nome', 'Turma', 'Total de Atrasos']]
+    for aluno in relatorio:
+        if aluno['categoria'] == 'Top Atrasos':
+            top_atrasos_data.append([
+                aluno['nome'],
+                aluno['turma'],
+                str(aluno['total_atrasos'])
+            ])
+    top_atrasos_table = Table(top_atrasos_data, colWidths=[2.5 * inch, 1.0 * inch, 1.2 * inch, 1.2 * inch, 1.0 * inch])
+    top_atrasos_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 10),
+        ('FONTSIZE', (0, 1), (-1, -1), 8),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 10),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.whitesmoke),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+        ('VALIGN', (0, 1), (-1, -1), 'TOP')
+    ]))
+    elementos.append(top_atrasos_table)
+    elementos.append(Spacer(1, 12))
+
+    # Tabela de Alunos com Baixa Frequência
+    elementos.append(Paragraph("Alunos com Baixa Frequência", styles['Heading3']))
+    baixa_frequencia_data = [['Nome', 'Turma', 'Total de Faltas']]
+    for aluno in relatorio:
+        if aluno['categoria'] == 'Baixa Frequência':
+            baixa_frequencia_data.append([
+                aluno['nome'],
+                aluno['turma'],
+                str(aluno['total_faltas'])
+            ])
+    baixa_frequencia_table = Table(baixa_frequencia_data, colWidths=[2.5 * inch, 1.0 * inch, 1.2 * inch, 1.2 * inch, 1.0 * inch])
+    baixa_frequencia_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 10),
+        ('FONTSIZE', (0, 1), (-1, -1), 8),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 10),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.whitesmoke),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+        ('VALIGN', (0, 1), (-1, -1), 'TOP')
+    ]))
+    elementos.append(baixa_frequencia_table)
+    elementos.append(Spacer(1, 12))
+
+    # Tabela de Informações Detalhadas dos Alunos
+    elementos.append(Paragraph("Detalhes dos Alunos", styles['Heading2']))
+    detalhes_alunos_data = [['Nome', 'Turma', 'Total de Atrasos', 'Total de Faltas']]
+    for aluno in relatorio:
+        detalhes_alunos_data.append([
+            aluno['nome'],
+            aluno['turma'],
+            str(aluno['total_atrasos']),
+            str(aluno['total_faltas'])
+        ])
+    detalhes_alunos_table = Table(detalhes_alunos_data, colWidths=[2.5 * inch, 1.0 * inch, 1.2 * inch, 1.2 * inch, 1.0 * inch])
+    detalhes_alunos_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 10),
+        ('FONTSIZE', (0, 1), (-1, -1), 8),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 10),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.whitesmoke),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+        ('VALIGN', (0, 1), (-1, -1), 'TOP')
+    ]))
+    elementos.append(detalhes_alunos_table)
+
+    # Construção do PDF
+    doc.build(elementos)
+    buffer.seek(0)
+    return buffer
+
+
 @login_required
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def relatorio(request):
     with connection.cursor() as cursor:
         cursor.execute("""
@@ -518,7 +695,7 @@ def relatorio(request):
                     f.hora,
                     LEAD(f.hora) OVER (PARTITION BY f.id_aluno_id, f.data ORDER BY f.hora) AS proxima_hora,
                     CAST(f.identificador AS INTEGER) AS identificador,
-                    CASE 
+                    CASE
                         WHEN CAST(f.identificador AS INTEGER) = 2 
                         AND NOT EXISTS (
                             SELECT 1
@@ -558,96 +735,50 @@ def relatorio(request):
                     total_atrasos,
                     dias_presenca,
                     dias_letivos,
-                    total_faltas,
-                    ROUND((dias_presenca::decimal / dias_letivos) * 100, 2) AS frequencia_porcentagem
+                    total_faltas
                 FROM 
                     atrasos_aluno
             ),
             top_atrasos AS (
-                SELECT nome, turma, total_atrasos, frequencia_porcentagem, total_faltas
+                SELECT nome, turma, total_atrasos, total_faltas
                 FROM frequencia_aluno
                 ORDER BY total_atrasos DESC
                 LIMIT 5
             ),
             baixa_frequencia AS (
-                SELECT nome, turma, total_atrasos, frequencia_porcentagem, total_faltas
+                SELECT nome, turma, total_atrasos, total_faltas
                 FROM frequencia_aluno
-                ORDER BY frequencia_porcentagem ASC
                 LIMIT 5
             )
             
             SELECT 
                 'Top Atrasos' AS categoria, 
-                nome, turma, total_atrasos, frequencia_porcentagem, total_faltas
+                nome, turma, total_atrasos, total_faltas
             FROM 
                 top_atrasos
             UNION ALL
             SELECT 
                 'Baixa Frequência' AS categoria, 
-                nome, turma, total_atrasos, frequencia_porcentagem, total_faltas
+                nome, turma, total_atrasos, total_faltas
             FROM 
                 baixa_frequencia
             ORDER BY 
-                categoria, total_atrasos DESC, frequencia_porcentagem ASC;
+                categoria, total_atrasos DESC;
         """)
         alunos_detalhes = cursor.fetchall()
 
     relatorio = [
         {
-            'categoria': aluno[0],
-            'nome': aluno[1],
-            'turma': aluno[2],
-            'total_atrasos': aluno[3],
-            'frequencia_porcentagem': aluno[4],
-            'total_faltas': aluno[5],
-        } for aluno in alunos_detalhes
+            'categoria': row[0],
+            'nome': row[1],
+            'turma': row[2],
+            'total_atrasos': row[3],
+            'total_faltas': row[4],
+        } for row in alunos_detalhes
     ]
 
     if request.GET.get('format') == 'pdf':
-        buffer = BytesIO()
-        doc = SimpleDocTemplate(buffer, pagesize=A4, title="Relatório de Frequência")
-        elementos = []
-
-        # Estilos para título e subtítulo
-        styles = getSampleStyleSheet()
-        styles.add(ParagraphStyle(name="Subtitle", fontSize=18, leading=22, spaceAfter=12, alignment=1))
-
-        elementos.append(Paragraph("Relatório de Frequência e Atrasos", styles['Title']))
-        elementos.append(Paragraph("Análise de frequência e atrasos dos alunos", styles['Subtitle']))
-
-        # Ajustar o conteúdo da tabela para lidar com nomes longos
-        dados_tabela = [['Categoria', 'Nome', 'Turma', 'Atrasos', 'Frequência (%)', 'Faltas']]
-        for aluno in relatorio:
-            nome_formatado = Paragraph(aluno['nome'], styles['BodyText'])
-            dados_tabela.append([
-                aluno['categoria'],
-                nome_formatado,
-                aluno['turma'],
-                str(aluno['total_atrasos']),
-                f"{aluno['frequencia_porcentagem']}%",
-                str(aluno['total_faltas'])
-            ])
-
-        # Estilização da Tabela com ajustes para nomes longos
-        tabela = Table(dados_tabela, colWidths=[1.2 * inch, 2.5 * inch, 1.0 * inch, 0.8 * inch, 1.2 * inch, 0.8 * inch])
-        tabela.setStyle(TableStyle([
-            ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
-            ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
-            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-            ('FONTSIZE', (0, 0), (-1, 0), 10),
-            ('FONTSIZE', (0, 1), (-1, -1), 8),  # Fonte menor para o conteúdo da tabela
-            ('BOTTOMPADDING', (0, 0), (-1, 0), 10),
-            ('BACKGROUND', (0, 1), (-1, -1), colors.whitesmoke),
-            ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
-            ('VALIGN', (0, 1), (-1, -1), 'TOP')  # Alinhamento superior para quebras de linha
-        ]))
-
-        elementos.append(tabela)
-
-        # Construção do PDF
-        doc.build(elementos)
-        buffer.seek(0)
+        buffer = gerar_relatorio_pdf(relatorio)
         
         return FileResponse(buffer, as_attachment=True, filename="relatorio_de_frequencia.pdf")
     

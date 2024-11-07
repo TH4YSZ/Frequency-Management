@@ -140,6 +140,16 @@ body {
     width: 100%;
 }
 
+.botao-cor {
+    color: white;
+    background: radial-gradient(circle at 20% 30%, #6A2D3F, #451214 50%, #3e1618 80%);
+}
+
+.botao-cor:hover {
+    color: #ffff;
+    background: #971c32;
+}
+
 .botao-lateral button {
     color: var(--text-color);
     background: var(--list-bg-color);
@@ -164,8 +174,9 @@ body {
 
 .modal-footer {
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
     align-items: center;
+    gap: 15px;
 }
 
 form {

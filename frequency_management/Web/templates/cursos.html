@@ -10,6 +10,13 @@ Cursos
 {% endblock %}
 
 {% block body %}
+{% if messages %}
+<div id="alert-container" class="mt-2 alert alert-warning fade-out" role="alert">
+    {% for mensagem in messages %}
+    {{ mensagem }}
+    {% endfor %}
+</div>
+{% endif %}
 <div class="container-conteudo animate downUp-1">
     <div class="topo">
         <h2 class="titulo">Cursos</h2>
@@ -19,10 +26,9 @@ Cursos
                 <i class="bi bi-file-earmark-arrow-down pagina" aria-label="relatório"></i>
             </a>
             <span> | </span>
-            <a href="{% url 'notificacoes' %}" aria-label="sino">
-                <span class="material-symbols-outlined">
-                    notifications
-                </span>
+            <a href="{% url 'notificacoes' %}">
+                <i class="notificacao bi {% if tem_notificacoes %}bi-envelope-paper{% else %}bi-envelope{% endif %} custom-icon"
+                    aria-label="envelope"></i>
             </a>
             <span> | </span>
             <i class=" bi bi-search lupa" id="search-icon"></i>
@@ -38,7 +44,7 @@ Cursos
         <div class="ident">
             <h3 class="cabecalho">Curso</h3>
             <h3 class="cabecalho">Turma</h3>
-            <h3 class="cabecalho">Frequência média</h3>
+            <h3 class="cabecalho">Responsável</h3>
         </div>
         <div class="fundo-curso" id="results-container">
             {% for curso in cursos %}
@@ -46,7 +52,7 @@ Cursos
                 <div class="curso">
                     <h4 class="titulo-curso">{{ curso.nome_curso }}</h4>
                     <h4 class="titulo-curso">{{ curso.turma }}</h4>
-                    <h4 class="titulo-curso">40%</h4>
+                    <h4 class="titulo-curso">{{curso.responsavel}}<h4>
                 </div>
             </a>
             {% empty %}
@@ -55,7 +61,6 @@ Cursos
         </div>
     </div>
 </div>
-
 
 
 {% endblock %}

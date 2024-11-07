@@ -31,7 +31,9 @@ Gestão de Atrasos
                 <div class="detalhes-info" role="columnheader">Atrasos</div>
                 <div class="detalhes-info" role="columnheader">Frequência</div>
                 <div class="detalhes-info" role="columnheader">Faltas</div>
+                {% if user.is_authenticated and user.is_superuser %}
                 <div class="detalhes-info" role="columnheader">Opções</div>
+                {% endif %}
             </div>
 
             {% for aluno in alunos_detalhes %}
@@ -40,6 +42,7 @@ Gestão de Atrasos
                 <div class="detalhes-info" role="cell">{{ aluno.atrasos }}</div>
                 <div class="detalhes-info" role="cell">{{ aluno.porcentagem_carga_horaria }}%</div>
                 <div class="detalhes-info" role="cell">{{ aluno.faltas }}</div>
+                {% if user.is_authenticated and user.is_superuser %}
                 <div class="detalhes-info" role="cell">
                     <form method="POST" action="{% url 'excluir_aluno' curso.turma aluno.id_carteirinha %}"
                         aria-label="Confirmar Exclusão">
@@ -50,6 +53,7 @@ Gestão de Atrasos
                         </button>
                     </form>
                 </div>
+                {% endif %}
             </div>
             {% empty %}
             <p>Nenhum aluno encontrado.</p>
@@ -61,11 +65,14 @@ Gestão de Atrasos
                 <h3 id="informacoes-title">Informações</h3>
                 <p><strong>Responsável: </strong>{{ curso.responsavel }}</p>
                 <p><strong>Código da Turma: </strong>{{ curso.turma }}</p>
+                <p><strong>Horário: </strong>{{ curso.horario_entrada }} - {{ curso.horario_saida }}</p>
             </div>
+            {% if user.is_authenticated and user.is_superuser %}
             <div class="botao-lateral">
                 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#excluirModal"
                     aria-label="Excluir curso {{ curso.nome_curso }}" style="font-size: 1rem;">Excluir Curso</button>
             </div>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -75,22 +82,23 @@ Gestão de Atrasos
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header" data-bs-theme="dark">
-                <h5 class="modal-title" id="excluirModalLabel">Excluir Curso</h5>
+                <h5 class="modal-title" id="excluirModalLabel" style="color: var(--background-color);">Excluir Curso
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="color: var(--background-color);">
                 Tem certeza que deseja excluir este curso?<br><br>
                 Observação: Ao deletar o curso, os alunos serão excluídos.
             </div>
             <div class="modal-footer" data-bs-theme="dark">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <form method="POST" action="{% url 'excluir_curso' curso.turma %}" aria-label="Confirmar Exclusão"
                     style="margin: 0; padding: 0;">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-secondary" style="margin: 0;">
+                    <button type="submit" class="botao-cor" style="margin: 0;">
                         Excluir
                     </button>
                 </form>
+                <button type="button" class="botao-cor" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>

@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.documentElement.setAttribute("data-theme", currentTheme);
 
     themeToggleBtn.addEventListener("click", function () {
-        currentTheme = currentTheme === "light" ? "dark" : "light"; // Atualiza o valor de currentTheme
+        currentTheme = currentTheme === "light" ? "dark" : "light";
         document.documentElement.setAttribute("data-theme", currentTheme);
         localStorage.setItem("theme", currentTheme);
     });

@@ -25,21 +25,14 @@ Cursos
         <div class="ident">
             <h5 class="nome-aluno">Nome</h5>
             <div class="detalhes-aluno">Atrasos</div>
-            <div class="detalhes-aluno">Opções</div>
+            <div class="detalhes-aluno">Turma</div>
         </div>
         <div class="fundo-curso">
             {% for aluno in alunos_notificados %}
             <div class="curso">
                 <h5 class="nome-aluno">{{ aluno.nome }}</h5>
                 <div class="detalhes-aluno">{{ aluno.total_atrasos }}</div>
-                <div class="detalhes-info options" role="cell">
-                    <a href="#" aria-label="Lido">
-                        <i class="bi bi-check-lg"></i>
-                    </a>
-                    <a href="#" aria-label="Excluir">
-                        <i class="bi bi-trash3" aria-hidden="true"></i>
-                    </a>
-                </div>
+                <div class="detalhes-aluno">{{ aluno.turma}}</div>
             </div>
             {% empty %}
             <div class="curso">
@@ -48,10 +41,6 @@ Cursos
                 <div class="detalhes-aluno">N/A</div>
             </div>
             {% endfor %}
-        </div>
-        <div class="ident">
-            <a href="{% url 'relatorio' %}" class="titulo-curso">Relatório <i
-                    class="bi bi-file-earmark-arrow-down"></i></a>
         </div>
     </div>
 </div>

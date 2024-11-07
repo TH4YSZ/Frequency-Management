@@ -15,4 +15,4 @@ urlpatterns = [
     path('excluir_aluno/<str:turma>/<str:id_carteirinha>', views.delete_aluno, name='excluir_aluno'),
     path('logout', views.logout, name='logout'),
     path('freq', views.upload_frequencia, name='freq')
-]   
+]

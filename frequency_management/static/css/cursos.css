@@ -100,14 +100,16 @@ a:hover {
 
 .lupa,
 .pagina,
-.sino {
+
+.notificacao {
     color: var(--text-color);
     cursor: pointer;
 }
 
 .lupa:hover,
 .pagina:hover,
-.sino:hover {
+
+.notificacao:hover {
     color: #8C031C;
 }
 

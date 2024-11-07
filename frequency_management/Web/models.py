@@ -65,18 +65,10 @@ class Frequencia(models.Model):
     def __str__(self):
         return f"Frequência de {self.id_aluno} em {self.data}"
 
-# class FrequenciaResumoAluno(models.Model):
-#     id_aluno_id = models.ForeignKey(Aluno, on_delete=models.CASCADE)
-#     data = models.DateField()
-#     horas_presenca = models.FloatField()
-#     teve_falta = models.BooleanField()
-#     teve_atraso = models.BooleanField()
-
 class Usuario(models.Model):
     nome = models.CharField(max_length=60)
     sobrenome = models.CharField(max_length=60)
     username = models.CharField(max_length=20, primary_key=True)
-    senha = models.CharField(max_length=20)
     cargo = models.CharField(max_length=15, choices=TIPO_USUARIOS)
 
     def __str__(self):

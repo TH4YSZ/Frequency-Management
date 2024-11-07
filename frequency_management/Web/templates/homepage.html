@@ -6,22 +6,21 @@ Homepage
 {% endblock %}
 
 {% block head %}
-
+<!-- Se precisar adicionar qualquer estilo específico ao cabeçalho, adicione aqui -->
 {% endblock %}
 
 {% block body %}
 <div class="bg_Home animate downUp-1">
     <div class="main">
         <h2 class="titulo">Gestão de Atrasos</h2>
-        <button style="background-color: var(--button-home);">
-            <a href="{% url 'login' %}"
-                style="color: var(--background-color); text-decoration: none; font-weight: 500; padding: 10px 20px; border-radius: 50px;">
-                Login
-            </a>
-        </button>
+        <a href="{% url 'login' %}"
+            style="display: inline-block; background-color: var(--button-home); color: var(--background-color); text-decoration: none; font-weight: 500; padding: 15px 25px; border-radius: 50px; text-align: center;"
+            aria-label="Entrar na conta" accesskey="l">
+            Login
+        </a>
     </div>
     <div class="imag">
-        <img src="{% static 'img/img_home.webp' %}" alt="Imagem de fundo">
+        <img src="{% static 'img/img_home.webp' %}" alt="Imagem de fundo" width="400" height="300">
     </div>
 </div>
 {% endblock %}
