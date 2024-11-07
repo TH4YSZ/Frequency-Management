@@ -27,14 +27,11 @@
     flex-wrap: wrap;
 }
 
-
 .curso:hover {
     background: #971c32;
     color: #fff;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
-
-/* Tira a sublinha azul dos cursos */
 
 a {
     text-decoration: none;
@@ -108,7 +105,6 @@ a:hover {
 
 .lupa:hover,
 .pagina:hover,
-
 .notificacao:hover {
     color: #8C031C;
 }
