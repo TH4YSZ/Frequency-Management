@@ -6,16 +6,19 @@ Login
 {% endblock %}
 
 {% block head %}
-
+<link rel="stylesheet" href="{% static 'css/criar_aluno.css' %}">
 {% endblock %}
 
 {% block body %}
-<form action="{% url 'criar_aluno' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <label for="alunos">Selecione o arquivo:</label>
-    <input type="file" id="alunos" name="alunos" accept=".csv">
-    <button type="submit">Enviar</button>
-</form>
-
+<div class="aluno">
+    <form action="{% url 'criar_aluno' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="alunos">
+            <h2>Selecione o arquivo</h2>
+        </label>
+        <input type="file" id="alunos" name="alunos" accept=".csv">
+        <button type="submit">Enviar</button>
+    </form>
+</div>
 
 {% endblock %}

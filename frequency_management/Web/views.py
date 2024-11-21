@@ -22,16 +22,30 @@ from io import BytesIO
 import csv
 import os
 
-
 def homepage(request):
+    if request.user.is_authenticated:
+        return redirect('cursos')
     return render(request, 'homepage.html')
+
+@login_required
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+def logout(request):
+    auth_logout(request)
+    return redirect("homepage")
+
+@login_required
+def nomeUsuario(request):
+    usuario = Usuario.objects.get(username=request.user.username)
+    return usuario.nome
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def login(request):
+    
     context = {}
 
     if request.method == "POST":
         form = FormLogin(request.POST)
+    
         if form.is_valid():
             var_username = form.cleaned_data['username']
             var_senha = form.cleaned_data['senha']
@@ -423,16 +437,7 @@ def delete_aluno(request, turma, id_carteirinha):
 
     return render(request, 'alunos.html', context)
 
-@login_required
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
-def logout(request):
-    auth_logout(request)
-    return redirect("homepage")
 
-@login_required
-def nomeUsuario(request):
-    usuario = Usuario.objects.get(username=request.user.username)
-    return usuario.nome
 
 @login_required
 def criar_cursos(request):
@@ -527,6 +532,7 @@ def criar_alunos(request):
 
     return render(request, 'criar_aluno.html')
 
+@login_required
 def upload_frequencia(request):
     if request.method == 'POST' and 'freq' in request.FILES:
         txt_file = request.FILES['freq']

@@ -19,6 +19,16 @@
         outline: none;
     }
 
+    #theme-icon {
+        color: white;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    #theme-icon.changing {
+        transform: rotate(180deg) scale(0);
+        opacity: 0;
+    }
+
     .navbar-toggler:focus,
     .navbar-toggler:hover {
         border: none;
@@ -27,7 +37,7 @@
     }
 
     .navbar img.logo_senai {
-        width: 30%;
+        width: 42%;
         max-width: 100%;
         height: auto;
     }
@@ -110,23 +120,27 @@
             <span class="navbar-text" style="color: #FFFAFB;">Olá, {{ user.username }}</span>
             {% endif %}
             <a id="theme-toggle" class="IconButton-homepage" aria-label="Alternar tema">
-                <span class="material-symbols-outlined">contrast</span>
+                <i id="theme-icon" class=""></i>
             </a>
+            {% if user.is_authenticated %}
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
                 aria-controls="offcanvasNavbar" aria-label="Toggle navigation menu"
                 style="border: none; outline: none;">
                 <i class="bi bi-list" style="color: #FFFAFB; font-size: 30px;"></i>
             </button>
+            {% endif %}
         </div>
 
         <!-- Offcanvas Navbar -->
         <div class="container-fluid">
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
                 style="background: var(--background); padding: 20px;" aria-labelledby="offcanvasNavbarLabel">
+
                 <div class="offcanvas-header">
                     <div class="icon-container"
                         style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                         <!-- Título e ícone à esquerda -->
+
                         {% if user.is_authenticated %}
                         <span class="navbar-text" style="color: #FFFAFB;">Olá, {{ user.username }}</span>
                         {% endif %}
@@ -137,10 +151,11 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                         <ul class="navbar-nav">
-                            {% if user.is_authenticated and user.is_superuser %}
+                            {% if user.is_superuser %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'cadastro' %}">
                                     <i class="bi bi-file-earmark-plus" style="font-size: 20px;"></i> Cadastro
@@ -157,7 +172,41 @@
                         </ul>
                     </ul>
                 </div>
+
             </div>
         </div>
     </div>
 </nav>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const themeToggleBtn = document.getElementById("theme-toggle");
+        const themeIcon = document.getElementById("theme-icon");
+        let currentTheme = localStorage.getItem("theme") || "light";
+
+        // Set initial theme and icon
+        document.documentElement.setAttribute("data-theme", currentTheme);
+        themeIcon.classList.add(currentTheme === "light" ? "bi-sun-fill" : "bi-moon-fill");
+        themeIcon.style.color = "white";
+
+        themeToggleBtn.addEventListener("click", function () {
+            // Add changing class to trigger transition
+            themeIcon.classList.add("changing");
+
+            // Wait for transition to complete
+            setTimeout(() => {
+                currentTheme = currentTheme === "light" ? "dark" : "light";
+
+                // Update theme and icon
+                document.documentElement.setAttribute("data-theme", currentTheme);
+                localStorage.setItem("theme", currentTheme);
+
+                // Remove previous icon class
+                themeIcon.classList.remove("bi-sun-fill", "bi-moon-fill", "changing");
+
+                // Add new icon class
+                themeIcon.classList.add(currentTheme === "light" ? "bi-sun-fill" : "bi-moon-fill");
+            }, 150);
+        });
+    });
+</script>

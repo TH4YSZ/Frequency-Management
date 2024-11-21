@@ -6,16 +6,20 @@ Login
 {% endblock %}
 
 {% block head %}
-
+<link rel="stylesheet" href="{% static 'css/criar_curso.css' %}">
 {% endblock %}
 
 {% block body %}
-<form action="{% url 'criar_curso' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <label for="cursos">Selecione o arquivo:</label>
-    <input type="file" id="cursos" name="cursos" accept=".csv">
-    <button type="submit">Enviar</button>
-</form>
+<div class="curso">
+    <form action="{% url 'criar_curso' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="cursos">
+            <h2>Selecione o arquivo</h2>
+        </label>
+        <input type="file" id="cursos" name="cursos" accept=".csv">
+        <button type="submit">Enviar</button>
+    </form>
+</div>
 
 
 {% endblock %}
