@@ -190,21 +190,16 @@
         themeIcon.style.color = "white";
 
         themeToggleBtn.addEventListener("click", function () {
-            // Add changing class to trigger transition
             themeIcon.classList.add("changing");
 
-            // Wait for transition to complete
             setTimeout(() => {
                 currentTheme = currentTheme === "light" ? "dark" : "light";
 
-                // Update theme and icon
                 document.documentElement.setAttribute("data-theme", currentTheme);
                 localStorage.setItem("theme", currentTheme);
 
-                // Remove previous icon class
                 themeIcon.classList.remove("bi-sun-fill", "bi-moon-fill", "changing");
 
-                // Add new icon class
                 themeIcon.classList.add(currentTheme === "light" ? "bi-sun-fill" : "bi-moon-fill");
             }, 150);
         });
