@@ -9,39 +9,32 @@ body {
     background-color: var(--background-color);
 }
 
-.curso {
-    background-color: #40010D;
-    color: white;
+.criar_curso {
+    background: var(--list-bg-color);
+    color: #fefffa;
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
-.curso form {
+.criar_curso form {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 15px;
+
 }
 
-.curso label {
+.criar_curso label {
     margin-bottom: 10px;
+    background-color: rgb(238, 75, 75);
 }
 
-.curso input[type="file"] {
+.criar_curso input[type="file"] {
     margin-bottom: 15px;
 }
 
-.curso button {
-    background: var(--list-bg-color);
-    color: var(--text-color);
-    padding: 10px 20px;
-    border-radius: 15px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.curso button:hover {
-    background-color: #8C031C;
+.input-group-text {
+    color: rgb(238, 75, 75)
 }

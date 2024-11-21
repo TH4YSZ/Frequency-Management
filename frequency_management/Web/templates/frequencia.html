@@ -2,20 +2,34 @@
 {% load static %}
 
 {% block title %}
-Login
+Frequência
 {% endblock %}
 
 {% block head %}
-
+<link rel="stylesheet" href="{% static 'css/formulario.css' %}">
 {% endblock %}
 
 {% block body %}
-<form action="{% url 'freq' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <label for="freq">Selecione o arquivo:</label>
-    <input type="file" id="freq" name="freq" accept=".txt">
-    <button type="submit">Enviar</button>
-</form>
+<div class="voltar">
+    <a href="{% url 'cursos' %}">
+        <i class="bi bi-house-fill" aria-hidden="true"></i>
+        <span>Voltar</span>
+    </a>
+</div>
+<div class="formulario">
+    <form action="{% url 'freq' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="freq">Selecione o arquivo:</label>
+
+        <div class="input-group mb-3">
+            <input type="file" class="form-control" id="freq" name="freq" accept=".txt">
+            <label class="input-group-text" for="inputGroupFile02"
+                style="align-items: center; justify-content: center;"><button
+                    style="background: transparent; align-items: center; justify-content: center; margin: 0; padding: 0;"
+                    type="submit">Enviar</button></label>
+        </div>
+    </form>
+</div>
 
 
 {% endblock %}

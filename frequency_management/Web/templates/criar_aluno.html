@@ -2,22 +2,31 @@
 {% load static %}
 
 {% block title %}
-Login
+Criar Aluno
 {% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href="{% static 'css/criar_aluno.css' %}">
+<link rel="stylesheet" href="{% static 'css/formulario.css' %}">
 {% endblock %}
 
 {% block body %}
-<div class="aluno">
+<div class="voltar">
+    <a href="{% url 'cursos' %}">
+        <i class="bi bi-house-fill" aria-hidden="true"></i>
+        <span>Voltar</span>
+    </a>
+</div>
+<div class="formulario">
     <form action="{% url 'criar_aluno' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <label for="alunos">
+        <label for="alunos" class="titulo">
             <h2>Selecione o arquivo</h2>
         </label>
-        <input type="file" id="alunos" name="alunos" accept=".csv">
-        <button type="submit">Enviar</button>
+
+        <div class="input-group mb-3">
+            <input type="file" class="form-control" id="alunos" name="alunos" accept=".csv">
+            <label class="input-group-text" for="inputGroupFile02" type="submit">Enviar</label>
+        </div>
     </form>
 </div>
 

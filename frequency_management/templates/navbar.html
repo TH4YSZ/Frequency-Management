@@ -21,7 +21,7 @@
 
     #theme-icon {
         color: white;
-        transition: transform 0.3s ease, opacity 0.3s ease;
+        transition: transform 0.7s ease, opacity 0.3s ease;
     }
 
     #theme-icon.changing {
@@ -134,11 +134,11 @@
         <!-- Offcanvas Navbar -->
         <div class="container-fluid">
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
-                style="background: var(--background); padding: 20px;" aria-labelledby="offcanvasNavbarLabel">
+                style="background: white; padding: 20px;" aria-labelledby="offcanvasNavbarLabel">
 
                 <div class="offcanvas-header">
                     <div class="icon-container"
-                        style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        style="display: flex; justify-content: space-between; width: 300%; border-bottom: 1px solid rgb(228, 228, 228);">
                         <!-- Título e ícone à esquerda -->
 
                         {% if user.is_authenticated %}

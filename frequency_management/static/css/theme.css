@@ -16,7 +16,7 @@
     --button-home: #FFFAFB;
 }
 
-[data-theme="dark"] {
+[data-theme="light"] {
     --text-color: #260104;
     --title-color: #260104;
     --background-color: #FFFAFB;

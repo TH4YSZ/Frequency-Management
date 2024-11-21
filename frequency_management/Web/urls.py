@@ -16,3 +16,6 @@ urlpatterns = [
     path('logout', views.logout, name='logout'),
     path('freq', views.upload_frequencia, name='freq')
 ]
+
+handler404 = None
+handler500 = None

@@ -16,8 +16,6 @@ from django.views.decorators.cache import cache_control
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.platypus import Table, TableStyle, Paragraph, SimpleDocTemplate, Spacer, Image
-from django.core.cache import cache
-import datetime
 from io import BytesIO
 import csv
 import os
@@ -68,41 +66,46 @@ def login(request):
 def cadastro(request):
     context = {}
 
-    if request.method == "POST":
-        form = FormCadastro(request.POST)
-        if form.is_valid():
-            var_nome = form.cleaned_data['nome']
-            var_sobrenome = form.cleaned_data['sobrenome']
-            var_username = form.cleaned_data['username']
-            var_senha = form.cleaned_data['senha']
+    if request.user.groups.filter(name='COORDENAÇÃO').exists():
+        messages.error(request, "Você não tem permissão para acessar essa página.")
+        return redirect('/')
 
-            try:
-                user = User.objects.create_user(username=var_username, password=var_senha)
-                user.first_name = var_nome
-                user.last_name = var_sobrenome
-                user.save()
+    else:
+        if request.method == "POST":
+            form = FormCadastro(request.POST)
+            if form.is_valid():
+                var_nome = form.cleaned_data['nome']
+                var_sobrenome = form.cleaned_data['sobrenome']
+                var_username = form.cleaned_data['username']
+                var_senha = form.cleaned_data['senha']
 
-                coordenacao_group = Group.objects.get(name='COORDENAÇÃO')
-                user.groups.add(coordenacao_group)
+                try:
+                    user = User.objects.create_user(username=var_username, password=var_senha)
+                    user.first_name = var_nome
+                    user.last_name = var_sobrenome
+                    user.save()
 
-                Usuario.objects.create(
-                    nome=var_nome,
-                    sobrenome=var_sobrenome,
-                    username=var_username,
-                    cargo="COORDENAÇÃO",
-                )
-                messages.success(request, "Usuário cadastrado.")
-                return redirect("cadastro")
+                    coordenacao_group = Group.objects.get(name='COORDENAÇÃO')
+                    user.groups.add(coordenacao_group)
 
-            except IntegrityError:
-                messages.error(request, "Nome de usuário já existe. Por favor, escolha outro nome de usuário.")
+                    Usuario.objects.create(
+                        nome=var_nome,
+                        sobrenome=var_sobrenome,
+                        username=var_username,
+                        cargo="COORDENAÇÃO",
+                    )
+                    messages.success(request, "Usuário cadastrado.")
+                    return redirect("cadastro")
+
+                except IntegrityError:
+                    messages.error(request, "Nome de usuário já existe. Por favor, escolha outro nome de usuário.")
+                    context.update({"form": form})
+                    return render(request, 'cadastro.html', context)
+            else:
                 context.update({"form": form})
                 return render(request, 'cadastro.html', context)
         else:
-            context.update({"form": form})
-            return render(request, 'cadastro.html', context)
-    else:
-        form = FormCadastro()
+            form = FormCadastro()
 
     context.update({"form": form})
     return render(request, 'cadastro.html', context)
@@ -407,173 +410,201 @@ def delete_curso(request, turma):
     curso = get_object_or_404(Curso, turma=turma) 
     alunos = curso.aluno_set.all()  
 
-    if request.method == 'POST':
-        Frequencia.objects.filter(id_aluno__in=alunos).delete()
-        alunos.delete()
-        curso.delete()
+    if request.user.groups.filter(name='COORDENAÇÃO').exists():
+        messages.error(request, "Você não tem permissão para acessar essa página.")
+        return redirect('/')
 
-        messages.success(request, "Curso e alunos associados excluídos com sucesso.")
-        return redirect('cursos')
+    else:
+        if request.method == 'POST':
+            Frequencia.objects.filter(id_aluno__in=alunos).delete()
+            alunos.delete()
+            curso.delete()
 
-    context = {'curso': curso, 'alunos': alunos}
-    return render(request, 'alunos.html', context)
+            messages.success(request, "Curso e alunos associados excluídos com sucesso.")
+            return redirect('cursos')
+
+        context = {'curso': curso, 'alunos': alunos}
+        return render(request, 'alunos.html', context)
 
 @login_required
 def delete_aluno(request, turma, id_carteirinha):
     curso = get_object_or_404(Curso, turma=turma)
     aluno = get_object_or_404(Aluno, id_carteirinha=id_carteirinha)
     
-    if request.method == 'POST':
-        
-        aluno.delete()
-        
-        messages.success(request, "Aluno excluído com sucesso.")
-        return redirect('cursos')
+    if request.user.groups.filter(name='COORDENAÇÃO').exists():
+        messages.error(request, "Você não tem permissão para acessar essa página.")
+        return redirect('/')
     
-    context = {
-        'curso': curso,
-        'aluno': aluno,
-    }
+    else:
+        if request.method == 'POST':
+            
+            aluno.delete()
+            
+            messages.success(request, "Aluno excluído com sucesso.")
+            return redirect('cursos')
+        
+        context = {
+            'curso': curso,
+            'aluno': aluno,
+        }
 
-    return render(request, 'alunos.html', context)
+        return render(request, 'alunos.html', context)
 
 
 
 @login_required
 def criar_cursos(request):
-    if request.method == 'POST' and 'cursos' in request.FILES:
-        csv_file = request.FILES['cursos']
-        
-        fs = FileSystemStorage()
-        filename = fs.save(csv_file.name, csv_file)
 
-        with open(fs.path(filename), newline='', encoding='ISO-8859-1') as csvfile:
-            reader = csv.reader(csvfile, delimiter=';')
-
-            for row in reader:
-                try:
-                    if Curso.objects.filter(turma=row[0], nome_curso=row[1]).exists():
-                        print(f"Curso já existe: {row[0]}, {row[1]}")
-                        continue
-
-                    dias = [dia.strip() for dia in row[6].split(',')]
-                    data_inicio = datetime.strptime(row[7], '%d/%m/%Y').date()
-                    data_fim = datetime.strptime(row[8], '%d/%m/%Y').date()
-
-                    Curso.objects.create(
-                        turma=row[0],
-                        nome_curso=row[1],
-                        horario_entrada=row[2],
-                        horario_saida=row[3],
-                        carga_horaria=row[4],
-                        responsavel=row[5],
-                        dias_funcionamento=dias,
-                        data_inicio=data_inicio,
-                        data_fim=data_fim,
-                        carga_horaria_intervalo=row[9],
-                        dias_letivos=row[10]
-                    )
-                except (IndexError, ValueError) as e:
-                    print(f"Linha mal formatada ou erro: {row}, Erro: {e}")
-
-        messages.success(request, "Cursos criados com sucesso.")
-        return redirect("cursos")
+    if request.user.groups.filter(name='COORDENAÇÃO').exists():
+        messages.error(request, "Você não tem permissão para acessar essa página.")
+        return redirect('/')
     
-    return render(request, 'criar_curso.html')
+    else:
+        if request.method == 'POST' and 'cursos' in request.FILES:
+            csv_file = request.FILES['cursos']
+            
+            fs = FileSystemStorage()
+            filename = fs.save(csv_file.name, csv_file)
+
+            with open(fs.path(filename), newline='', encoding='ISO-8859-1') as csvfile:
+                reader = csv.reader(csvfile, delimiter=';')
+
+                for row in reader:
+                    try:
+                        if Curso.objects.filter(turma=row[0], nome_curso=row[1]).exists():
+                            print(f"Curso já existe: {row[0]}, {row[1]}")
+                            continue
+
+                        dias = [dia.strip() for dia in row[6].split(',')]
+                        data_inicio = datetime.strptime(row[7], '%d/%m/%Y').date()
+                        data_fim = datetime.strptime(row[8], '%d/%m/%Y').date()
+
+                        Curso.objects.create(
+                            turma=row[0],
+                            nome_curso=row[1],
+                            horario_entrada=row[2],
+                            horario_saida=row[3],
+                            carga_horaria=row[4],
+                            responsavel=row[5],
+                            dias_funcionamento=dias,
+                            data_inicio=data_inicio,
+                            data_fim=data_fim,
+                            carga_horaria_intervalo=row[9],
+                            dias_letivos=row[10]
+                        )
+                    except (IndexError, ValueError) as e:
+                        print(f"Linha mal formatada ou erro: {row}, Erro: {e}")
+
+            messages.success(request, "Cursos criados com sucesso.")
+            return redirect("cursos")
+        
+        return render(request, 'criar_curso.html')
 
 @login_required
-def criar_alunos(request): 
-    if request.method == 'POST' and 'alunos' in request.FILES:
-        csv_file = request.FILES['alunos']
+def criar_alunos(request):
 
-        fs = FileSystemStorage()
-        filename = fs.save(csv_file.name, csv_file)
+    if request.user.groups.filter(name='COORDENAÇÃO').exists():
+        messages.error(request, "Você não tem permissão para acessar essa página.")
+        return redirect('/')
 
-        with open(fs.path(filename), newline='', encoding='ISO-8859-1') as csvfile:
-            reader = csv.reader(csvfile, delimiter=';')  
+    else: 
+        if request.method == 'POST' and 'alunos' in request.FILES:
+            csv_file = request.FILES['alunos']
 
-            for row in reader:
-                try:
-                    nome = row[0].strip()
-                    
-                    # Verifica se id_carteirinha não está vazio e é um número
-                    if row[1].strip().isdigit():
-                        id_carteirinha = int(row[1].strip())
-                    else:
-                        print(f"ID da carteirinha inválido para o aluno '{nome}'. Verifique o arquivo CSV.")
-                        continue  # Pula para o próximo registro se o id_carteirinha estiver inválido
+            fs = FileSystemStorage()
+            filename = fs.save(csv_file.name, csv_file)
 
-                    curso_id = row[2].strip()
-                    
-                    # Verifica se o curso existe
+            with open(fs.path(filename), newline='', encoding='ISO-8859-1') as csvfile:
+                reader = csv.reader(csvfile, delimiter=';')  
+
+                for row in reader:
                     try:
-                        curso = Curso.objects.get(turma=curso_id)
-                    except Curso.DoesNotExist:
-                        print(f"Curso com turma '{curso_id}' não encontrado para o aluno '{nome}'. Verifique o arquivo CSV.")
-                        continue  # Pula este registro e continua com o próximo
+                        nome = row[0].strip()
+                        
+                        # Verifica se id_carteirinha não está vazio e é um número
+                        if row[1].strip().isdigit():
+                            id_carteirinha = int(row[1].strip())
+                        else:
+                            print(f"ID da carteirinha inválido para o aluno '{nome}'. Verifique o arquivo CSV.")
+                            continue  # Pula para o próximo registro se o id_carteirinha estiver inválido
 
-                    # Verifica se o aluno já existe
-                    if Aluno.objects.filter(id_carteirinha=id_carteirinha).exists():
-                        print(f"Aluno com ID de carteirinha '{id_carteirinha}' já existe. Ignorando...")
-                        continue  # Ignora este registro e continua com o próximo
+                        curso_id = row[2].strip()
+                        
+                        # Verifica se o curso existe
+                        try:
+                            curso = Curso.objects.get(turma=curso_id)
+                        except Curso.DoesNotExist:
+                            print(f"Curso com turma '{curso_id}' não encontrado para o aluno '{nome}'. Verifique o arquivo CSV.")
+                            continue  # Pula este registro e continua com o próximo
 
-                    # Criação do aluno
-                    Aluno.objects.create(
-                        nome=nome,
-                        id_carteirinha=id_carteirinha,
-                        id_curso=curso
-                    )
-                except IndexError:
-                    print("Erro: O arquivo CSV está com formato incorreto.")
-                    return redirect("criar_aluno")
+                        # Verifica se o aluno já existe
+                        if Aluno.objects.filter(id_carteirinha=id_carteirinha).exists():
+                            print(f"Aluno com ID de carteirinha '{id_carteirinha}' já existe. Ignorando...")
+                            continue  # Ignora este registro e continua com o próximo
 
-        messages.success(request, "Alunos criados com sucesso.")
-        return redirect("cursos")
+                        # Criação do aluno
+                        Aluno.objects.create(
+                            nome=nome,
+                            id_carteirinha=id_carteirinha,
+                            id_curso=curso
+                        )
+                    except IndexError:
+                        print("Erro: O arquivo CSV está com formato incorreto.")
+                        return redirect("criar_aluno")
 
-    return render(request, 'criar_aluno.html')
+            messages.success(request, "Alunos criados com sucesso.")
+            return redirect("cursos")
+
+        return render(request, 'criar_aluno.html')
 
 @login_required
 def upload_frequencia(request):
-    if request.method == 'POST' and 'freq' in request.FILES:
-        txt_file = request.FILES['freq']
 
-        fs = FileSystemStorage()
-        filename = fs.save(txt_file.name, txt_file)
+    if request.user.groups.filter(name='COORDENAÇÃO').exists():
+        messages.error(request, "Você não tem permissão para acessar essa página.")
+        return redirect('/')
+    
+    else:
+        if request.method == 'POST' and 'freq' in request.FILES:
+            txt_file = request.FILES['freq']
 
-        # Abrir o arquivo TXT
-        with open(fs.path(filename), newline='', encoding='ISO-8859-1') as txtfile:
-            reader = csv.reader(txtfile, delimiter='\t')  # Usando tabulação como delimitador
+            fs = FileSystemStorage()
+            filename = fs.save(txt_file.name, txt_file)
 
-            for row in reader:
-                try:
-                    # Assumindo que o TXT contém as colunas na ordem: data, id_carteirinha, hora, identificador
-                    data = row[0].strip()  # Data da frequência
-                    id_carteirinha = int(row[1].strip())
-                    hora = row[2].strip()  # Hora da frequência
-                    identificador = int(row[3].strip())  # Identificador de entrada ou saída
+            # Abrir o arquivo TXT
+            with open(fs.path(filename), newline='', encoding='ISO-8859-1') as txtfile:
+                reader = csv.reader(txtfile, delimiter='\t')  # Usando tabulação como delimitador
 
-                    # Buscar o aluno pelo id_carteirinha
-                    aluno = Aluno.objects.get(id_carteirinha=id_carteirinha)
+                for row in reader:
+                    try:
+                        # Assumindo que o TXT contém as colunas na ordem: data, id_carteirinha, hora, identificador
+                        data = row[0].strip()  # Data da frequência
+                        id_carteirinha = int(row[1].strip())
+                        hora = row[2].strip()  # Hora da frequência
+                        identificador = int(row[3].strip())  # Identificador de entrada ou saída
 
-                    # Criar a frequência no banco
-                    Frequencia.objects.create(
-                        id_aluno=aluno,
-                        data=data,
-                        hora=hora,
-                        identificador=identificador
-                    )
+                        # Buscar o aluno pelo id_carteirinha
+                        aluno = Aluno.objects.get(id_carteirinha=id_carteirinha)
 
-                except Aluno.DoesNotExist:
-                    messages.error(request, f"Aluno com carteirinha {id_carteirinha} não encontrado.")
-                except IndexError:
-                    messages.error(request, "Erro no formato do arquivo TXT.")
-                except Exception as e:
-                    messages.error(request, f"Erro ao salvar a frequência: {str(e)}")
+                        # Criar a frequência no banco
+                        Frequencia.objects.create(
+                            id_aluno=aluno,
+                            data=data,
+                            hora=hora,
+                            identificador=identificador
+                        )
 
-        messages.success(request, "Frequências carregadas com sucesso.")
-        return redirect("homepage")
+                    except Aluno.DoesNotExist:
+                        messages.error(request, f"Aluno com carteirinha {id_carteirinha} não encontrado.")
+                    except IndexError:
+                        messages.error(request, "Erro no formato do arquivo TXT.")
+                    except Exception as e:
+                        messages.error(request, f"Erro ao salvar a frequência: {str(e)}")
 
-    return render(request, 'frequencia.html')
+            messages.success(request, "Frequências carregadas com sucesso.")
+            return redirect("homepage")
+
+        return render(request, 'frequencia.html')
 
 
 def gerar_relatorio_pdf(relatorio):
