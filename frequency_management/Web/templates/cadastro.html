@@ -64,12 +64,11 @@ Cadastro
             </div>
 
             {% if messages %}
-            {% for mensagem in messages %}
-            <div class="mt-2 alert {% if 'success' in mensagem.tags %}alert-success{% else %}alert-warning{% endif %}"
-                role="alert" style="border-radius: 8px;">
+            <div id="alert-container" class="mt-2 alert alert-warning fade-out" role="alert">
+                {% for mensagem in messages %}
                 {{ mensagem }}
+                {% endfor %}
             </div>
-            {% endfor %}
             {% endif %}
 
             <div style="justify-content: center; align-items: center">

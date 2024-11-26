@@ -17,5 +17,4 @@ urlpatterns = [
     path('freq', views.upload_frequencia, name='freq')
 ]
 
-handler404 = None
-handler500 = None
+handler404 = 'django.views.defaults.page_not_found'

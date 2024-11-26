@@ -10,6 +10,7 @@ Cursos
 {% endblock %}
 
 {% block body %}
+
 {% if messages %}
 <div id="alert-container" class="mt-2 alert alert-warning fade-out" role="alert">
     {% for mensagem in messages %}
@@ -17,6 +18,7 @@ Cursos
     {% endfor %}
 </div>
 {% endif %}
+
 <div class="container-conteudo animate downUp-1">
     <div class="topo">
         <h2 class="titulo">Cursos</h2>
@@ -61,5 +63,4 @@ Cursos
         </div>
     </div>
 </div>
-
 {% endblock %}

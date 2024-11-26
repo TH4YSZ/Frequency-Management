@@ -7,6 +7,7 @@ body {
     margin: 0;
     font-family: "Kumbh Sans";
     background-color: var(--background-color);
+
 }
 
 .formulario {
@@ -34,6 +35,7 @@ body {
 .formulario input[type="file"] {
     margin-bottom: 15px;
 }
+
 
 .form-control {
     height: 42px;
@@ -63,4 +65,5 @@ body {
     font-family: "Krona One", sans-serif;
     font-size: 2rem;
     margin-bottom: 20px;
+    color: #fefffa;
 }

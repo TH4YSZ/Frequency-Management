@@ -142,7 +142,7 @@ body {
 
 .botao-cor {
     color: white;
-    background: radial-gradient(circle at 20% 30%, #6A2D3F, #451214 50%, #3e1618 80%);
+    background: var(--background);
 }
 
 .botao-cor:hover {

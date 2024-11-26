@@ -24,16 +24,14 @@ Relatório
         <div class="imagem">
             <img src="{% static 'img/imagem_relatorios.webp' %}" alt="Imagem ilustrativa de relatórios">
         </div>
-        <div class="botoes">
-            <div class="relatorio-geral">
-                <form method="GET" action="{% url 'relatorio' %}">
-                    <input type="hidden" name="format" value="pdf">
-                    <button type="submit">Gerar relatório em PDF</button>
-                </form>
-                <button type="button" data-bs-toggle="modal" data-bs-target="#relatorioModal">
-                    Sobre os Relatórios
-                </button>
-            </div>
+        <div class="relatorio-geral">
+            <form method="GET" action="{% url 'relatorio' %}">
+                <input type="hidden" name="format" value="pdf">
+                <button type="submit">Gerar relatório em PDF</button>
+            </form>
+            <button type="button" data-bs-toggle="modal" data-bs-target="#relatorioModal">
+                Sobre os Relatórios
+            </button>
         </div>
     </div>
 </div>

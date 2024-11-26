@@ -3,6 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (alertContainer) {
         setTimeout(() => {
             alertContainer.classList.add("fade-out-hidden");
-        }, 5000);
+        }, 3000);
     }
 });

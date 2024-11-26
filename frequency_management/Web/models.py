@@ -15,14 +15,6 @@ DIAS_DA_SEMANA = [
         ('SEX', 'Sexta-feira')
     ]
 
-class Senai(models.Model):
-    nome_instituicao = models.CharField(max_length=50)
-    logo = models.ImageField(upload_to="")
-    endereco = models.CharField(max_length=150)
-    telefone = models.IntegerField()
-
-    def __str__(self):
-        return self.nome_instituicao
 
 class Curso(models.Model):
     turma = models.CharField(max_length=100, primary_key=True)

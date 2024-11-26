@@ -87,13 +87,10 @@
     color: var(--text-color);
 }
 
-.botoes {
-    display: flex;
-    flex-direction: column;
-}
-
 .relatorio-geral {
     text-align: center;
+    display: flex;
+    flex-direction: column;
 }
 
 .relatorio-geral button {
@@ -101,7 +98,6 @@
     border: none;
     border-radius: 20px;
     color: var(--text-color);
-    font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
 }

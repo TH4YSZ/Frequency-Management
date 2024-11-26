@@ -176,6 +176,21 @@ a:hover {
     background: var(--button-home-hover, rgb(143, 41, 41));
 }
 
+.fade-out {
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+}
+
+.fade-out-hidden {
+    opacity: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    transition: opacity 0.5s ease-out, height 0s 0.5s;
+    pointer-events: none;
+}
+
 @media screen and (max-width: 600px) {
     .search-container {
         width: 100%;

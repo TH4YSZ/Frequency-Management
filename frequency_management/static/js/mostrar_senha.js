@@ -1,12 +1,17 @@
 function mostrar() {
-    var inputPass = document.getElementById('id_password');
-    var btnShowPass = document.getElementById('btnSenha');
+    const senhaInput = document.querySelector('input[name="senha"]');
+    const btnSenha = document.getElementById('btnSenha');
 
-    if (inputPass.type === 'password') {
-        inputPass.setAttribute('type', 'text');
-        btnShowPass.classList.replace('bi-eye', 'bi-eye-slash');
+    if (senhaInput.type === 'password') {
+
+        senhaInput.type = 'text';
+        btnSenha.classList.remove('bi-eye-slash');
+        btnSenha.classList.add('bi-eye');
+
     } else {
-        inputPass.setAttribute('type', 'password');
-        btnShowPass.classList.replace('bi-eye-slash', 'bi-eye');
+
+        senhaInput.type = 'password';
+        btnSenha.classList.remove('bi-eye');
+        btnSenha.classList.add('bi-eye-slash');
     }
 }

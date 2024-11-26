@@ -410,56 +410,51 @@ def delete_curso(request, turma):
     curso = get_object_or_404(Curso, turma=turma) 
     alunos = curso.aluno_set.all()  
 
-    if request.user.groups.filter(name='COORDENAÇÃO').exists():
+    if not request.user.is_superuser:
         messages.error(request, "Você não tem permissão para acessar essa página.")
-        return redirect('/')
+        return redirect('cursos')
 
+    if request.method == 'POST':
+        Frequencia.objects.filter(id_aluno__in=alunos).delete()
+        alunos.delete()
+        curso.delete()
+
+        messages.success(request, "Curso e alunos associados excluídos com sucesso.")
+        return redirect('cursos')
+    
     else:
-        if request.method == 'POST':
-            Frequencia.objects.filter(id_aluno__in=alunos).delete()
-            alunos.delete()
-            curso.delete()
+        messages.error(request, "Erro ao excluir curso.")
 
-            messages.success(request, "Curso e alunos associados excluídos com sucesso.")
-            return redirect('cursos')
-
-        context = {'curso': curso, 'alunos': alunos}
-        return render(request, 'alunos.html', context)
+    context = {'curso': curso, 'alunos': alunos}
+    return render(request, 'alunos.html', context)
 
 @login_required
 def delete_aluno(request, turma, id_carteirinha):
     curso = get_object_or_404(Curso, turma=turma)
     aluno = get_object_or_404(Aluno, id_carteirinha=id_carteirinha)
     
-    if request.user.groups.filter(name='COORDENAÇÃO').exists():
+    if not request.user.is_superuser:
         messages.error(request, "Você não tem permissão para acessar essa página.")
         return redirect('/')
     
+    if request.method == 'POST':
+        aluno.delete()
+        messages.success(request, "Aluno excluído com sucesso.")
+        return redirect('cursos')
     else:
-        if request.method == 'POST':
-            
-            aluno.delete()
-            
-            messages.success(request, "Aluno excluído com sucesso.")
-            return redirect('cursos')
-        
-        context = {
-            'curso': curso,
-            'aluno': aluno,
-        }
+        messages.error(request, "Erro ao excluir aluno.")
 
-        return render(request, 'alunos.html', context)
+    context = {
+        'curso': curso,
+        'aluno': aluno,
+    }
+    return render(request, 'alunos.html', context)
 
 
 
 @login_required
 def criar_cursos(request):
 
-    if request.user.groups.filter(name='COORDENAÇÃO').exists():
-        messages.error(request, "Você não tem permissão para acessar essa página.")
-        return redirect('/')
-    
-    else:
         if request.method == 'POST' and 'cursos' in request.FILES:
             csv_file = request.FILES['cursos']
             
@@ -503,11 +498,7 @@ def criar_cursos(request):
 @login_required
 def criar_alunos(request):
 
-    if request.user.groups.filter(name='COORDENAÇÃO').exists():
-        messages.error(request, "Você não tem permissão para acessar essa página.")
-        return redirect('/')
 
-    else: 
         if request.method == 'POST' and 'alunos' in request.FILES:
             csv_file = request.FILES['alunos']
 
@@ -560,11 +551,7 @@ def criar_alunos(request):
 @login_required
 def upload_frequencia(request):
 
-    if request.user.groups.filter(name='COORDENAÇÃO').exists():
-        messages.error(request, "Você não tem permissão para acessar essa página.")
-        return redirect('/')
-    
-    else:
+
         if request.method == 'POST' and 'freq' in request.FILES:
             txt_file = request.FILES['freq']
 
@@ -595,11 +582,11 @@ def upload_frequencia(request):
                         )
 
                     except Aluno.DoesNotExist:
-                        messages.error(request, f"Aluno com carteirinha {id_carteirinha} não encontrado.")
+                        print(request, f"Aluno com carteirinha {id_carteirinha} não encontrado.")
                     except IndexError:
-                        messages.error(request, "Erro no formato do arquivo TXT.")
+                        print(request, "Erro no formato do arquivo TXT.")
                     except Exception as e:
-                        messages.error(request, f"Erro ao salvar a frequência: {str(e)}")
+                        print(request, f"Erro ao salvar a frequência: {str(e)}")
 
             messages.success(request, "Frequências carregadas com sucesso.")
             return redirect("homepage")
@@ -612,6 +599,9 @@ def gerar_relatorio_pdf(relatorio):
     doc = SimpleDocTemplate(buffer, pagesize=A4, title="Relatório de Frequência")
     elementos = []
 
+    styles = getSampleStyleSheet()
+    styles.add(ParagraphStyle(name="Subtitle", fontSize=18, leading=22, spaceAfter=12, alignment=1))
+
     caminho_imagem = os.path.join(settings.BASE_DIR, 'static', 'img', 'senai_logo.webp')
 
     if os.path.exists(caminho_imagem):
@@ -621,13 +611,12 @@ def gerar_relatorio_pdf(relatorio):
         elementos.append(img)
     else:
         elementos.append(Paragraph("Imagem não encontrada", styles['BodyText']))
-
     # Estilos para título e subtítulo
     styles = getSampleStyleSheet()
     styles.add(ParagraphStyle(name="Subtitle", fontSize=18, leading=22, spaceAfter=12, alignment=1))
 
     # Capa do Relatório
-    hoje = datetime.datetime.now().strftime('%d/%m/%Y')
+    hoje = datetime.now().strftime('%d/%m/%Y')
     elementos.append(Spacer(1, 12))
     elementos.append(Paragraph("Relatório de Frequência e Atrasos", styles['Title']))
     elementos.append(Paragraph("Análise de Desempenho dos Alunos", styles['Subtitle']))
