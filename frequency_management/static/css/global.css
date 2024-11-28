@@ -1,4 +1,4 @@
-*{
+* {
     text-decoration: none;
     font-family: "Kumbh Sans";
 }
@@ -7,20 +7,12 @@
     animation: downUp 1s forwards;
 }
 
-.titulo{
+.titulo {
     font-family: "Krona One";
     font-weight: 400;
     font-style: normal;
 }
 
-.navbarcor{
-    background-color: #7C0D1D;
-}
-
-.nav-mobile{
-    text-decoration: none;
-}
-
-body{
+body {
     padding-top: 60px;
 }

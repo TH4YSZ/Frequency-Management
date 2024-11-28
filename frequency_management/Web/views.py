@@ -20,6 +20,7 @@ from io import BytesIO
 import csv
 import os
 
+
 def homepage(request):
     if request.user.is_authenticated:
         return redirect('cursos')
@@ -118,9 +119,11 @@ def cursos(request):
     if search_query:
         cursos = Curso.objects.filter(
             nome_curso__icontains=search_query
-        ) | Curso.objects.filter(
+            ) | Curso.objects.filter(
             turma__icontains=search_query
-        )
+            ) | Curso.objects.filter(
+            aluno__nome__icontains=search_query 
+            )
     else:
         cursos = Curso.objects.all()
 
@@ -595,6 +598,7 @@ def upload_frequencia(request):
 
 
 def gerar_relatorio_pdf(relatorio):
+    # Definindo área para armazenar os dados temporariamente
     buffer = BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=A4, title="Relatório de Frequência")
     elementos = []
@@ -604,6 +608,7 @@ def gerar_relatorio_pdf(relatorio):
 
     caminho_imagem = os.path.join(settings.BASE_DIR, 'static', 'img', 'senai_logo.webp')
 
+# Se o caminnho existe, realizar ações na imagem (retorna valor booleano)
     if os.path.exists(caminho_imagem):
         img = Image(caminho_imagem)
         img.drawHeight = 0.5 * inch 
@@ -616,6 +621,7 @@ def gerar_relatorio_pdf(relatorio):
     styles.add(ParagraphStyle(name="Subtitle", fontSize=18, leading=22, spaceAfter=12, alignment=1))
 
     # Capa do Relatório
+    # Variável para verificar o dia a aparecer no relatório
     hoje = datetime.now().strftime('%d/%m/%Y')
     elementos.append(Spacer(1, 12))
     elementos.append(Paragraph("Relatório de Frequência e Atrasos", styles['Title']))
@@ -636,6 +642,7 @@ def gerar_relatorio_pdf(relatorio):
                 aluno['turma'],
                 str(aluno['total_atrasos'])
             ])
+    # Definindo propriedades da tabela
     top_atrasos_table = Table(top_atrasos_data, colWidths=[2.5 * inch, 1.0 * inch, 1.2 * inch, 1.2 * inch, 1.0 * inch])
     top_atrasos_table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.Color(223/255, 78/255, 78/255)),
@@ -662,6 +669,7 @@ def gerar_relatorio_pdf(relatorio):
                 aluno['turma'],
                 str(aluno['total_faltas'])
             ])
+    # Definindo propriedades da tabela
     baixa_frequencia_table = Table(baixa_frequencia_data, colWidths=[2.5 * inch, 1.0 * inch, 1.2 * inch, 1.2 * inch, 1.0 * inch])
     baixa_frequencia_table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.Color(223/255, 78/255, 78/255)),
@@ -688,6 +696,7 @@ def gerar_relatorio_pdf(relatorio):
             str(aluno['total_atrasos']),
             str(aluno['total_faltas'])
         ])
+    # Definindo propriedades da tabela
     detalhes_alunos_table = Table(detalhes_alunos_data, colWidths=[2.5 * inch, 1.0 * inch, 1.2 * inch, 1.2 * inch, 1.0 * inch])
     detalhes_alunos_table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.Color(223/255, 78/255, 78/255)),
@@ -712,6 +721,7 @@ def gerar_relatorio_pdf(relatorio):
 @login_required
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def relatorio(request):
+    # Realização da consulta no banco de dados
     with connection.cursor() as cursor:
         cursor.execute("""
             WITH frequencias_calculadas AS (

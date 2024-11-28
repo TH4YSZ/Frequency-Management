@@ -109,6 +109,7 @@
     }
 </style>
 
+
 <nav class="navbar">
     <div class="container-fluid">
         <a class="navbar-brand" href="" style="max-width: 40%;">
@@ -192,31 +193,3 @@
         </div>
     </div>
 </nav>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const themeToggleBtn = document.getElementById("theme-toggle");
-        const themeIcon = document.getElementById("theme-icon");
-        let currentTheme = localStorage.getItem("theme") || "light";
-
-        // Set initial theme and icon
-        document.documentElement.setAttribute("data-theme", currentTheme);
-        themeIcon.classList.add(currentTheme === "light" ? "bi-sun-fill" : "bi-moon-fill");
-        themeIcon.style.color = "white";
-
-        themeToggleBtn.addEventListener("click", function () {
-            themeIcon.classList.add("changing");
-
-            setTimeout(() => {
-                currentTheme = currentTheme === "light" ? "dark" : "light";
-
-                document.documentElement.setAttribute("data-theme", currentTheme);
-                localStorage.setItem("theme", currentTheme);
-
-                themeIcon.classList.remove("bi-sun-fill", "bi-moon-fill", "changing");
-
-                themeIcon.classList.add(currentTheme === "light" ? "bi-sun-fill" : "bi-moon-fill");
-            }, 150);
-        });
-    });
-</script>
