@@ -119,11 +119,12 @@ def cursos(request):
     if search_query:
         cursos = Curso.objects.filter(
             nome_curso__icontains=search_query
-            ) | Curso.objects.filter(
+        ) | Curso.objects.filter(
             turma__icontains=search_query
-            ) | Curso.objects.filter(
-            aluno__nome__icontains=search_query 
-            )
+        ) | Curso.objects.filter(
+            aluno__nome__icontains=search_query
+        )
+        cursos = cursos.distinct()  # Remove duplicatas
     else:
         cursos = Curso.objects.all()
 

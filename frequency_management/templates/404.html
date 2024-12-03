@@ -1,5 +1,11 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}
+Página não existente
+{% endblock %}
+
+{% block head %}
 
 <head>
     <meta charset="UTF-8">
@@ -7,10 +13,30 @@
     <title>Página Não Encontrada</title>
 </head>
 
+<style>
+    .container {
+        margin-top: 4rem;
+        margin-bottom: 25%;
+    }
+
+    .container a {
+        color: inherit;
+    }
+</style>
+
+{% endblock %}
+
+{% block body %}
+
 <body>
-    <h1>Página não encontrada!</h1>
-    <p>A página que você está procurando não existe.</p>
-    <a href="/">Voltar para a página inicial</a>
+    <div class="container">
+        <h1>Página não encontrada!</h1>
+        <p>A página que você está procurando não existe.</p>
+        <a href="/">
+            <i class="bi bi-house-fill" aria-hidden="true"></i>
+            <span>Voltar para a página inicial</span>
+        </a>
+    </div>
 </body>
 
-</html>
+{% endblock %}
