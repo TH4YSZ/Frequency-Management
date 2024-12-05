@@ -604,6 +604,7 @@ def gerar_relatorio_pdf(relatorio):
     doc = SimpleDocTemplate(buffer, pagesize=A4, title="Relatório de Frequência")
     elementos = []
 
+    # Estilos para título e subtítulo
     styles = getSampleStyleSheet()
     styles.add(ParagraphStyle(name="Subtitle", fontSize=18, leading=22, spaceAfter=12, alignment=1))
 
@@ -617,10 +618,7 @@ def gerar_relatorio_pdf(relatorio):
         elementos.append(img)
     else:
         elementos.append(Paragraph("Imagem não encontrada", styles['BodyText']))
-    # Estilos para título e subtítulo
-    styles = getSampleStyleSheet()
-    styles.add(ParagraphStyle(name="Subtitle", fontSize=18, leading=22, spaceAfter=12, alignment=1))
-
+    
     # Capa do Relatório
     # Variável para verificar o dia a aparecer no relatório
     hoje = datetime.now().strftime('%d/%m/%Y')
